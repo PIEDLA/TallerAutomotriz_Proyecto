@@ -1,6 +1,6 @@
 ﻿namespace lib_dominio.Entidades
 {
-    public class Deatalle_Factura
+    public class Detalle_Factura
     {
         public int Id_detalle { get; set; }
         public int Id_factura { get; set; }
