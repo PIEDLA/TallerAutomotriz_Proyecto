@@ -1,0 +1,25 @@
+# Archivos de usuario
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Archivos de build
+bin/
+obj/
+out/
+
+# Archivos de paquetes NuGet
+*.nupkg
+*.snupkg
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Archivos NuGet generados localmente
+*.nuget.dgspec.json
+*.nuget.g.props
+*.nuget.g.targets
+
+# Archivos de VS
+.vs/
