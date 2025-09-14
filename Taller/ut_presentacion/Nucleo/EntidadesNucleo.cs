@@ -1,231 +1,51 @@
-﻿//using lib_dominio.Entidades;
+﻿using lib_dominio.Entidades;
 namespace ut_presentacion.Nucleo
 {
     public class EntidadesNucleo
     {
-        /*public static Notas? Notas()
+        public static Detalle_Factura? Detalle_Factura()
         {
-            var entidad = new Notas();
-            entidad.Estudiante = "Pruebas-" + DateTime.Now.ToString("yyyyMMddhhmmss");
-            entidad.Materia = "Pruebas";
-            entidad.Nota1 = 2.4m;
-            entidad.Nota2 = 4.5m;
-            entidad.Nota3 = 3.8m;
-            entidad.Nota4 = 1.7m;
-            entidad.Nota5 = 3.7m;
-            entidad.NotaFinal = 0.0m;
-            entidad.Fecha = DateTime.Now;
+            var entidad = new Detalle_Factura();
+            entidad.Cantidad = 1;
+            entidad.Subtotal = 1.0m;
             return entidad;
-        }*/
+        }
 
-        /*public static Notas? Notas()
+        public static Detalles_Pago? Detalles_Pago()
         {
-            var entidad = new Notas();
-            entidad.Estudiante = "Pruebas-" + DateTime.Now.ToString("yyyyMMddhhmmss");
-            entidad.Materia = "Pruebas";
-            entidad.Nota1 = 2.4m;
-            entidad.Nota2 = 4.5m;
-            entidad.Nota3 = 3.8m;
-            entidad.Nota4 = 1.7m;
-            entidad.Nota5 = 3.7m;
-            entidad.NotaFinal = 0.0m;
-            entidad.Fecha = DateTime.Now;
+            var entidad = new Detalles_Pago();
+            entidad.Metodo_pago = "Pruebas-" + DateTime.Now.ToString("yyyyMMddhhmmss");
+            entidad.Monto = 1.0m;
+            entidad.Fecha_pago = DateTime.Now;
             return entidad;
-        }*/
+        }
 
-        /*public static Notas? Notas()
+        public static Productos? Productos()
         {
-            var entidad = new Notas();
-            entidad.Estudiante = "Pruebas-" + DateTime.Now.ToString("yyyyMMddhhmmss");
-            entidad.Materia = "Pruebas";
-            entidad.Nota1 = 2.4m;
-            entidad.Nota2 = 4.5m;
-            entidad.Nota3 = 3.8m;
-            entidad.Nota4 = 1.7m;
-            entidad.Nota5 = 3.7m;
-            entidad.NotaFinal = 0.0m;
-            entidad.Fecha = DateTime.Now;
+            var entidad = new Productos();
+            entidad.Nombre_producto = "Pruebas-" + DateTime.Now.ToString("yyyyMMddhhmmss");
+            entidad.Precio = 1.0m;
+            entidad.Categoria = "Pruebas";
+            entidad.Stock = 1;
             return entidad;
-        }*/
+        }
 
-        /*public static Notas? Notas()
+        public static Reservas? Reservas()
         {
-            var entidad = new Notas();
-            entidad.Estudiante = "Pruebas-" + DateTime.Now.ToString("yyyyMMddhhmmss");
-            entidad.Materia = "Pruebas";
-            entidad.Nota1 = 2.4m;
-            entidad.Nota2 = 4.5m;
-            entidad.Nota3 = 3.8m;
-            entidad.Nota4 = 1.7m;
-            entidad.Nota5 = 3.7m;
-            entidad.NotaFinal = 0.0m;
-            entidad.Fecha = DateTime.Now;
+            var entidad = new Reservas();
+            entidad.Estado = "Pruebas-" + DateTime.Now.ToString("yyyyMMddhhmmss");
+            entidad.Fecha_reserva = DateTime.Now;
             return entidad;
-        }*/
+        }
 
-        /*public static Notas? Notas()
+        public static Sedes? Sedes()
         {
-            var entidad = new Notas();
-            entidad.Estudiante = "Pruebas-" + DateTime.Now.ToString("yyyyMMddhhmmss");
-            entidad.Materia = "Pruebas";
-            entidad.Nota1 = 2.4m;
-            entidad.Nota2 = 4.5m;
-            entidad.Nota3 = 3.8m;
-            entidad.Nota4 = 1.7m;
-            entidad.Nota5 = 3.7m;
-            entidad.NotaFinal = 0.0m;
-            entidad.Fecha = DateTime.Now;
+            var entidad = new Sedes();
+            entidad.Nombre_sede = "Pruebas-" + DateTime.Now.ToString("yyyyMMddhhmmss");
+            entidad.Direccion = "Pruebas";
+            entidad.Telefono = "Pruebas";
+            entidad.Ciudad = "Pruebas";
             return entidad;
-        }*/
-
-        /*public static Notas? Notas()
-        {
-            var entidad = new Notas();
-            entidad.Estudiante = "Pruebas-" + DateTime.Now.ToString("yyyyMMddhhmmss");
-            entidad.Materia = "Pruebas";
-            entidad.Nota1 = 2.4m;
-            entidad.Nota2 = 4.5m;
-            entidad.Nota3 = 3.8m;
-            entidad.Nota4 = 1.7m;
-            entidad.Nota5 = 3.7m;
-            entidad.NotaFinal = 0.0m;
-            entidad.Fecha = DateTime.Now;
-            return entidad;
-        }*/
-
-        /*public static Notas? Notas()
-        {
-            var entidad = new Notas();
-            entidad.Estudiante = "Pruebas-" + DateTime.Now.ToString("yyyyMMddhhmmss");
-            entidad.Materia = "Pruebas";
-            entidad.Nota1 = 2.4m;
-            entidad.Nota2 = 4.5m;
-            entidad.Nota3 = 3.8m;
-            entidad.Nota4 = 1.7m;
-            entidad.Nota5 = 3.7m;
-            entidad.NotaFinal = 0.0m;
-            entidad.Fecha = DateTime.Now;
-            return entidad;
-        }*/
-
-        /*public static Notas? Notas()
-        {
-            var entidad = new Notas();
-            entidad.Estudiante = "Pruebas-" + DateTime.Now.ToString("yyyyMMddhhmmss");
-            entidad.Materia = "Pruebas";
-            entidad.Nota1 = 2.4m;
-            entidad.Nota2 = 4.5m;
-            entidad.Nota3 = 3.8m;
-            entidad.Nota4 = 1.7m;
-            entidad.Nota5 = 3.7m;
-            entidad.NotaFinal = 0.0m;
-            entidad.Fecha = DateTime.Now;
-            return entidad;
-        }*/
-
-        /*public static Notas? Notas()
-        {
-            var entidad = new Notas();
-            entidad.Estudiante = "Pruebas-" + DateTime.Now.ToString("yyyyMMddhhmmss");
-            entidad.Materia = "Pruebas";
-            entidad.Nota1 = 2.4m;
-            entidad.Nota2 = 4.5m;
-            entidad.Nota3 = 3.8m;
-            entidad.Nota4 = 1.7m;
-            entidad.Nota5 = 3.7m;
-            entidad.NotaFinal = 0.0m;
-            entidad.Fecha = DateTime.Now;
-            return entidad;
-        }*/
-
-        /*public static Notas? Notas()
-        {
-            var entidad = new Notas();
-            entidad.Estudiante = "Pruebas-" + DateTime.Now.ToString("yyyyMMddhhmmss");
-            entidad.Materia = "Pruebas";
-            entidad.Nota1 = 2.4m;
-            entidad.Nota2 = 4.5m;
-            entidad.Nota3 = 3.8m;
-            entidad.Nota4 = 1.7m;
-            entidad.Nota5 = 3.7m;
-            entidad.NotaFinal = 0.0m;
-            entidad.Fecha = DateTime.Now;
-            return entidad;
-        }*/
-
-        /*public static Notas? Notas()
-        {
-            var entidad = new Notas();
-            entidad.Estudiante = "Pruebas-" + DateTime.Now.ToString("yyyyMMddhhmmss");
-            entidad.Materia = "Pruebas";
-            entidad.Nota1 = 2.4m;
-            entidad.Nota2 = 4.5m;
-            entidad.Nota3 = 3.8m;
-            entidad.Nota4 = 1.7m;
-            entidad.Nota5 = 3.7m;
-            entidad.NotaFinal = 0.0m;
-            entidad.Fecha = DateTime.Now;
-            return entidad;
-        }*/
-
-        /*public static Notas? Notas()
-        {
-            var entidad = new Notas();
-            entidad.Estudiante = "Pruebas-" + DateTime.Now.ToString("yyyyMMddhhmmss");
-            entidad.Materia = "Pruebas";
-            entidad.Nota1 = 2.4m;
-            entidad.Nota2 = 4.5m;
-            entidad.Nota3 = 3.8m;
-            entidad.Nota4 = 1.7m;
-            entidad.Nota5 = 3.7m;
-            entidad.NotaFinal = 0.0m;
-            entidad.Fecha = DateTime.Now;
-            return entidad;
-        }*/
-
-        /*public static Notas? Notas()
-        {
-            var entidad = new Notas();
-            entidad.Estudiante = "Pruebas-" + DateTime.Now.ToString("yyyyMMddhhmmss");
-            entidad.Materia = "Pruebas";
-            entidad.Nota1 = 2.4m;
-            entidad.Nota2 = 4.5m;
-            entidad.Nota3 = 3.8m;
-            entidad.Nota4 = 1.7m;
-            entidad.Nota5 = 3.7m;
-            entidad.NotaFinal = 0.0m;
-            entidad.Fecha = DateTime.Now;
-            return entidad;
-        }*/
-
-        /*public static Notas? Notas()
-        {
-            var entidad = new Notas();
-            entidad.Estudiante = "Pruebas-" + DateTime.Now.ToString("yyyyMMddhhmmss");
-            entidad.Materia = "Pruebas";
-            entidad.Nota1 = 2.4m;
-            entidad.Nota2 = 4.5m;
-            entidad.Nota3 = 3.8m;
-            entidad.Nota4 = 1.7m;
-            entidad.Nota5 = 3.7m;
-            entidad.NotaFinal = 0.0m;
-            entidad.Fecha = DateTime.Now;
-            return entidad;
-        }*/
-
-        /*public static Notas? Notas()
-        {
-            var entidad = new Notas();
-            entidad.Estudiante = "Pruebas-" + DateTime.Now.ToString("yyyyMMddhhmmss");
-            entidad.Materia = "Pruebas";
-            entidad.Nota1 = 2.4m;
-            entidad.Nota2 = 4.5m;
-            entidad.Nota3 = 3.8m;
-            entidad.Nota4 = 1.7m;
-            entidad.Nota5 = 3.7m;
-            entidad.NotaFinal = 0.0m;
-            entidad.Fecha = DateTime.Now;
-            return entidad;
-        }*/
+        }
     }
 }

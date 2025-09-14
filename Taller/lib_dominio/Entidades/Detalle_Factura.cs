@@ -2,7 +2,7 @@
 {
     public class Detalle_Factura
     {
-        public int Id_detalle { get; set; }
+        public int Id { get; set; }
         public int Id_factura { get; set; }
         public int Id_servicio { get; set; }
         public int Id_prodcuto { get; set; }
