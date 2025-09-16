@@ -1,3 +1,4 @@
+
 ﻿//using lib_dominio.Entidades;
 using lib_dominio.Entidades;
 using lib_repositorios.Interfaces;
@@ -18,5 +19,16 @@ namespace lib_repositorios.Implementaciones
         public DbSet<Herramientas>? Herramientas { get; set; }
         public DbSet<Repuestos>? Repuestos { get; set; }
         public DbSet<Reparacion_Herramienta>? Reparacion_Herramienta { get; set; }
+        public DbSet<Detalle_Factura>? Detalle_Factura { get; set; }
+        public DbSet<Detalles_Pago>? Detalles_Pago { get; set; }
+        public DbSet<Productos>? Productos { get; set; }
+        public DbSet<Reservas>? Reservas { get; set; }
+        public DbSet<Sedes>? Sedes { get; set; }
+        public DbSet<Clientes>? Clientes { get; set; }
+        public DbSet<Empleados>? Empleados { get; set; }
+        public DbSet<Facturas>? Facturas { get; set; }
+        public DbSet<Proveedores>? Proveedores { get; set; }
+        public DbSet<Servicios>? Servicios { get; set; }
+        public DbSet<Vehiculos>? Vehiculos { get; set; }
     }
 }
