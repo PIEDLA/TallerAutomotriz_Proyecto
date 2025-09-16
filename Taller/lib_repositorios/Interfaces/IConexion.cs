@@ -1,5 +1,4 @@
-﻿//using lib_dominio.Entidades;
-﻿using lib_dominio.Entidades;
+﻿﻿using lib_dominio.Entidades;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 namespace lib_repositorios.Interfaces
