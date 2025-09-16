@@ -1,4 +1,4 @@
-﻿//using lib_dominio.Entidades;
+﻿using lib_dominio.Entidades;
 using lib_repositorios.Interfaces;
 using Microsoft.EntityFrameworkCore;
 namespace lib_repositorios.Implementaciones
@@ -11,20 +11,16 @@ namespace lib_repositorios.Implementaciones
             optionsBuilder.UseSqlServer(this.StringConexion!, p => { });
             optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
         }
-        //spublic DbSet<Notas>? Notas { get; set; }
-        //spublic DbSet<Notas>? Notas { get; set; }
-        //spublic DbSet<Notas>? Notas { get; set; }
-        //spublic DbSet<Notas>? Notas { get; set; }
-        //spublic DbSet<Notas>? Notas { get; set; }
-        //spublic DbSet<Notas>? Notas { get; set; }
-        //spublic DbSet<Notas>? Notas { get; set; }
-        //spublic DbSet<Notas>? Notas { get; set; }
-        //spublic DbSet<Notas>? Notas { get; set; }
-        //spublic DbSet<Notas>? Notas { get; set; }
-        //spublic DbSet<Notas>? Notas { get; set; }
-        //spublic DbSet<Notas>? Notas { get; set; }
-        //spublic DbSet<Notas>? Notas { get; set; }
-        //spublic DbSet<Notas>? Notas { get; set; }
-        //spublic DbSet<Notas>? Notas { get; set; }
+        public DbSet<Detalle_Factura>? Detalle_Factura { get; set; }
+        public DbSet<Detalles_Pago>? Detalles_Pago { get; set; }
+        public DbSet<Productos>? Productos { get; set; }
+        public DbSet<Reservas>? Reservas { get; set; }
+        public DbSet<Sedes>? Sedes { get; set; }
+        public DbSet<Clientes>? Clientes { get; set; }
+        public DbSet<Empleados>? Empleados { get; set; }
+        public DbSet<Facturas>? Facturas { get; set; }
+        public DbSet<Proveedores>? Proveedores { get; set; }
+        public DbSet<Servicios>? Servicios { get; set; }
+        public DbSet<Vehiculos>? Vehiculos { get; set; }
     }
 }
