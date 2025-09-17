@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace lib_repositorios.Implementaciones
 {
-    public class Detalles_PagoAplicacion : IDetalles_PagoAplicacion
+    public class VehiculosAplicacion : IVehiculosAplicacion
     {
         private IConexion? IConexion = null;
 
-        public Detalles_PagoAplicacion(IConexion iConexion)
+        public VehiculosAplicacion(IConexion iConexion)
         {
             this.IConexion = iConexion;
         }
@@ -18,7 +18,7 @@ namespace lib_repositorios.Implementaciones
             this.IConexion!.StringConexion = StringConexion;
         }
 
-        public Detalles_Pago? Borrar(Detalles_Pago? entidad)
+        public Vehiculos? Borrar(Vehiculos? entidad)
         {
             if (entidad == null)
                 throw new Exception("lbFaltaInformacion");
@@ -26,14 +26,15 @@ namespace lib_repositorios.Implementaciones
             if (entidad!.Id == 0)
                 throw new Exception("lbNoSeGuardo");
 
+            // Operaciones
+            entidad._Cliente = null;
 
-
-            this.IConexion!.Detalles_Pago!.Remove(entidad);
+            this.IConexion!.Vehiculos!.Remove(entidad);
             this.IConexion.SaveChanges();
             return entidad;
         }
 
-        public Detalles_Pago? Guardar(Detalles_Pago? entidad)
+        public Vehiculos? Guardar(Vehiculos? entidad)
         {
             if (entidad == null)
                 throw new Exception("lbFaltaInformacion");
@@ -41,24 +42,20 @@ namespace lib_repositorios.Implementaciones
             if (entidad.Id != 0)
                 throw new Exception("lbYaSeGuardo");
 
-            this.IConexion!.Detalles_Pago!.Add(entidad);
+            // Operaciones
+            entidad._Cliente = null;
+
+            this.IConexion!.Vehiculos!.Add(entidad);
             this.IConexion.SaveChanges();
             return entidad;
         }
 
-        public List<Detalles_Pago> Listar()
+        public List<Vehiculos> Listar()
         {
-            return this.IConexion!.Detalles_Pago!.Take(20).ToList();
+            return this.IConexion!.Vehiculos!.Take(20).ToList();
         }
 
-        public List<Detalles_Pago> PorEstudiante(Detalles_Pago? entidad)
-        {
-            return this.IConexion!.Detalles_Pago!
-                .Where(x => x.Metodo_pago!.Contains(entidad!.Metodo_pago!))
-                .ToList();
-        }
-
-        public Detalles_Pago? Modificar(Detalles_Pago? entidad)
+        public Vehiculos? Modificar(Vehiculos? entidad)
         {
             if (entidad == null)
                 throw new Exception("lbFaltaInformacion");
@@ -66,7 +63,10 @@ namespace lib_repositorios.Implementaciones
             if (entidad!.Id == 0)
                 throw new Exception("lbNoSeGuardo");
 
-            var entry = this.IConexion!.Entry<Detalles_Pago>(entidad);
+            // Operaciones
+            entidad._Cliente = null;
+
+            var entry = this.IConexion!.Entry<Vehiculos>(entidad);
             entry.State = EntityState.Modified;
             this.IConexion.SaveChanges();
             return entidad;
