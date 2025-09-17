@@ -178,14 +178,14 @@ namespace ut_presentacion.Nucleo
             entidad.Nombre_servicio = "Pruebas-" + DateTime.Now.ToString("yyyyMMddhhmmss");
             entidad.Descripcion = "Pruebas";
             entidad.Precio = 1.0m;
-            entidad.Duracion_aprox = 1;
+            entidad.Duracion_aprox = "Prueba";
             return entidad;
         }
 
         public static Vehiculos? Vehiculos()
         {
             var entidad = new Vehiculos();
-            entidad.Placa = "Pruebas-" + DateTime.Now.ToString("yyyyMMddhhmmss");
+            entidad.Placa = "Pruebas-";
             entidad.Marca = "Pruebas";
             entidad.Modelo = "Pruebas";
             entidad.Id_cliente = 1;

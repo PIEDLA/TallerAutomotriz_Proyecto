@@ -30,7 +30,9 @@ namespace ut_presentacion.Repositorios
 
         public bool Listar()
         {
-            this.lista = this.iConexion!.Vehiculos!.ToList();
+            this.lista = this.iConexion!.Vehiculos!
+            .Include(x => x._Cliente)
+            .ToList();
             return lista.Count > 0;
         }
 
