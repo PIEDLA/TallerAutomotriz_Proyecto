@@ -19,7 +19,10 @@ namespace lib_repositorios.Implementaciones
         public DbSet<Herramientas>? Herramientas { get; set; }
         public DbSet<Repuestos>? Repuestos { get; set; }
         public DbSet<Reparacion_Herramienta>? Reparacion_Herramienta { get; set; }
-        public DbSet<Detalle_Factura>? Detalle_Factura { get; set; }
+        public DbSet<Detalles_Producto>? Detalles_Producto { get; set; }
+        public DbSet<Detalles_Repuesto>? Detalles_Repuesto { get; set; }
+        public DbSet<Detalles_Servicio>? Detalles_Servicio { get; set; }
+        public DbSet<Reserva_Servicio>? Reserva_Servicio { get; set; }
         public DbSet<Detalles_Pago>? Detalles_Pago { get; set; }
         public DbSet<Productos>? Productos { get; set; }
         public DbSet<Reservas>? Reservas { get; set; }

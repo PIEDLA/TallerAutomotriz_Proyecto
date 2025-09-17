@@ -1,5 +1,4 @@
-﻿//using lib_dominio.Entidades;
-﻿using lib_dominio.Entidades;
+﻿﻿using lib_dominio.Entidades;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 namespace lib_repositorios.Interfaces
@@ -13,7 +12,10 @@ namespace lib_repositorios.Interfaces
         DbSet<Herramientas>? Herramientas { get; set; }
         DbSet<Repuestos>? Repuestos { get; set; }
         DbSet<Reparacion_Herramienta>? Reparacion_Herramienta { get; set; }
-        DbSet<Detalle_Factura>? Detalle_Factura { get; set; }
+        DbSet<Detalles_Producto>? Detalles_Producto { get; set; }
+        DbSet<Detalles_Repuesto>? Detalles_Repuesto { get; set; }
+        DbSet<Detalles_Servicio>? Detalles_Servicio { get; set; }
+        DbSet<Reserva_Servicio>? Reserva_Servicio { get; set; }
         DbSet<Detalles_Pago>? Detalles_Pago { get; set; }
         DbSet<Productos>? Productos { get; set; }
         DbSet<Reservas>? Reservas { get; set; }

@@ -518,9 +518,13 @@ $RECYCLE.BIN/
 # Vim temporary swap files
 *.swp
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> main
 
 Config.txt
 Configuracion.cs
+>>>>>>> main
+=======
+>>>>>>> main
 >>>>>>> main

@@ -30,7 +30,10 @@ namespace ut_presentacion.Repositorios
 
         public bool Listar()
         {
-            this.lista = this.iConexion!.Diagnosticos!.ToList();
+            this.lista = this.iConexion!.Diagnosticos!
+            .Include(x => x._Empleado)
+            .Include(x => x._Vehiculo)
+            .ToList();
             return lista.Count > 0;
         }
 

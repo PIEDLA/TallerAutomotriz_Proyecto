@@ -7,13 +7,13 @@ using ut_presentacion.Nucleo;
 namespace ut_presentacion.Repositorios
 {
     [TestClass]
-    public class ReparacionHerramientaPrueba
+    public class Detalles_RepuestoPrueba
     {
         private readonly IConexion? iConexion;
-        private List<Reparacion_Herramienta>? lista;
-        private Reparacion_Herramienta? entidad;
+        private List<Detalles_Repuesto>? lista;
+        private Detalles_Repuesto? entidad;
 
-        public ReparacionHerramientaPrueba()
+        public Detalles_RepuestoPrueba()
         {
             iConexion = new Conexion();
             iConexion.StringConexion = Configuracion.ObtenerValor("StringConexion");
@@ -23,30 +23,42 @@ namespace ut_presentacion.Repositorios
         public void Ejecutar()
         {
             Assert.AreEqual(true, Guardar());
+            Assert.AreEqual(true, Modificar());
             Assert.AreEqual(true, Listar());
             Assert.AreEqual(true, Borrar());
         }
 
         public bool Listar()
         {
-            this.lista = this.iConexion!.Reparacion_Herramienta!
-            .Include(x => x._Herramienta)
-            .Include(x => x._Reparacion)
+            this.lista = this.iConexion!.Detalles_Repuesto!
+            .Include(x => x._Factura)
+            .Include(x => x._Repuesto)
             .ToList();
             return lista.Count > 0;
         }
 
         public bool Guardar()
         {
-            this.entidad = EntidadesNucleo.Reparacion_Herramienta()!;
-            this.iConexion!.Reparacion_Herramienta!.Add(this.entidad);
+            this.entidad = EntidadesNucleo.Detalles_Repuesto()!;
+            this.iConexion!.Detalles_Repuesto!.Add(this.entidad);
             this.iConexion!.SaveChanges();
+            return true;
+        }
+
+        public bool Modificar()
+        {
+            this.entidad!.Repuesto = 2;
+
+            var entry = this.iConexion!.Entry<Detalles_Repuesto>(this.entidad);
+            entry.State = EntityState.Modified;
+            this.iConexion!.SaveChanges();
+
             return true;
         }
 
         public bool Borrar()
         {
-            this.iConexion!.Reparacion_Herramienta!.Remove(this.entidad!);
+            this.iConexion!.Detalles_Repuesto!.Remove(this.entidad!);
             this.iConexion!.SaveChanges();
             return true;
         }

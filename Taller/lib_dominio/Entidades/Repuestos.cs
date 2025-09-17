@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,5 +15,7 @@ namespace lib_dominio.Entidades
         public string? Marca { get; set; }
         public decimal Precio { get; set; }
         public int Stock { get; set; }
+
+        [ForeignKey("Id_proveedor")] public Proveedores? _Proveedor { get; set; }
     }
 }

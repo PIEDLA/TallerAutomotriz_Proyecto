@@ -30,7 +30,10 @@ namespace ut_presentacion.Repositorios
 
         public bool Listar()
         {
-            this.lista = this.iConexion!.Reservas!.ToList();
+            this.lista = this.iConexion!.Reservas!
+            .Include(x => x._Cliente)
+            .Include(x => x._Sede)
+            .ToList();
             return lista.Count > 0;
         }
 

@@ -30,7 +30,9 @@ namespace ut_presentacion.Repositorios
 
         public bool Listar()
         {
-            this.lista = this.iConexion!.Reparaciones!.ToList();
+            this.lista = this.iConexion!.Reparaciones!
+            .Include(x => x._Diagnostico)
+            .ToList();
             return lista.Count > 0;
         }
 
