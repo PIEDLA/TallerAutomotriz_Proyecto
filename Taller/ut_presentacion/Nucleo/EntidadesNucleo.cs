@@ -115,7 +115,7 @@ namespace ut_presentacion.Nucleo
         public static Reservas? Reservas()
         {
             var entidad = new Reservas();
-            entidad.Estado = "Pruebas-" + DateTime.Now.ToString("yyyyMMddhhmmss");
+            entidad.Estado = "Pruebas-";
             entidad.Fecha_reserva = DateTime.Now;
             entidad.Id_cliente = 1;
             entidad.Id_sede = 1;
@@ -178,7 +178,7 @@ namespace ut_presentacion.Nucleo
             entidad.Nombre_servicio = "Pruebas-" + DateTime.Now.ToString("yyyyMMddhhmmss");
             entidad.Descripcion = "Pruebas";
             entidad.Precio = 1.0m;
-            entidad.Duracion_aprox = 1;
+            entidad.Duracion_aprox = "Pruebas";
             return entidad;
         }
 

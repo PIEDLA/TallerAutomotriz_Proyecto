@@ -44,7 +44,7 @@ namespace ut_presentacion.Repositorios
 
         public bool Modificar()
         {
-            this.entidad!.Estado = "En reparación - Prueba";
+            this.entidad!.Estado = "En reparación";
             var entry = this.iConexion!.Entry<Herramientas>(this.entidad);
             entry.State = EntityState.Modified;
             this.iConexion!.SaveChanges();

@@ -2,6 +2,7 @@
 using lib_repositorios.Implementaciones;
 using lib_repositorios.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using ut_presentacion.Nucleo;
 
 namespace ut_presentacion.Repositorios
@@ -30,6 +31,7 @@ namespace ut_presentacion.Repositorios
 
         public bool Listar()
         {
+
             this.lista = this.iConexion!.Detalles_Servicio!
             .Include(x => x._Factura)
             .Include(x => x._Servicio)
