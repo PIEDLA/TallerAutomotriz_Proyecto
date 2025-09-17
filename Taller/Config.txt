@@ -1,7 +1,3 @@
 {
-<<<<<<< HEAD
 "StringConexion": "server=LAPTOP-1PUA5BHN\\DEV;database=db_taller;Integrated Security=True;TrustServerCertificate=true;"
-=======
-"StringConexion": "server=PIEDRA\\DEV;database=db_tallerautomotriz;Integrated Security=True;TrustServerCertificate=true;"
->>>>>>> main
 }

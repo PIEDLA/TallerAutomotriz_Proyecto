@@ -7,13 +7,13 @@ using ut_presentacion.Nucleo;
 namespace ut_presentacion.Repositorios
 {
     [TestClass]
-    public class ReparacionesPrueba
+    public class ReparacionesPrueba2
     {
         private readonly IConexion? iConexion;
         private List<Reparaciones>? lista;
         private Reparaciones? entidad;
 
-        public ReparacionesPrueba()
+        public ReparacionesPrueba2()
         {
             iConexion = new Conexion();
             iConexion.StringConexion = Configuracion.ObtenerValor("StringConexion");
@@ -38,9 +38,9 @@ namespace ut_presentacion.Repositorios
         {
             this.entidad = new Reparaciones
             {
-                Id_diagnostico = 1,
-                Descripcion_trabajo = "Cambio de aceite",
-                Costo_estimado = 150.75m,
+                Id_diagnostico = 2,
+                Descripcion_trabajo = "Alineación y balanceo",
+                Costo_estimado = 300.00m,
                 Fecha_inicio = DateTime.Now
             };
             this.iConexion!.Reparaciones!.Add(this.entidad);
@@ -50,7 +50,7 @@ namespace ut_presentacion.Repositorios
 
         public bool Modificar()
         {
-            this.entidad!.Descripcion_trabajo = "Cambio de aceite y filtro";
+            this.entidad!.Costo_estimado = 350.00m;
             var entry = this.iConexion!.Entry<Reparaciones>(this.entidad);
             entry.State = EntityState.Modified;
             this.iConexion!.SaveChanges();

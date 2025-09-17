@@ -7,13 +7,13 @@ using ut_presentacion.Nucleo;
 namespace ut_presentacion.Repositorios
 {
     [TestClass]
-    public class ReparacionesPrueba
+    public class PagosPrueba2
     {
         private readonly IConexion? iConexion;
-        private List<Reparaciones>? lista;
-        private Reparaciones? entidad;
+        private List<Pagos>? lista;
+        private Pagos? entidad;
 
-        public ReparacionesPrueba()
+        public PagosPrueba2()
         {
             iConexion = new Conexion();
             iConexion.StringConexion = Configuracion.ObtenerValor("StringConexion");
@@ -30,28 +30,28 @@ namespace ut_presentacion.Repositorios
 
         public bool Listar()
         {
-            this.lista = this.iConexion!.Reparaciones!.ToList();
+            this.lista = this.iConexion!.Pagos!.ToList();
             return lista.Count > 0;
         }
 
         public bool Guardar()
         {
-            this.entidad = new Reparaciones
+            this.entidad = new Pagos
             {
-                Id_diagnostico = 1,
-                Descripcion_trabajo = "Cambio de aceite",
-                Costo_estimado = 150.75m,
-                Fecha_inicio = DateTime.Now
+                Id_factura = 2,
+                Monto_total = 750.50m,
+                Fecha_pago = DateTime.Now,
+                Estado = "Pendiente"
             };
-            this.iConexion!.Reparaciones!.Add(this.entidad);
+            this.iConexion!.Pagos!.Add(this.entidad);
             this.iConexion!.SaveChanges();
             return true;
         }
 
         public bool Modificar()
         {
-            this.entidad!.Descripcion_trabajo = "Cambio de aceite y filtro";
-            var entry = this.iConexion!.Entry<Reparaciones>(this.entidad);
+            this.entidad!.Monto_total = 800.00m;
+            var entry = this.iConexion!.Entry<Pagos>(this.entidad);
             entry.State = EntityState.Modified;
             this.iConexion!.SaveChanges();
             return true;
@@ -59,7 +59,7 @@ namespace ut_presentacion.Repositorios
 
         public bool Borrar()
         {
-            this.iConexion!.Reparaciones!.Remove(this.entidad!);
+            this.iConexion!.Pagos!.Remove(this.entidad!);
             this.iConexion!.SaveChanges();
             return true;
         }

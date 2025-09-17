@@ -36,7 +36,13 @@ namespace ut_presentacion.Repositorios
 
         public bool Guardar()
         {
-            this.entidad = EntidadesNucleo.Diagnosticos()!;
+            this.entidad = new Diagnosticos
+            {
+                Id_vehiculo = 1,
+                Id_empleado = 1,
+                Descripcion = "Prueba inicial",
+                Fecha = DateTime.Now
+            };
             this.iConexion!.Diagnosticos!.Add(this.entidad);
             this.iConexion!.SaveChanges();
             return true;
@@ -44,7 +50,7 @@ namespace ut_presentacion.Repositorios
 
         public bool Modificar()
         {
-            this.entidad!.Descripcion = "Actualizado desde prueba";
+            this.entidad!.Descripcion = "Descripcion modificada";
             var entry = this.iConexion!.Entry<Diagnosticos>(this.entidad);
             entry.State = EntityState.Modified;
             this.iConexion!.SaveChanges();
