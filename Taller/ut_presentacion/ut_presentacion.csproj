@@ -21,8 +21,4 @@
     <ProjectReference Include="..\lib_repositorios\lib_repositorios.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Repositorios\" />
-  </ItemGroup>
-
 </Project>
