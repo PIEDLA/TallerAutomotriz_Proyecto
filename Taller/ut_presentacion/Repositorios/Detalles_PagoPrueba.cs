@@ -30,7 +30,9 @@ namespace ut_presentacion.Repositorios
 
         public bool Listar()
         {
-            this.lista = this.iConexion!.Detalles_Pago!.ToList();
+            this.lista = this.iConexion!.Detalles_Pago!
+            .Include(x => x._Pago)
+            .ToList();
             return lista.Count > 0;
         }
 
@@ -46,7 +48,7 @@ namespace ut_presentacion.Repositorios
 
         public bool Modificar()
         {
-            this.entidad!.Monto = 16.5m;
+            this.entidad!.Id_pago = 2;
 
             var entry = this.iConexion!.Entry<Detalles_Pago>(this.entidad);
             entry.State = EntityState.Modified;

@@ -3,6 +3,36 @@ namespace ut_presentacion.Nucleo
 {
     public class EntidadesNucleo
     {
+        public static Detalles_Producto? Detalles_Producto()
+        {
+            var entidad = new Detalles_Producto();
+            entidad.Cantidad = 1;
+            entidad.Factura = 1;
+            entidad.Producto = 1;
+            return entidad;
+        }
+        public static Detalles_Repuesto? Detalles_Repuesto()
+        {
+            var entidad = new Detalles_Repuesto();
+            entidad.Cantidad = 1;
+            entidad.Factura = 1;
+            entidad.Repuesto = 1;
+            return entidad;
+        }
+        public static Detalles_Servicio? Detalles_Servicio()
+        {
+            var entidad = new Detalles_Servicio();
+            entidad.Servicio = 1;
+            entidad.Factura = 1;
+            return entidad;
+        }
+        public static Reserva_Servicio? Reserva_Servicio()
+        {
+            var entidad = new Reserva_Servicio();
+            entidad.Reserva= 1;
+            entidad.Servicio = 1;
+            return entidad;
+        }
         public static Diagnosticos? Diagnosticos()
         {
             var entidad = new Diagnosticos();
@@ -61,18 +91,12 @@ namespace ut_presentacion.Nucleo
             entidad.Id_herramienta = 1;
             return entidad;
         }
-        public static Detalle_Factura? Detalle_Factura()
-        {
-            var entidad = new Detalle_Factura();
-            entidad.Cantidad = 1;
-            entidad.Subtotal = 1.0m;
-            return entidad;
-        }
 
         public static Detalles_Pago? Detalles_Pago()
         {
             var entidad = new Detalles_Pago();
-            entidad.Metodo_pago = "Pruebas-" + DateTime.Now.ToString("yyyyMMddhhmmss");
+            entidad.Metodo_pago = "Pruebas-";
+            entidad.Id_pago = 1;
             entidad.Monto = 1.0m;
             entidad.Fecha_pago = DateTime.Now;
             return entidad;
@@ -93,6 +117,8 @@ namespace ut_presentacion.Nucleo
             var entidad = new Reservas();
             entidad.Estado = "Pruebas-" + DateTime.Now.ToString("yyyyMMddhhmmss");
             entidad.Fecha_reserva = DateTime.Now;
+            entidad.Id_cliente = 1;
+            entidad.Id_sede = 1;
             return entidad;
         }
 
@@ -120,6 +146,7 @@ namespace ut_presentacion.Nucleo
             var entidad = new Empleados();
             entidad.Nombre = "Pruebas-" + DateTime.Now.ToString("yyyyMMddhhmmss");
             entidad.Apellido = "Pruebas";
+            entidad.Id_sede = 1;
             entidad.Cargo = "Pruebas";
             entidad.Telefono = "Pruebas";
             return entidad;
@@ -129,6 +156,8 @@ namespace ut_presentacion.Nucleo
         {
             var entidad = new Facturas();
             entidad.Fecha_emision = DateTime.Now;
+            entidad.Id_cliente = 1;
+            entidad.Id_reparacion = 1;
             entidad.Total = 1.0m;
             return entidad;
         }
@@ -159,6 +188,7 @@ namespace ut_presentacion.Nucleo
             entidad.Placa = "Pruebas-" + DateTime.Now.ToString("yyyyMMddhhmmss");
             entidad.Marca = "Pruebas";
             entidad.Modelo = "Pruebas";
+            entidad.Id_cliente = 1;
             return entidad;
         }
     }

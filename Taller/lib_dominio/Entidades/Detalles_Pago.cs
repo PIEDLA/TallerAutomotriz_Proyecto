@@ -1,4 +1,6 @@
-﻿namespace lib_dominio.Entidades
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace lib_dominio.Entidades
 {
     public class Detalles_Pago
     {
@@ -7,5 +9,7 @@
         public string? Metodo_pago { get; set; }
         public decimal Monto { get; set; }
         public DateTime Fecha_pago { get; set; }
+
+        [ForeignKey("Id_pago")] public Pagos? _Pago { get; set; }
     }
 }
