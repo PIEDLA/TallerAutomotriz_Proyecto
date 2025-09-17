@@ -23,7 +23,7 @@ namespace lib_repositorios.Implementaciones
         public DbSet<Detalles_Repuesto>? Detalles_Repuesto { get; set; }
         public DbSet<Detalles_Servicio>? Detalles_Servicio { get; set; }
         public DbSet<Reserva_Servicio>? Reserva_Servicio { get; set; }
-        public DbSet<Detalles_Pago>? Detalles_Pago { get; set; }
+        public DbSet<Detalles_PagoAplicacion>? Detalles_Pago { get; set; }
         public DbSet<Productos>? Productos { get; set; }
         public DbSet<Reservas>? Reservas { get; set; }
         public DbSet<Sedes>? Sedes { get; set; }
