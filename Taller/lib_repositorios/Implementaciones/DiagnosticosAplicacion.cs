@@ -18,11 +18,15 @@ namespace lib_repositorios.Implementaciones
             this.IConexion!.StringConexion = StringConexion;
         }
 
-
         public List<Diagnosticos> Listar()
         {
-            return this.IConexion!.Diagnosticos!.Take(20).ToList();
+            return this.IConexion!.Diagnosticos!
+                .Include(x => x._Vehiculo)
+                .Include(x => x._Empleado)
+                .Take(20)
+                .ToList();
         }
+
 
         public Diagnosticos? Guardar(Diagnosticos? entidad)
         {
@@ -30,18 +34,29 @@ namespace lib_repositorios.Implementaciones
                 throw new Exception("Falta información");
 
             if (entidad.Id != 0)
-                throw new Exception("Ya se guardó");
+                throw new Exception("El diagnóstico ya existe");
 
+            // Regla 1: el vehículo debe existir
+            if (!this.IConexion!.Vehiculos!.Any(v => v.Id == entidad.Id_vehiculo))
+                throw new Exception("El vehículo no existe");
+
+            // Regla 2: el empleado debe existir
+            if (!this.IConexion.Empleados!.Any(e => e.Id == entidad.Id_empleado))
+                throw new Exception("El empleado no existe");
+
+            // Regla 3: la descripción no puede estar vacía
             if (string.IsNullOrWhiteSpace(entidad.Descripcion))
-                throw new Exception("El diagnóstico debe tener una descripción");
+                throw new Exception("Debe ingresar una descripción del diagnóstico");
 
+            // Regla 4: la fecha no puede ser futura
             if (entidad.Fecha > DateTime.Now)
                 throw new Exception("La fecha no puede ser futura");
+
 
             entidad._Vehiculo = null;
             entidad._Empleado = null;
 
-            this.IConexion!.Diagnosticos!.Add(entidad);
+            this.IConexion.Diagnosticos!.Add(entidad);
             this.IConexion.SaveChanges();
             return entidad;
         }
@@ -52,15 +67,36 @@ namespace lib_repositorios.Implementaciones
                 throw new Exception("Falta información");
 
             if (entidad.Id == 0)
-                throw new Exception("No se guardó");
+                throw new Exception("No se puede modificar un diagnóstico que no existe");
+
+
+            var original = this.IConexion!.Diagnosticos!
+                .Include(d => d.Reparaciones)
+                .FirstOrDefault(d => d.Id == entidad.Id);
+
+            if (original == null)
+                throw new Exception("El diagnóstico no fue encontrado");
+
+            // Regla: no se puede modificar un diagnóstico si ya tiene reparaciones asociadas
+            if (original.Reparaciones != null && original.Reparaciones.Any())
+                throw new Exception("No se puede modificar un diagnóstico con reparaciones asociadas");
+
+            if (!this.IConexion.Vehiculos!.Any(v => v.Id == entidad.Id_vehiculo))
+                throw new Exception("El vehículo no existe");
+
+            if (!this.IConexion.Empleados!.Any(e => e.Id == entidad.Id_empleado))
+                throw new Exception("El empleado no existe");
 
             if (string.IsNullOrWhiteSpace(entidad.Descripcion))
-                throw new Exception("El diagnóstico debe tener una descripción");
+                throw new Exception("Debe ingresar una descripción del diagnóstico");
+
+            if (entidad.Fecha > DateTime.Now)
+                throw new Exception("La fecha no puede ser futura");
 
             entidad._Vehiculo = null;
             entidad._Empleado = null;
 
-            var entry = this.IConexion!.Entry<Diagnosticos>(entidad);
+            var entry = this.IConexion.Entry<Diagnosticos>(entidad);
             entry.State = EntityState.Modified;
             this.IConexion.SaveChanges();
             return entidad;
@@ -72,16 +108,26 @@ namespace lib_repositorios.Implementaciones
                 throw new Exception("Falta información");
 
             if (entidad.Id == 0)
-                throw new Exception("No se guardó");
+                throw new Exception("No se puede borrar un diagnóstico que no existe");
 
-            entidad._Vehiculo = null;
-            entidad._Empleado = null;
+            var original = this.IConexion!.Diagnosticos!
+                .Include(d => d.Reparaciones)
+                .FirstOrDefault(d => d.Id == entidad.Id);
 
-            this.IConexion!.Diagnosticos!.Remove(entidad);
+            if (original == null)
+                throw new Exception("El diagnóstico no fue encontrado");
+
+            // Regla: no se puede borrar un diagnóstico si ya tiene reparaciones
+            if (original.Reparaciones != null && original.Reparaciones.Any())
+                throw new Exception("No se puede borrar un diagnóstico con reparaciones asociadas");
+
+            original._Vehiculo = null;
+            original._Empleado = null;
+
+            this.IConexion.Diagnosticos!.Remove(original);
             this.IConexion.SaveChanges();
-            return entidad;
+            return original;
         }
-
 
         public List<Diagnosticos> PorVehiculo(int idVehiculo)
         {

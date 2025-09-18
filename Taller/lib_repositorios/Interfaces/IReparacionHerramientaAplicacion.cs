@@ -13,6 +13,5 @@ namespace lib_repositorios.Interfaces
         List<Herramientas> HerramientasPorReparacion(int idReparacion);
         List<Reparaciones> ReparacionesPorHerramienta(int idHerramienta);
         int VecesUsadaHerramienta(int idHerramienta);
-        List<Reparacion_Herramienta> PorSede(int idSede);
     }
 }

@@ -10,12 +10,20 @@ namespace lib_dominio.Entidades
         public DateTime Fecha_emision { get; set; }
         public decimal Total { get; set; }
 
+<<<<<<< HEAD
         public List<Detalles_Producto>? Detalles_Productos;
         public List<Detalles_Repuesto>? Detalles_Repuestos;
         public List<Detalles_Servicio>? Detalles_Servicios;
         public List<Pagos>? Pagos;
 
+=======
+>>>>>>> main
         [ForeignKey("Id_cliente")] public Clientes? _Cliente { get; set; }
         [ForeignKey("Id_reparacion")] public Reparaciones? _Reparacion { get; set; }
+
+        public List<Pagos>? Pagos { get; set; }
+        public List<Detalles_Producto>? Detalles_Producto;
+        public List<Detalles_Servicio>? Detalles_Servicio;
+        public List<Detalles_Repuesto>? Detalles_Repuesto;
     }
 }
