@@ -9,6 +9,6 @@ namespace lib_repositorios.Interfaces
         Facturas? Guardar(Facturas? entidad);
         Facturas? Modificar(Facturas? entidad);
         Facturas? Borrar(Facturas? entidad);
-        public List<Facturas> ListarPorCliente(int idCliente)
+        public List<Facturas> ListarPorCliente(int idCliente);
     }
 }

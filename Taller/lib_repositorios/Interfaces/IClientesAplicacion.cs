@@ -9,8 +9,6 @@ namespace lib_repositorios.Interfaces
         Clientes? Guardar(Clientes? entidad);
         Clientes? Modificar(Clientes? entidad);
         Clientes? Borrar(Clientes? entidad);
-        public List<Clientes> BuscarPorNombre(string nombre);
-        public Clientes? PorCorreo(string correo);
-        public Clientes? PorTelefono(string telefono);
+        public List<Clientes> PorNombre(string nombre);
     }
 }

@@ -47,6 +47,13 @@ namespace lib_repositorios.Implementaciones
             if (entidad.Fecha_emision < DateTime.Now)
                 throw new Exception("La fecha no puede ser pasada");
 
+            bool tieneDetalles = (entidad.Detalles_Productos != null && entidad.Detalles_Productos.Count > 0) ||
+                                 (entidad.Detalles_Servicios != null && entidad.Detalles_Servicios.Count > 0) ||
+                                 (entidad.Detalles_Repuestos != null && entidad.Detalles_Repuestos.Count > 0);
+
+            if (!tieneDetalles)
+                throw new Exception("La factura debe tener al menos un detalle (producto, servicio o repuesto)");
+
             entidad._Cliente = null;
             entidad._Reparacion = null;
 
