@@ -50,11 +50,8 @@ namespace ut_presentacion.Repositorios
 
         public bool Modificar()
         {
-<<<<<<< HEAD
             this.entidad!.Estado = "En uso";
-=======
             this.entidad!.Estado = "En reparación";
->>>>>>> main
             var entry = this.iConexion!.Entry<Herramientas>(this.entidad);
             entry.State = EntityState.Modified;
             this.iConexion!.SaveChanges();
