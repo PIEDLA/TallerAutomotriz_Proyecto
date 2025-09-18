@@ -29,6 +29,11 @@ namespace lib_repositorios.Implementaciones
             // Operaciones
             entidad._Sede = null;
 
+            var empleadoExistente = this.IConexion!.Empleados!.Include(x => x._Sede).FirstOrDefault(x => x.Id == entidad.Id);
+
+            if (empleadoExistente == null)
+                throw new Exception("El empleado que intenta eliminar no existe");
+
             this.IConexion!.Empleados!.Remove(entidad);
             this.IConexion.SaveChanges();
             return entidad;
@@ -52,7 +57,16 @@ namespace lib_repositorios.Implementaciones
 
         public List<Empleados> Listar()
         {
-            return this.IConexion!.Empleados!.Take(20).ToList();
+            return this.IConexion!.Empleados!.ToList();
+        }
+
+        public List<Empleados> ListarPorSede(int sedeId)
+        {
+            if (sedeId <= 0)
+                throw new Exception("Debe especificar una sede válida");
+
+            return this.IConexion!.Empleados!
+                .Include(x => x._Sede).Where(x => x.Id_sede == sedeId).ToList();
         }
 
         public Empleados? Modificar(Empleados? entidad)
@@ -66,10 +80,17 @@ namespace lib_repositorios.Implementaciones
             // Operaciones
             entidad._Sede = null;
 
+            var empleadoExistente = this.IConexion!.Empleados!.FirstOrDefault(x => x.Id == entidad.Id);
+
+            if (empleadoExistente == null)
+                throw new Exception("El empleado que intenta modificar no existe");
+
             var entry = this.IConexion!.Entry<Empleados>(entidad);
             entry.State = EntityState.Modified;
             this.IConexion.SaveChanges();
             return entidad;
         }
+
+
     }
 }

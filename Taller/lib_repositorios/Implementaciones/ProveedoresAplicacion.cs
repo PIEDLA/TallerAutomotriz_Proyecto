@@ -28,6 +28,11 @@ namespace lib_repositorios.Implementaciones
 
             // Operaciones
 
+            var proveedorExistente = this.IConexion!.Proveedores!.FirstOrDefault(x => x.Id == entidad.Id);
+
+            if (proveedorExistente == null)
+                throw new Exception("El proveedor que intenta eliminar no existe");
+
             this.IConexion!.Proveedores!.Remove(entidad);
             this.IConexion.SaveChanges();
             return entidad;
@@ -42,6 +47,8 @@ namespace lib_repositorios.Implementaciones
                 throw new Exception("lbYaSeGuardo");
 
             // Operaciones
+            if (string.IsNullOrWhiteSpace(entidad.Telefono) && string.IsNullOrWhiteSpace(entidad.Correo))
+                throw new Exception("Debe proporcionar al menos un teléfono o correo electrónico");
 
             this.IConexion!.Proveedores!.Add(entidad);
             this.IConexion.SaveChanges();
@@ -50,7 +57,16 @@ namespace lib_repositorios.Implementaciones
 
         public List<Proveedores> Listar()
         {
-            return this.IConexion!.Proveedores!.Take(20).ToList();
+            return this.IConexion!.Proveedores!.ToList();
+        }
+
+        public List<Proveedores> BuscarPorNombre(string nombre)
+        {
+            if (string.IsNullOrWhiteSpace(nombre))
+                throw new Exception("Debe especificar un nombre para buscar");
+
+            return this.IConexion!.Proveedores!.Where(x => x.Nombre!.Contains(nombre))
+                                            .OrderBy(x => x.Nombre).ToList();
         }
 
         public Proveedores? Modificar(Proveedores? entidad)
@@ -62,6 +78,10 @@ namespace lib_repositorios.Implementaciones
                 throw new Exception("lbNoSeGuardo");
 
             // Operaciones
+            var proveedorExistente = this.IConexion!.Proveedores!.FirstOrDefault(x => x.Id == entidad.Id);
+
+            if (proveedorExistente == null)
+                throw new Exception("El proveedor que intenta modificar no existe");
 
             var entry = this.IConexion!.Entry<Proveedores>(entidad);
             entry.State = EntityState.Modified;
