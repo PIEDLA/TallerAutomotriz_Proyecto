@@ -7,5 +7,12 @@ namespace lib_dominio.Entidades
         public string? Apellido { get; set; }
         public string? Telefono { get; set; }
         public string? Correo { get; set; }
+
+        List<Vehiculos> vehiculos = new List<Vehiculos>();
+
+        List<Reservas> reservas = new List<Reservas>();
+
+        List<Facturas> facturas = new List<Facturas>();
+
     }
 }
