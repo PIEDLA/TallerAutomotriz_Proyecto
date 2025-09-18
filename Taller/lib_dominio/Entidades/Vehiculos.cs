@@ -10,12 +10,6 @@ namespace lib_dominio.Entidades
         public string? Marca { get; set; }
         public string? Modelo { get; set; }
 
-<<<<<<< HEAD
-        public List<Diagnosticos>? Diagnosticos;
-
-=======
->>>>>>> main
-
         [ForeignKey("Id_cliente")] public Clientes? _Cliente { get; set; }
 
         public List<Diagnosticos>? Diagnosticos;

@@ -8,10 +8,6 @@ namespace lib_dominio.Entidades
         public string? Correo { get; set; }
         public string? Direccion { get; set; }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> main
         public List<Repuestos>? Repuestos;
 
     }
