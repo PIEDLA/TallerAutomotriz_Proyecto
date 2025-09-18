@@ -7,13 +7,13 @@ using ut_presentacion.Nucleo;
 namespace ut_presentacion.Repositorios
 {
     [TestClass]
-    public class HerramientasPrueba
+    public class ReparacionesPrueba2
     {
         private readonly IConexion? iConexion;
-        private List<Herramientas>? lista;
-        private Herramientas? entidad;
+        private List<Reparaciones>? lista;
+        private Reparaciones? entidad;
 
-        public HerramientasPrueba()
+        public ReparacionesPrueba2()
         {
             iConexion = new Conexion();
             iConexion.StringConexion = Configuracion.ObtenerValor("StringConexion");
@@ -30,32 +30,28 @@ namespace ut_presentacion.Repositorios
 
         public bool Listar()
         {
-            this.lista = this.iConexion!.Herramientas!.ToList();
+            this.lista = this.iConexion!.Reparaciones!.ToList();
             return lista.Count > 0;
         }
 
         public bool Guardar()
         {
-            this.entidad = new Herramientas
+            this.entidad = new Reparaciones
             {
-                Nombre = "Llave Inglesa",
-                Tipo = "Manual",
-                Estado = "Disponible",
-                Ubicacion = "Estante A1"
+                Id_diagnostico = 2,
+                Descripcion_trabajo = "Alineación y balanceo",
+                Costo_estimado = 300.00m,
+                Fecha_inicio = DateTime.Now
             };
-            this.iConexion!.Herramientas!.Add(this.entidad);
+            this.iConexion!.Reparaciones!.Add(this.entidad);
             this.iConexion!.SaveChanges();
             return true;
         }
 
         public bool Modificar()
         {
-<<<<<<< HEAD
-            this.entidad!.Estado = "En uso";
-=======
-            this.entidad!.Estado = "En reparación";
->>>>>>> main
-            var entry = this.iConexion!.Entry<Herramientas>(this.entidad);
+            this.entidad!.Costo_estimado = 350.00m;
+            var entry = this.iConexion!.Entry<Reparaciones>(this.entidad);
             entry.State = EntityState.Modified;
             this.iConexion!.SaveChanges();
             return true;
@@ -63,7 +59,7 @@ namespace ut_presentacion.Repositorios
 
         public bool Borrar()
         {
-            this.iConexion!.Herramientas!.Remove(this.entidad!);
+            this.iConexion!.Reparaciones!.Remove(this.entidad!);
             this.iConexion!.SaveChanges();
             return true;
         }

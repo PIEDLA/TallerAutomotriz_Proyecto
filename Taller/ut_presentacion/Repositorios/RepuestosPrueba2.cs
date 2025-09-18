@@ -7,13 +7,13 @@ using ut_presentacion.Nucleo;
 namespace ut_presentacion.Repositorios
 {
     [TestClass]
-    public class HerramientasPrueba
+    public class RepuestosPrueba2
     {
         private readonly IConexion? iConexion;
-        private List<Herramientas>? lista;
-        private Herramientas? entidad;
+        private List<Repuestos>? lista;
+        private Repuestos? entidad;
 
-        public HerramientasPrueba()
+        public RepuestosPrueba2()
         {
             iConexion = new Conexion();
             iConexion.StringConexion = Configuracion.ObtenerValor("StringConexion");
@@ -30,32 +30,29 @@ namespace ut_presentacion.Repositorios
 
         public bool Listar()
         {
-            this.lista = this.iConexion!.Herramientas!.ToList();
+            this.lista = this.iConexion!.Repuestos!.ToList();
             return lista.Count > 0;
         }
 
         public bool Guardar()
         {
-            this.entidad = new Herramientas
+            this.entidad = new Repuestos
             {
-                Nombre = "Llave Inglesa",
-                Tipo = "Manual",
-                Estado = "Disponible",
-                Ubicacion = "Estante A1"
+                Id_proveedor = 2,
+                Nombre_repuesto = "Bujía",
+                Marca = "NGK",
+                Precio = 15.75m,
+                Stock = 50
             };
-            this.iConexion!.Herramientas!.Add(this.entidad);
+            this.iConexion!.Repuestos!.Add(this.entidad);
             this.iConexion!.SaveChanges();
             return true;
         }
 
         public bool Modificar()
         {
-<<<<<<< HEAD
-            this.entidad!.Estado = "En uso";
-=======
-            this.entidad!.Estado = "En reparación";
->>>>>>> main
-            var entry = this.iConexion!.Entry<Herramientas>(this.entidad);
+            this.entidad!.Precio = 18.00m;
+            var entry = this.iConexion!.Entry<Repuestos>(this.entidad);
             entry.State = EntityState.Modified;
             this.iConexion!.SaveChanges();
             return true;
@@ -63,7 +60,7 @@ namespace ut_presentacion.Repositorios
 
         public bool Borrar()
         {
-            this.iConexion!.Herramientas!.Remove(this.entidad!);
+            this.iConexion!.Repuestos!.Remove(this.entidad!);
             this.iConexion!.SaveChanges();
             return true;
         }

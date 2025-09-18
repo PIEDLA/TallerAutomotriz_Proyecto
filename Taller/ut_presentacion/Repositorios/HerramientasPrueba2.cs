@@ -7,13 +7,13 @@ using ut_presentacion.Nucleo;
 namespace ut_presentacion.Repositorios
 {
     [TestClass]
-    public class HerramientasPrueba
+    public class HerramientasPrueba2
     {
         private readonly IConexion? iConexion;
         private List<Herramientas>? lista;
         private Herramientas? entidad;
 
-        public HerramientasPrueba()
+        public HerramientasPrueba2()
         {
             iConexion = new Conexion();
             iConexion.StringConexion = Configuracion.ObtenerValor("StringConexion");
@@ -38,10 +38,10 @@ namespace ut_presentacion.Repositorios
         {
             this.entidad = new Herramientas
             {
-                Nombre = "Llave Inglesa",
-                Tipo = "Manual",
+                Nombre = "Taladro Eléctrico",
+                Tipo = "Eléctrico",
                 Estado = "Disponible",
-                Ubicacion = "Estante A1"
+                Ubicacion = "Estante B2"
             };
             this.iConexion!.Herramientas!.Add(this.entidad);
             this.iConexion!.SaveChanges();
@@ -50,11 +50,7 @@ namespace ut_presentacion.Repositorios
 
         public bool Modificar()
         {
-<<<<<<< HEAD
-            this.entidad!.Estado = "En uso";
-=======
-            this.entidad!.Estado = "En reparación";
->>>>>>> main
+            this.entidad!.Ubicacion = "Estante C3";
             var entry = this.iConexion!.Entry<Herramientas>(this.entidad);
             entry.State = EntityState.Modified;
             this.iConexion!.SaveChanges();
