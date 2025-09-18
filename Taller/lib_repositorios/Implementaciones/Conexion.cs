@@ -1,6 +1,5 @@
 
-﻿//using lib_dominio.Entidades;
-using lib_dominio.Entidades;
+﻿using lib_dominio.Entidades;
 using lib_repositorios.Interfaces;
 using Microsoft.EntityFrameworkCore;
 namespace lib_repositorios.Implementaciones
@@ -13,6 +12,7 @@ namespace lib_repositorios.Implementaciones
             optionsBuilder.UseSqlServer(this.StringConexion!, p => { });
             optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
         }
+
         public DbSet<Diagnosticos>? Diagnosticos { get; set; }
         public DbSet<Reparaciones>? Reparaciones { get; set; }
         public DbSet<Pagos>? Pagos { get; set; }
