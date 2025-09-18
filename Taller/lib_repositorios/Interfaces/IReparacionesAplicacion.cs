@@ -9,5 +9,11 @@ namespace lib_repositorios.Interfaces
         Reparaciones? Guardar(Reparaciones? entidad);
         Reparaciones? Modificar(Reparaciones? entidad);
         Reparaciones? Borrar(Reparaciones? entidad);
+
+        List<Reparaciones> PorDiagnostico(int idDiagnostico);
+        List<Reparaciones> Costosas(decimal minimo);
+        List<Reparaciones> EntreFechas(DateTime inicio, DateTime fin);
+        Reparaciones? UltimaReparacion();
+        decimal TotalEstimado();
     }
 }

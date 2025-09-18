@@ -18,6 +18,7 @@ namespace lib_repositorios.Implementaciones
             this.IConexion!.StringConexion = StringConexion;
         }
 
+
         public List<Diagnosticos> Listar()
         {
             return this.IConexion!.Diagnosticos!.Take(20).ToList();
@@ -31,7 +32,12 @@ namespace lib_repositorios.Implementaciones
             if (entidad.Id != 0)
                 throw new Exception("Ya se guardó");
 
-            // Operaciones
+            if (string.IsNullOrWhiteSpace(entidad.Descripcion))
+                throw new Exception("El diagnóstico debe tener una descripción");
+
+            if (entidad.Fecha > DateTime.Now)
+                throw new Exception("La fecha no puede ser futura");
+
             entidad._Vehiculo = null;
             entidad._Empleado = null;
 
@@ -48,7 +54,9 @@ namespace lib_repositorios.Implementaciones
             if (entidad.Id == 0)
                 throw new Exception("No se guardó");
 
-            // Operaciones
+            if (string.IsNullOrWhiteSpace(entidad.Descripcion))
+                throw new Exception("El diagnóstico debe tener una descripción");
+
             entidad._Vehiculo = null;
             entidad._Empleado = null;
 
@@ -66,13 +74,47 @@ namespace lib_repositorios.Implementaciones
             if (entidad.Id == 0)
                 throw new Exception("No se guardó");
 
-            // Operaciones
             entidad._Vehiculo = null;
             entidad._Empleado = null;
 
             this.IConexion!.Diagnosticos!.Remove(entidad);
             this.IConexion.SaveChanges();
             return entidad;
+        }
+
+
+        public List<Diagnosticos> PorVehiculo(int idVehiculo)
+        {
+            return this.IConexion!.Diagnosticos!
+                .Where(x => x.Id_vehiculo == idVehiculo)
+                .ToList();
+        }
+
+        public List<Diagnosticos> PorEmpleado(int idEmpleado)
+        {
+            return this.IConexion!.Diagnosticos!
+                .Where(x => x.Id_empleado == idEmpleado)
+                .ToList();
+        }
+
+        public List<Diagnosticos> PorRangoFechas(DateTime inicio, DateTime fin)
+        {
+            return this.IConexion!.Diagnosticos!
+                .Where(x => x.Fecha >= inicio && x.Fecha <= fin)
+                .ToList();
+        }
+
+        public int ContarPorVehiculo(int idVehiculo)
+        {
+            return this.IConexion!.Diagnosticos!
+                .Count(x => x.Id_vehiculo == idVehiculo);
+        }
+
+        public Diagnosticos? UltimoDiagnostico()
+        {
+            return this.IConexion!.Diagnosticos!
+                .OrderByDescending(x => x.Fecha)
+                .FirstOrDefault();
         }
     }
 }

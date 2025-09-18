@@ -9,5 +9,12 @@ namespace lib_repositorios.Interfaces
         Repuestos? Guardar(Repuestos? entidad);
         Repuestos? Modificar(Repuestos? entidad);
         Repuestos? Borrar(Repuestos? entidad);
+
+        List<Repuestos> StockBajo(int limite = 5);
+        List<Repuestos> PorMarca(string marca);
+        List<Repuestos> PorProveedor(int idProveedor);
+        Repuestos? MasCaro();
+        Repuestos? MasBarato();
+        int StockTotal();
     }
 }

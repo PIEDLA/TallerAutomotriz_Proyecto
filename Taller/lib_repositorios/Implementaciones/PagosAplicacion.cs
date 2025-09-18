@@ -18,9 +18,13 @@ namespace lib_repositorios.Implementaciones
             this.IConexion!.StringConexion = StringConexion;
         }
 
+
         public List<Pagos> Listar()
         {
-            return this.IConexion!.Pagos!.Take(20).ToList();
+            return this.IConexion!.Pagos!
+                .Include(p => p._Factura) 
+                .Take(20)
+                .ToList();
         }
 
         public Pagos? Guardar(Pagos? entidad)
@@ -31,8 +35,8 @@ namespace lib_repositorios.Implementaciones
             if (entidad.Id != 0)
                 throw new Exception("Ya se guardó");
 
-            // Operaciones
-            entidad._Factura = null;
+
+            entidad._Factura = null; 
 
             this.IConexion!.Pagos!.Add(entidad);
             this.IConexion.SaveChanges();
@@ -47,7 +51,6 @@ namespace lib_repositorios.Implementaciones
             if (entidad.Id == 0)
                 throw new Exception("No se guardó");
 
-            // Operaciones
             entidad._Factura = null;
 
             var entry = this.IConexion!.Entry<Pagos>(entidad);
@@ -64,12 +67,46 @@ namespace lib_repositorios.Implementaciones
             if (entidad.Id == 0)
                 throw new Exception("No se guardó");
 
-            // Operaciones
+
             entidad._Factura = null;
 
             this.IConexion!.Pagos!.Remove(entidad);
             this.IConexion.SaveChanges();
             return entidad;
+        }
+
+
+        public List<Pagos> PorFactura(int idFactura)
+        {
+            return this.IConexion!.Pagos!
+                .Where(p => p.Id_factura == idFactura)
+                .ToList();
+        }
+
+        public List<Pagos> PorEstado(string estado)
+        {
+            return this.IConexion!.Pagos!
+                .Where(p => p.Estado == estado)
+                .ToList();
+        }
+
+        public List<Pagos> PorFecha(DateTime fecha)
+        {
+            return this.IConexion!.Pagos!
+                .Where(p => p.Fecha_pago.Date == fecha.Date)
+                .ToList();
+        }
+
+        public decimal TotalPagos()
+        {
+            return this.IConexion!.Pagos!.Sum(p => p.Monto_total);
+        }
+
+        public Pagos? UltimoPago()
+        {
+            return this.IConexion!.Pagos!
+                .OrderByDescending(p => p.Fecha_pago)
+                .FirstOrDefault();
         }
     }
 }

@@ -18,9 +18,12 @@ namespace lib_repositorios.Implementaciones
             this.IConexion!.StringConexion = StringConexion;
         }
 
+
         public List<Reparacion_Herramienta> Listar()
         {
-            return this.IConexion!.Reparacion_Herramienta!.Take(20).ToList();
+            return this.IConexion!.Reparacion_Herramienta!
+                .Take(20)
+                .ToList();
         }
 
         public Reparacion_Herramienta? Guardar(Reparacion_Herramienta? entidad)
@@ -31,7 +34,6 @@ namespace lib_repositorios.Implementaciones
             if (entidad.Id != 0)
                 throw new Exception("Ya se guardó");
 
-            // Operaciones
             entidad._Reparacion = null;
             entidad._Herramienta = null;
 
@@ -48,7 +50,6 @@ namespace lib_repositorios.Implementaciones
             if (entidad.Id == 0)
                 throw new Exception("No se guardó");
 
-            // Operaciones
             entidad._Reparacion = null;
             entidad._Herramienta = null;
 
@@ -66,13 +67,42 @@ namespace lib_repositorios.Implementaciones
             if (entidad.Id == 0)
                 throw new Exception("No se guardó");
 
-            // Operaciones
             entidad._Reparacion = null;
             entidad._Herramienta = null;
 
             this.IConexion!.Reparacion_Herramienta!.Remove(entidad);
             this.IConexion.SaveChanges();
             return entidad;
+        }
+
+
+        public List<Herramientas> HerramientasPorReparacion(int idReparacion)
+        {
+            return this.IConexion!.Reparacion_Herramienta!
+                .Where(rh => rh.Id_reparacion == idReparacion)
+                .Select(rh => rh._Herramienta!)
+                .ToList();
+        }
+
+        public List<Reparaciones> ReparacionesPorHerramienta(int idHerramienta)
+        {
+            return this.IConexion!.Reparacion_Herramienta!
+                .Where(rh => rh.Id_herramienta == idHerramienta)
+                .Select(rh => rh._Reparacion!)
+                .ToList();
+        }
+
+        public int VecesUsadaHerramienta(int idHerramienta)
+        {
+            return this.IConexion!.Reparacion_Herramienta!
+                .Count(rh => rh.Id_herramienta == idHerramienta);
+        }
+
+        public List<Reparacion_Herramienta> PorSede(int idSede)
+        {
+            return this.IConexion!.Reparacion_Herramienta!
+                .Where(rh => rh._Reparacion!._Diagnostico!._Vehiculo!.Id_cliente == idSede)
+                .ToList();
         }
     }
 }

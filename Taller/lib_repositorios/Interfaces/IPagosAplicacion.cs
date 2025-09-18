@@ -9,5 +9,11 @@ namespace lib_repositorios.Interfaces
         Pagos? Guardar(Pagos? entidad);
         Pagos? Modificar(Pagos? entidad);
         Pagos? Borrar(Pagos? entidad);
+
+        List<Pagos> PorFactura(int idFactura);
+        List<Pagos> PorEstado(string estado);
+        List<Pagos> PorFecha(DateTime fecha);
+        decimal TotalPagos();
+        Pagos? UltimoPago();
     }
 }

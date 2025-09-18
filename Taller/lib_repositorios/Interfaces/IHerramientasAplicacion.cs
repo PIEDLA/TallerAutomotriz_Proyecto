@@ -9,5 +9,11 @@ namespace lib_repositorios.Interfaces
         Herramientas? Guardar(Herramientas? entidad);
         Herramientas? Modificar(Herramientas? entidad);
         Herramientas? Borrar(Herramientas? entidad);
+
+        List<Herramientas> Disponibles();
+        List<Herramientas> EnMantenimiento();
+        List<Herramientas> PorTipo(string tipo);
+        int TotalHerramientas();
+        int TotalDisponibles();
     }
 }

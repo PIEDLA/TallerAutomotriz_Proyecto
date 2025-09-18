@@ -18,9 +18,12 @@ namespace lib_repositorios.Implementaciones
             this.IConexion!.StringConexion = StringConexion;
         }
 
+
         public List<Repuestos> Listar()
         {
-            return this.IConexion!.Repuestos!.Take(20).ToList();
+            return this.IConexion!.Repuestos!
+                .Take(20)
+                .ToList();
         }
 
         public Repuestos? Guardar(Repuestos? entidad)
@@ -30,9 +33,6 @@ namespace lib_repositorios.Implementaciones
 
             if (entidad.Id != 0)
                 throw new Exception("Ya se guardó");
-
-            // Operaciones
-            entidad._Proveedor = null;
 
             this.IConexion!.Repuestos!.Add(entidad);
             this.IConexion.SaveChanges();
@@ -46,9 +46,6 @@ namespace lib_repositorios.Implementaciones
 
             if (entidad.Id == 0)
                 throw new Exception("No se guardó");
-
-            // Operaciones
-            entidad._Proveedor = null;
 
             var entry = this.IConexion!.Entry<Repuestos>(entidad);
             entry.State = EntityState.Modified;
@@ -64,12 +61,51 @@ namespace lib_repositorios.Implementaciones
             if (entidad.Id == 0)
                 throw new Exception("No se guardó");
 
-            // Operaciones
-            entidad._Proveedor = null;
-
             this.IConexion!.Repuestos!.Remove(entidad);
             this.IConexion.SaveChanges();
             return entidad;
+        }
+
+
+        public List<Repuestos> StockBajo(int limite = 5)
+        {
+            return this.IConexion!.Repuestos!
+                .Where(r => r.Stock < limite)
+                .ToList();
+        }
+
+        public List<Repuestos> PorMarca(string marca)
+        {
+            return this.IConexion!.Repuestos!
+                .Where(r => r.Marca.Contains(marca))
+                .ToList();
+        }
+
+        public List<Repuestos> PorProveedor(int idProveedor)
+        {
+            return this.IConexion!.Repuestos!
+                .Where(r => r.Id_proveedor == idProveedor)
+                .ToList();
+        }
+
+        public Repuestos? MasCaro()
+        {
+            return this.IConexion!.Repuestos!
+                .OrderByDescending(r => r.Precio)
+                .FirstOrDefault();
+        }
+
+        public Repuestos? MasBarato()
+        {
+            return this.IConexion!.Repuestos!
+                .OrderBy(r => r.Precio)
+                .FirstOrDefault();
+        }
+
+        public int StockTotal()
+        {
+            return this.IConexion!.Repuestos!
+                .Sum(r => r.Stock);
         }
     }
 }

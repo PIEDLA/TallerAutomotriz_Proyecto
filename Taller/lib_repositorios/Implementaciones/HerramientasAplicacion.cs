@@ -18,9 +18,12 @@ namespace lib_repositorios.Implementaciones
             this.IConexion!.StringConexion = StringConexion;
         }
 
+
         public List<Herramientas> Listar()
         {
-            return this.IConexion!.Herramientas!.Take(20).ToList();
+            return this.IConexion!.Herramientas!
+                .Take(20)
+                .ToList();
         }
 
         public Herramientas? Guardar(Herramientas? entidad)
@@ -30,9 +33,6 @@ namespace lib_repositorios.Implementaciones
 
             if (entidad.Id != 0)
                 throw new Exception("Ya se guardó");
-
-            // Operaciones
-            // No tiene navegación
 
             this.IConexion!.Herramientas!.Add(entidad);
             this.IConexion.SaveChanges();
@@ -46,9 +46,6 @@ namespace lib_repositorios.Implementaciones
 
             if (entidad.Id == 0)
                 throw new Exception("No se guardó");
-
-            // Operaciones
-            // No tiene navegación
 
             var entry = this.IConexion!.Entry<Herramientas>(entidad);
             entry.State = EntityState.Modified;
@@ -64,12 +61,42 @@ namespace lib_repositorios.Implementaciones
             if (entidad.Id == 0)
                 throw new Exception("No se guardó");
 
-            // Operaciones
-            // No tiene navegación
-
             this.IConexion!.Herramientas!.Remove(entidad);
             this.IConexion.SaveChanges();
             return entidad;
+        }
+
+
+        public List<Herramientas> Disponibles()
+        {
+            return this.IConexion!.Herramientas!
+                .Where(h => h.Estado == "Disponible")
+                .ToList();
+        }
+
+        public List<Herramientas> EnMantenimiento()
+        {
+            return this.IConexion!.Herramientas!
+                .Where(h => h.Estado == "Mantenimiento")
+                .ToList();
+        }
+
+        public List<Herramientas> PorTipo(string tipo)
+        {
+            return this.IConexion!.Herramientas!
+                .Where(h => h.Tipo.Contains(tipo))
+                .ToList();
+        }
+
+        public int TotalHerramientas()
+        {
+            return this.IConexion!.Herramientas!.Count();
+        }
+
+        public int TotalDisponibles()
+        {
+            return this.IConexion!.Herramientas!
+                .Count(h => h.Estado == "Disponible");
         }
     }
 }
