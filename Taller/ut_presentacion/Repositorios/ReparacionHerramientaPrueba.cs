@@ -38,7 +38,11 @@ namespace ut_presentacion.Repositorios
 
         public bool Guardar()
         {
-            this.entidad = EntidadesNucleo.Reparacion_Herramienta()!;
+            this.entidad = new Reparacion_Herramienta
+            {
+                Id_reparacion = 1, 
+                Id_herramienta = 1  
+            };
             this.iConexion!.Reparacion_Herramienta!.Add(this.entidad);
             this.iConexion!.SaveChanges();
             return true;

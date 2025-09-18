@@ -7,13 +7,13 @@ using ut_presentacion.Nucleo;
 namespace ut_presentacion.Repositorios
 {
     [TestClass]
-    public class PagosPrueba
+    public class HerramientasPrueba2
     {
         private readonly IConexion? iConexion;
-        private List<Pagos>? lista;
-        private Pagos? entidad;
+        private List<Herramientas>? lista;
+        private Herramientas? entidad;
 
-        public PagosPrueba()
+        public HerramientasPrueba2()
         {
             iConexion = new Conexion();
             iConexion.StringConexion = Configuracion.ObtenerValor("StringConexion");
@@ -30,30 +30,28 @@ namespace ut_presentacion.Repositorios
 
         public bool Listar()
         {
-            this.lista = this.iConexion!.Pagos!
-            .Include(x => x._Factura)
-            .ToList();
+            this.lista = this.iConexion!.Herramientas!.ToList();
             return lista.Count > 0;
         }
 
         public bool Guardar()
         {
-            this.entidad = new Pagos
+            this.entidad = new Herramientas
             {
-                Id_factura = 1,
-                Monto_total = 500.00m,
-                Fecha_pago = DateTime.Now,
-                Estado = "Pendiente"
+                Nombre = "Taladro Eléctrico",
+                Tipo = "Eléctrico",
+                Estado = "Disponible",
+                Ubicacion = "Estante B2"
             };
-            this.iConexion!.Pagos!.Add(this.entidad);
+            this.iConexion!.Herramientas!.Add(this.entidad);
             this.iConexion!.SaveChanges();
             return true;
         }
 
         public bool Modificar()
         {
-            this.entidad!.Estado = "Pagado";
-            var entry = this.iConexion!.Entry<Pagos>(this.entidad);
+            this.entidad!.Ubicacion = "Estante C3";
+            var entry = this.iConexion!.Entry<Herramientas>(this.entidad);
             entry.State = EntityState.Modified;
             this.iConexion!.SaveChanges();
             return true;
@@ -61,7 +59,7 @@ namespace ut_presentacion.Repositorios
 
         public bool Borrar()
         {
-            this.iConexion!.Pagos!.Remove(this.entidad!);
+            this.iConexion!.Herramientas!.Remove(this.entidad!);
             this.iConexion!.SaveChanges();
             return true;
         }

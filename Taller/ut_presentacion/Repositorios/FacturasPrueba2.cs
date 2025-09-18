@@ -7,13 +7,13 @@ using ut_presentacion.Nucleo;
 namespace ut_presentacion.Repositorios
 {
     [TestClass]
-    public class PagosPrueba
+    public class FacturasPrueba2
     {
         private readonly IConexion? iConexion;
-        private List<Pagos>? lista;
-        private Pagos? entidad;
+        private List<Facturas>? lista;
+        private Facturas? entidad;
 
-        public PagosPrueba()
+        public FacturasPrueba2()
         {
             iConexion = new Conexion();
             iConexion.StringConexion = Configuracion.ObtenerValor("StringConexion");
@@ -30,38 +30,37 @@ namespace ut_presentacion.Repositorios
 
         public bool Listar()
         {
-            this.lista = this.iConexion!.Pagos!
-            .Include(x => x._Factura)
+            this.lista = this.iConexion!.Facturas!
+            .Include(x => x._Cliente)
+            .Include(x => x._Reparacion)
             .ToList();
             return lista.Count > 0;
         }
 
         public bool Guardar()
         {
-            this.entidad = new Pagos
-            {
-                Id_factura = 1,
-                Monto_total = 500.00m,
-                Fecha_pago = DateTime.Now,
-                Estado = "Pendiente"
-            };
-            this.iConexion!.Pagos!.Add(this.entidad);
+            this.entidad = EntidadesNucleo.Facturas()!;
+
+            this.iConexion!.Facturas!.Add(this.entidad);
             this.iConexion!.SaveChanges();
+
             return true;
         }
 
         public bool Modificar()
         {
-            this.entidad!.Estado = "Pagado";
-            var entry = this.iConexion!.Entry<Pagos>(this.entidad);
+            this.entidad!.Fecha_emision = DateTime.Now;
+
+            var entry = this.iConexion!.Entry<Facturas>(this.entidad);
             entry.State = EntityState.Modified;
             this.iConexion!.SaveChanges();
+
             return true;
         }
 
         public bool Borrar()
         {
-            this.iConexion!.Pagos!.Remove(this.entidad!);
+            this.iConexion!.Facturas!.Remove(this.entidad!);
             this.iConexion!.SaveChanges();
             return true;
         }

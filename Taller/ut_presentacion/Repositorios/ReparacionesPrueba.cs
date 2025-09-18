@@ -38,7 +38,13 @@ namespace ut_presentacion.Repositorios
 
         public bool Guardar()
         {
-            this.entidad = EntidadesNucleo.Reparaciones()!;
+            this.entidad = new Reparaciones
+            {
+                Id_diagnostico = 1,
+                Descripcion_trabajo = "Cambio de aceite",
+                Costo_estimado = 150.75m,
+                Fecha_inicio = DateTime.Now
+            };
             this.iConexion!.Reparaciones!.Add(this.entidad);
             this.iConexion!.SaveChanges();
             return true;
@@ -46,7 +52,7 @@ namespace ut_presentacion.Repositorios
 
         public bool Modificar()
         {
-            this.entidad!.Descripcion_trabajo = "Trabajo actualizado desde prueba";
+            this.entidad!.Descripcion_trabajo = "Cambio de aceite y filtro";
             var entry = this.iConexion!.Entry<Reparaciones>(this.entidad);
             entry.State = EntityState.Modified;
             this.iConexion!.SaveChanges();

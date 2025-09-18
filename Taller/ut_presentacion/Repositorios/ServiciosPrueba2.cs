@@ -7,13 +7,13 @@ using ut_presentacion.Nucleo;
 namespace ut_presentacion.Repositorios
 {
     [TestClass]
-    public class PagosPrueba
+    public class ServiciosPrueba2
     {
         private readonly IConexion? iConexion;
-        private List<Pagos>? lista;
-        private Pagos? entidad;
+        private List<Servicios>? lista;
+        private Servicios? entidad;
 
-        public PagosPrueba()
+        public ServiciosPrueba2()
         {
             iConexion = new Conexion();
             iConexion.StringConexion = Configuracion.ObtenerValor("StringConexion");
@@ -30,38 +30,34 @@ namespace ut_presentacion.Repositorios
 
         public bool Listar()
         {
-            this.lista = this.iConexion!.Pagos!
-            .Include(x => x._Factura)
-            .ToList();
+            this.lista = this.iConexion!.Servicios!.ToList();
             return lista.Count > 0;
         }
 
         public bool Guardar()
         {
-            this.entidad = new Pagos
-            {
-                Id_factura = 1,
-                Monto_total = 500.00m,
-                Fecha_pago = DateTime.Now,
-                Estado = "Pendiente"
-            };
-            this.iConexion!.Pagos!.Add(this.entidad);
+            this.entidad = EntidadesNucleo.Servicios()!;
+
+            this.iConexion!.Servicios!.Add(this.entidad);
             this.iConexion!.SaveChanges();
+
             return true;
         }
 
         public bool Modificar()
         {
-            this.entidad!.Estado = "Pagado";
-            var entry = this.iConexion!.Entry<Pagos>(this.entidad);
+            this.entidad!.Descripcion = "Test";
+
+            var entry = this.iConexion!.Entry<Servicios>(this.entidad);
             entry.State = EntityState.Modified;
             this.iConexion!.SaveChanges();
+
             return true;
         }
 
         public bool Borrar()
         {
-            this.iConexion!.Pagos!.Remove(this.entidad!);
+            this.iConexion!.Servicios!.Remove(this.entidad!);
             this.iConexion!.SaveChanges();
             return true;
         }

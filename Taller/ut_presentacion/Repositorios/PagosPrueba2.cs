@@ -7,13 +7,13 @@ using ut_presentacion.Nucleo;
 namespace ut_presentacion.Repositorios
 {
     [TestClass]
-    public class PagosPrueba
+    public class PagosPrueba2
     {
         private readonly IConexion? iConexion;
         private List<Pagos>? lista;
         private Pagos? entidad;
 
-        public PagosPrueba()
+        public PagosPrueba2()
         {
             iConexion = new Conexion();
             iConexion.StringConexion = Configuracion.ObtenerValor("StringConexion");
@@ -30,9 +30,7 @@ namespace ut_presentacion.Repositorios
 
         public bool Listar()
         {
-            this.lista = this.iConexion!.Pagos!
-            .Include(x => x._Factura)
-            .ToList();
+            this.lista = this.iConexion!.Pagos!.ToList();
             return lista.Count > 0;
         }
 
@@ -40,8 +38,8 @@ namespace ut_presentacion.Repositorios
         {
             this.entidad = new Pagos
             {
-                Id_factura = 1,
-                Monto_total = 500.00m,
+                Id_factura = 2,
+                Monto_total = 750.50m,
                 Fecha_pago = DateTime.Now,
                 Estado = "Pendiente"
             };
@@ -52,7 +50,7 @@ namespace ut_presentacion.Repositorios
 
         public bool Modificar()
         {
-            this.entidad!.Estado = "Pagado";
+            this.entidad!.Monto_total = 800.00m;
             var entry = this.iConexion!.Entry<Pagos>(this.entidad);
             entry.State = EntityState.Modified;
             this.iConexion!.SaveChanges();

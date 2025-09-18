@@ -36,7 +36,13 @@ namespace ut_presentacion.Repositorios
 
         public bool Guardar()
         {
-            this.entidad = EntidadesNucleo.Herramientas()!;
+            this.entidad = new Herramientas
+            {
+                Nombre = "Llave Inglesa",
+                Tipo = "Manual",
+                Estado = "Disponible",
+                Ubicacion = "Estante A1"
+            };
             this.iConexion!.Herramientas!.Add(this.entidad);
             this.iConexion!.SaveChanges();
             return true;
@@ -44,6 +50,7 @@ namespace ut_presentacion.Repositorios
 
         public bool Modificar()
         {
+            this.entidad!.Estado = "En uso";
             this.entidad!.Estado = "En reparación";
             var entry = this.iConexion!.Entry<Herramientas>(this.entidad);
             entry.State = EntityState.Modified;
