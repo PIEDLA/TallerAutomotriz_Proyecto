@@ -10,5 +10,6 @@ namespace lib_dominio.Entidades
 
 
         public List<Repuestos>? Repuestos;
+
     }
 }

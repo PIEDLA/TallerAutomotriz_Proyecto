@@ -50,8 +50,9 @@ CREATE TABLE [Reservas] (
 
 CREATE TABLE [Reserva_Servicio] (
 	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1, 1),
+    [PrecioServicio] DECIMAL(10,2) NOT NULL,
 	[Servicio] INT NOT NULL REFERENCES [Servicios] ([Id]),
-	[Reserva] INT NOT NULL REFERENCES [Reservas] ([Id]),
+	[Reserva] INT NOT NULL REFERENCES [Reservas] ([Id])
 );
 
 -- Tabla: Empleados
@@ -148,20 +149,21 @@ CREATE TABLE [Productos] (
 
 CREATE TABLE [Detalles_Servicio] (
 	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1, 1),
+    [PrecioServicio] DECIMAL(10,2) NOT NULL,
 	[Servicio] INT NOT NULL REFERENCES [Servicios] ([Id]),
 	[Factura] INT NOT NULL REFERENCES [Facturas] ([Id]),
 );
 
 CREATE TABLE [Detalles_Producto] (
 	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1, 1),
-    [Cantidad] INT NOT NULL,
+    [PrecioProducto] DECIMAL(10,2) NOT NULL,
 	[Producto] INT NOT NULL REFERENCES [Productos] ([Id]),
 	[Factura] INT NOT NULL REFERENCES [Facturas] ([Id]),
 );
 
 CREATE TABLE [Detalles_Repuesto] (
 	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1, 1),
-    [Cantidad] INT NOT NULL,
+    [PrecioRepuesto] DECIMAL(10,2) NOT NULL,
 	[Repuesto] INT NOT NULL REFERENCES [Repuestos] ([Id]),
 	[Factura] INT NOT NULL REFERENCES [Facturas] ([Id]),
 );
@@ -177,11 +179,11 @@ GO
 
 -- Clientes
 INSERT INTO Clientes (Nombre, Apellido, Telefono, Correo) VALUES
-('Juan', 'P rez', '3001111111', 'juan.perez@mail.com'),
-('Mar a', 'G mez', '3002222222', 'maria.gomez@mail.com'),
-('Carlos', 'Rodr guez', '3003333333', 'carlos.rodriguez@mail.com'),
-('Ana', 'Mart nez', '3004444444', 'ana.martinez@mail.com'),
-('Luis', 'Hern ndez', '3005555555', 'luis.hernandez@mail.com');
+('Juan', 'Perez', '3001111111', 'juan.perez@mail.com'),
+('Mar a', 'Gomez', '3002222222', 'maria.gomez@mail.com'),
+('Carlos', 'Rodriguez', '3003333333', 'carlos.rodriguez@mail.com'),
+('Ana', 'Martinez', '3004444444', 'ana.martinez@mail.com'),
+('Luis', 'Hernendez', '3005555555', 'luis.hernandez@mail.com');
 
 
 -- Vehiculos
@@ -196,18 +198,18 @@ INSERT INTO Vehiculos (Id_cliente, Placa, Marca, Modelo) VALUES
 -- Servicios
 INSERT INTO Servicios (Nombre_servicio, Descripcion, Precio, Duracion_aprox) VALUES
 ('Cambio de aceite', 'Incluye cambio de filtro', 150000, '30 minutos'),
-('Alineaci n', 'Alineaci n de las 4 ruedas', 120000, '40 minutos'),
-('Balanceo', 'Balanceo de neum ticos', 100000, '35 minutos'),
-('Revisi n general', 'Chequeo completo del veh culo', 200000, '1 hora'),
+('Alineacion', 'Alineacion de las 4 ruedas', 120000, '40 minutos'),
+('Balanceo', 'Balanceo de neumaticos', 100000, '35 minutos'),
+('Revision general', 'Chequeo completo del vehiculo', 200000, '1 hora'),
 ('Cambio de frenos', 'Pastillas delanteras y traseras', 250000, '50 minutos');
 
 
 -- Sedes
 INSERT INTO Sedes (Nombre_sede, Direccion, Telefono, Ciudad) VALUES
-('Taller Centro', 'Cra 10 #20-30', '6011111111', 'Bogot '),
-('Taller Norte', 'Av 19 #120-45', '6012222222', 'Bogot '),
+('Taller Centro', 'Cra 10 #20-30', '6011111111', 'Bogota'),
+('Taller Norte', 'Av 19 #120-45', '6012222222', 'Bogota'),
 ('Taller Sur', 'Cl 80 #50-15', '6013333333', 'Cali'),
-('Taller Occidente', 'Av Boyac  #70-50', '6014444444', 'Medell n'),
+('Taller Occidente', 'Av Boyac  #70-50', '6014444444', 'Medellin'),
 ('Taller Oriente', 'Cl 50 #30-25', '6015555555', 'Barranquilla');
 
 
@@ -221,36 +223,36 @@ INSERT INTO Reservas (Id_cliente, Id_sede, Fecha_reserva, Estado) VALUES
 
 
 -- Reserva_Servicio
-INSERT INTO Reserva_Servicio (Servicio, Reserva) VALUES
-(1, 1),
-(2, 2),
-(3, 3),
-(4, 4),
-(5, 5);
+INSERT INTO Reserva_Servicio (PrecioServicio ,Servicio, Reserva) VALUES
+(150000.0,1, 1),
+(120000.0, 2, 2),
+(100000.0, 3, 3),
+(200000.0, 4, 4),
+(250000.0, 5, 5);
 
 
 -- Empleados
 INSERT INTO Empleados (Id_sede, Nombre, Apellido, Cargo, Telefono) VALUES
-(1, 'Pedro', 'Su rez', 'Mec nico', '3101111111'),
+(1, 'Pedro', 'Suarez', 'Mecanico', '3101111111'),
 (2, 'Laura', 'Torres', 'Recepcionista', '3102222222'),
-(3, 'Andr s', 'Mora', 'Mec nico', '3103333333'),
-(4, 'Camila', 'R os', 'Administrador', '3104444444'),
-(5, 'Felipe', 'Vargas', 'Mec nico', '3105555555');
+(3, 'Andres', 'Mora', 'Mecanico', '3103333333'),
+(4, 'Camila', 'Rios', 'Administrador', '3104444444'),
+(5, 'Felipe', 'Vargas', 'Mecanico', '3105555555');
 
 
 -- Diagnosticos
 INSERT INTO Diagnosticos (Id_vehiculo, Id_empleado, Descripcion, Fecha) VALUES
-(1, 1, 'Revisi n de frenos delanteros', GETDATE()),
-(2, 3, 'Cambio de bater a recomendado', GETDATE()),
+(1, 1, 'Revision de frenos delanteros', GETDATE()),
+(2, 3, 'Cambio de bateria recomendado', GETDATE()),
 (3, 5, 'Motor con ruido inusual', GETDATE()),
-(4, 1, 'Neum ticos desgastados', GETDATE()),
-(5, 3, 'Chequeo de suspensi n', GETDATE());
+(4, 1, 'Neumaticos desgastados', GETDATE()),
+(5, 3, 'Chequeo de suspension', GETDATE());
 
 
 -- Reparaciones
 INSERT INTO Reparaciones (Id_diagnostico, Descripcion_trabajo, Costo_estimado, Fecha_inicio) VALUES
 (1, 'Cambio de pastillas de freno', 300000, GETDATE()),
-(2, 'Instalaci n de bater a nueva', 400000, GETDATE()),
+(2, 'Instalacion de bateria nueva', 400000, GETDATE()),
 (3, 'Ajuste de motor', 500000, GETDATE()),
 (4, 'Cambio de llantas delanteras', 600000, GETDATE()),
 (5, 'Cambio de amortiguadores', 700000, GETDATE());
@@ -286,17 +288,17 @@ INSERT INTO Detalles_Pago (Id_pago, Metodo_pago, Monto, Fecha_pago) VALUES
 -- Herramientas
 INSERT INTO Herramientas (Nombre, Tipo, Estado, Ubicacion) VALUES
 ('Llave inglesa', 'Manual', 'Disponible', 'Bodega A'),
-('Gato hidr ulico', 'Mec nico', 'En uso', ' rea reparaciones'),
-('Compresor de aire', 'El ctrico', 'Disponible', 'Bodega B'),
-('Taladro', 'El ctrico', 'En reparaci n', 'Bodega C'),
-('Esc ner OBD2', 'Electr nico', 'Disponible', 'Oficina mec nicos');
+('Gato hidraulico', 'Mecanico', 'En uso', 'Area reparaciones'),
+('Compresor de aire', 'Electrico', 'Disponible', 'Bodega B'),
+('Taladro', 'Electrico', 'En reparacion', 'Bodega C'),
+('Esc ner OBD2', 'Electronico', 'Disponible', 'Oficina mecanicos');
 
 
 -- Proveedores
 INSERT INTO Proveedores (Nombre, Telefono, Correo, Direccion) VALUES
 ('Repuestos Express', '6016666666', 'ventas@repuestosx.com', 'Cl 10 #25-50'),
-('Autopartes Bogot ', '6017777777', 'info@autopartesbogota.com', 'Cra 15 #45-20'),
-('Motores y m s', '6018888888', 'contacto@motoresymas.com', 'Av 68 #70-30'),
+('Autopartes Bogota', '6017777777', 'info@autopartesbogota.com', 'Cra 15 #45-20'),
+('Motores y mas', '6018888888', 'contacto@motoresymas.com', 'Av 68 #70-30'),
 ('Frenos Seguros', '6019999999', 'soporte@frenosseguros.com', 'Cl 100 #15-10'),
 ('Accesorios Cars', '6011010101', 'ventas@accesorioscars.com', 'Cra 7 #50-25');
 
@@ -304,7 +306,7 @@ INSERT INTO Proveedores (Nombre, Telefono, Correo, Direccion) VALUES
 -- Repuestos
 INSERT INTO Repuestos (Id_proveedor, Nombre_repuesto, Marca, Precio, Stock) VALUES
 (1, 'Pastillas de freno', 'Brembo', 200000, 50),
-(2, 'Bater a 12V', 'Bosch', 400000, 30),
+(2, 'Bateria 12V', 'Bosch', 400000, 30),
 (3, 'Amortiguador', 'Monroe', 300000, 40),
 (4, 'Filtro de aire', 'Mann', 80000, 100),
 (5, 'Aceite 10W40', 'Castrol', 120000, 200);
@@ -316,34 +318,34 @@ INSERT INTO Productos (Nombre_producto, Precio, Categoria, Stock) VALUES
 ('Limpia parabrisas', 15000, 'Cuidado', 200),
 ('Aditivo para gasolina', 50000, 'Mantenimiento', 50),
 ('Ambientador', 10000, 'Accesorios', 300),
-('Cera l quida', 40000, 'Cuidado', 80);
+('Cera liquida', 40000, 'Cuidado', 80);
 
 
 -- Detalles_Servicio
-INSERT INTO Detalles_Servicio (Servicio, Factura) VALUES
-(1, 1),
-(2, 2),
-(3, 3),
-(4, 4),
-(5, 5);
+INSERT INTO Detalles_Servicio (PrecioServicio, Servicio, Factura) VALUES
+(150000.0, 1, 1),
+(120000.0, 2, 2),
+(100000.0, 3, 3),
+(200000.0, 4, 4),
+(250000.0, 5, 5);
 
 
 -- Detalles_Producto
-INSERT INTO Detalles_Producto (Cantidad, Producto, Factura) VALUES
-(2, 1, 1),
-(1, 2, 2),
-(3, 3, 3),
-(4, 4, 4),
-(5, 5, 5);
+INSERT INTO Detalles_Producto (PrecioProducto, Producto, Factura) VALUES
+(30000.0, 1, 1),
+(15000.0, 2, 2),
+(50000.00, 3, 3),
+(10000.0, 4, 4),
+(40000.0, 5, 5);
 
 
 -- Detalles_Repuesto
-INSERT INTO Detalles_Repuesto (Cantidad, Repuesto, Factura) VALUES
-(2, 1, 1),
-(1, 2, 2),
-(3, 3, 3),
-(4, 4, 4),
-(5, 5, 5);
+INSERT INTO Detalles_Repuesto (PrecioRepuesto, Repuesto, Factura) VALUES
+(300000.0, 1, 1),
+(400000.0, 2, 2),
+(500000.0, 3, 3),
+(600000.0, 4, 4),
+(700000.0, 5, 5);
 
 
 -- Reparacion_Herramienta

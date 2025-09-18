@@ -23,5 +23,6 @@ namespace lib_dominio.Entidades
 
         public List<Reparaciones>? Reparaciones;
 
+
     }
 }

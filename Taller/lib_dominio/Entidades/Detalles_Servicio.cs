@@ -10,6 +10,7 @@ namespace lib_dominio.Entidades
     public class Detalles_Servicio
     {
         public int Id { get; set; }
+        public decimal PrecioServicio { get; set; }
         public int Servicio { get; set; }
         public int Factura { get; set; }
 

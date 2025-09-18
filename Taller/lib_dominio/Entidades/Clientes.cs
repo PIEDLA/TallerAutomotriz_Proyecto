@@ -8,8 +8,10 @@ namespace lib_dominio.Entidades
         public string? Telefono { get; set; }
         public string? Correo { get; set; }
 
+
         public List<Vehiculos>? Vehiculos;
         public List<Facturas>? Facturas;
         public List<Reservas>? Reservas; 
+
     }
 }

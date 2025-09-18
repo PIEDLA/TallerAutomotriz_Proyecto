@@ -6,7 +6,7 @@ namespace ut_presentacion.Nucleo
         public static Detalles_Producto? Detalles_Producto()
         {
             var entidad = new Detalles_Producto();
-            entidad.Cantidad = 1;
+            entidad.PrecioProducto = 1.0m;
             entidad.Factura = 1;
             entidad.Producto = 1;
             return entidad;
@@ -14,7 +14,7 @@ namespace ut_presentacion.Nucleo
         public static Detalles_Repuesto? Detalles_Repuesto()
         {
             var entidad = new Detalles_Repuesto();
-            entidad.Cantidad = 1;
+            entidad.PrecioRepuesto = 1.0m;
             entidad.Factura = 1;
             entidad.Repuesto = 1;
             return entidad;
@@ -22,6 +22,7 @@ namespace ut_presentacion.Nucleo
         public static Detalles_Servicio? Detalles_Servicio()
         {
             var entidad = new Detalles_Servicio();
+            entidad.PrecioServicio = 1.0m;
             entidad.Servicio = 1;
             entidad.Factura = 1;
             return entidad;
@@ -29,6 +30,7 @@ namespace ut_presentacion.Nucleo
         public static Reserva_Servicio? Reserva_Servicio()
         {
             var entidad = new Reserva_Servicio();
+            entidad.PrecioServicio = 1.0m;
             entidad.Reserva= 1;
             entidad.Servicio = 1;
             return entidad;

@@ -22,5 +22,6 @@ namespace lib_dominio.Entidades
         public List<Facturas>? Facturas { get; set; }
         public List<Reparacion_Herramienta>? Reparacion_Herramienta;
 
+
     }
 }

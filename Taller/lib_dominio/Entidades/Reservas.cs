@@ -10,6 +10,9 @@ namespace lib_dominio.Entidades
         public DateTime Fecha_reserva { get; set; }
         public string? Estado { get; set; }
 
+        List<Reserva_Servicio> reservas_Servicios = new List<Reserva_Servicio>();
+
+
         [ForeignKey("Id_cliente")] public Clientes? _Cliente { get; set; }
         [ForeignKey("Id_sede")] public Sedes? _Sede { get; set; }
     }

@@ -12,5 +12,6 @@ namespace lib_dominio.Entidades
         public List<Detalles_Servicio>? Detalles_Servicio;
 
         public List<Reserva_Servicio>? Reserva_Servicio;
+
     }
 }

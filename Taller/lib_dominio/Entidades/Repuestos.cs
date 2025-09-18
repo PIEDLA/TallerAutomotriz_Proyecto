@@ -22,5 +22,6 @@ namespace lib_dominio.Entidades
 
         public List<Detalles_Repuesto>? Detalles_Repuesto;
 
+
     }
 }
