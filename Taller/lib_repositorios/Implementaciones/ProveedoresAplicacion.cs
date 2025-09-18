@@ -56,7 +56,7 @@ namespace lib_repositorios.Implementaciones
 
         public List<Proveedores> Listar()
         {
-            return this.IConexion!.Proveedores!.Take(50).ToList();
+            return this.IConexion!.Proveedores!.ToList();
         }
 
         public List<Proveedores> BuscarPorNombre(string nombre)

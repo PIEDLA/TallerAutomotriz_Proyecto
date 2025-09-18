@@ -40,7 +40,14 @@ namespace lib_repositorios.Implementaciones
             if (entidad.Id != 0)
                 throw new Exception("lbYaSeGuardo");
 
+            if (string.IsNullOrWhiteSpace(entidad.Nombre_servicio))
+                throw new Exception("El servicio debe tener un nombre");
 
+            if (entidad.Precio <= 0)
+                throw new Exception("El precio del servicio debe ser mayor que 0");
+
+            if (string.IsNullOrWhiteSpace(entidad.Duracion_aprox))
+                throw new Exception("Debe especificar la duración aproximada del servicio");
 
             this.IConexion!.Servicios!.Add(entidad);
             this.IConexion.SaveChanges();
@@ -59,6 +66,15 @@ namespace lib_repositorios.Implementaciones
 
             if (entidad!.Id == 0)
                 throw new Exception("lbNoSeGuardo");
+
+            if (string.IsNullOrWhiteSpace(entidad.Nombre_servicio))
+                throw new Exception("El servicio debe tener un nombre");
+
+            if (entidad.Precio <= 0)
+                throw new Exception("El precio del servicio debe ser mayor que 0");
+
+            if (string.IsNullOrWhiteSpace(entidad.Duracion_aprox))
+                throw new Exception("Debe especificar la duración aproximada del servicio");
 
             var entry = this.IConexion!.Entry<Servicios>(entidad);
             entry.State = EntityState.Modified;

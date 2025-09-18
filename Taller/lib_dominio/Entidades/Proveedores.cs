@@ -8,7 +8,7 @@ namespace lib_dominio.Entidades
         public string? Correo { get; set; }
         public string? Direccion { get; set; }
 
-        List<Repuestos> repuestos = new List<Repuestos>();
+        public List<Repuestos>? Repuestos;
 
     }
 }

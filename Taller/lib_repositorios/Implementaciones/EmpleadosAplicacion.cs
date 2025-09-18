@@ -28,6 +28,10 @@ namespace lib_repositorios.Implementaciones
 
             entidad._Sede = null;
 
+            bool tieneDiagnosticos = this.IConexion!.Diagnosticos!.Any(d => d.Id_empleado == entidad.Id);
+            if (tieneDiagnosticos)
+                throw new Exception("No se puede eliminar un empleado con diagnósticos asociados");
+
             this.IConexion!.Empleados!.Remove(entidad);
             this.IConexion.SaveChanges();
             return entidad;

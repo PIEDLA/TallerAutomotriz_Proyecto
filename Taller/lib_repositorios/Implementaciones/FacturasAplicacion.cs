@@ -23,7 +23,6 @@ namespace lib_repositorios.Implementaciones
             return this.IConexion!.Facturas!
                 .Include(f => f._Cliente)
                 .Include(f => f._Reparacion)
-                .Take(20)
                 .ToList();
         }
 

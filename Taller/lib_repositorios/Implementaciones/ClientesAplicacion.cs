@@ -26,7 +26,7 @@ namespace lib_repositorios.Implementaciones
             if (entidad!.Id == 0)
                 throw new Exception("El cliente no existe");
 
-            var tieneFacturas = this.IConexion!.Facturas!.Any(x => x.Id_cliente == entidad.Id);
+           var tieneFacturas = this.IConexion!.Facturas!.Any(x => x.Id_cliente == entidad.Id);
             if (tieneFacturas)
             {
                 throw new Exception("No se puede eliminar el cliente porque tiene facturas registradas.");
@@ -62,9 +62,7 @@ namespace lib_repositorios.Implementaciones
         public List<Clientes> Listar()
         {
             return this.IConexion!.Clientes!
-                        .Include(c => c.Vehiculos)
-                        .Take(50)
-                        .ToList();
+                        .Include(c => c.Vehiculos).ToList();
         }
 
         public List<Clientes> PorNombre(string nombre)

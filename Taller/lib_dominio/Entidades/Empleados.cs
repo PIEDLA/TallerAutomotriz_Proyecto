@@ -11,8 +11,7 @@ namespace lib_dominio.Entidades
         public string? Cargo { get; set; }
         public string? Telefono { get; set; }
 
-        List<Diagnosticos> diagnosticos = new List<Diagnosticos>();
-
+        public List<Diagnosticos>? Diagnosticos;
 
         [ForeignKey("Id_sede")] public Sedes? _Sede { get; set; }
     }
