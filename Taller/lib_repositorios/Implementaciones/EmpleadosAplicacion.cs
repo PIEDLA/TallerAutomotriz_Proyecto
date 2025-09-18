@@ -77,7 +77,6 @@ namespace lib_repositorios.Implementaciones
             if (entidad!.Id == 0)
                 throw new Exception("lbNoSeGuardo");
 
-            // Operaciones
             entidad._Sede = null;
 
             var empleadoExistente = this.IConexion!.Empleados!.FirstOrDefault(x => x.Id == entidad.Id);

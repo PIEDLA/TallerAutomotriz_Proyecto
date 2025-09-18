@@ -18,96 +18,85 @@ namespace lib_repositorios.Implementaciones
             this.IConexion!.StringConexion = StringConexion;
         }
 
-        public Facturas? Borrar(Facturas? entidad)
+        public List<Facturas> Listar()
         {
-            if (entidad == null)
-                throw new Exception("lbFaltaInformacion");
-
-            if (entidad!.Id == 0)
-                throw new Exception("lbNoSeGuardo");
-
-            // Operaciones
-            entidad._Cliente = null;
-            entidad._Reparacion = null;
-
-            var facturaExistente = this.IConexion!.Facturas!.FirstOrDefault(x => x.Id == entidad.Id);
-
-            if (facturaExistente == null)
-                throw new Exception("La factura que intenta eliminar no existe");
-
-            this.IConexion!.Facturas!.Remove(entidad);
-            this.IConexion.SaveChanges();
-            return entidad;
+            return this.IConexion!.Facturas!
+                .Include(f => f._Cliente)
+                .Include(f => f._Reparacion)
+                .Take(20)
+                .ToList();
         }
 
         public Facturas? Guardar(Facturas? entidad)
         {
             if (entidad == null)
-                throw new Exception("lbFaltaInformacion");
+                throw new Exception("Falta información de la factura");
 
             if (entidad.Id != 0)
-                throw new Exception("lbYaSeGuardo");
+                throw new Exception("La factura ya existe");
 
-            // Operaciones
+            if (entidad.Id_cliente <= 0)
+                throw new Exception("Debe especificar un cliente");
+
+            if (entidad.Id_reparacion <= 0)
+                throw new Exception("Debe especificar una reparación");
+
+            if (entidad.Total <= 0)
+                throw new Exception("El total debe ser mayor a 0");
+
+            if (entidad.Fecha_emision < DateTime.Now)
+                throw new Exception("La fecha no puede ser pasada");
+
             entidad._Cliente = null;
             entidad._Reparacion = null;
-
-            if (entidad.Fecha_emision > DateTime.Now)
-                throw new Exception("La fecha de emisión no puede ser futura");
-
-            ValidarFacturasVencidasCliente(entidad.Id_cliente);
 
             this.IConexion!.Facturas!.Add(entidad);
             this.IConexion.SaveChanges();
             return entidad;
         }
 
-        private void ValidarFacturasVencidasCliente(int clienteId)
-        {
-            var fechaLimite = DateTime.Now.AddDays(-30); // 30 días de vencimiento
-
-            var facturas_vencidas = this.IConexion!.Facturas!.Where(x => x.Id_cliente == clienteId && x.Fecha_emision < fechaLimite)
-                                    .Count(x => !this.IConexion.Pagos!.Any(p => p.Id_factura == x.Id));
-
-            if (facturas_vencidas > 3)
-                throw new Exception("El cliente tiene más de 3 facturas vencidas pendientes de pago");
-        }
-
-        public List<Facturas> Listar()
-        {
-            return this.IConexion!.Facturas!.ToList();
-        }
-
-        public List<Facturas> ListarPorCliente(int clienteId)
-        {
-            if (clienteId <= 0)
-                throw new Exception("Debe especificar un cliente válido");
-
-            return this.IConexion!.Facturas!.Include(x => x._Cliente).Include(x => x._Reparacion)
-                                            .Where(x => x.Id_cliente == clienteId).ToList();
-        }
-
         public Facturas? Modificar(Facturas? entidad)
         {
             if (entidad == null)
-                throw new Exception("lbFaltaInformacion");
+                throw new Exception("Falta información de la factura");
 
-            if (entidad!.Id == 0)
-                throw new Exception("lbNoSeGuardo");
+            if (entidad.Id == 0)
+                throw new Exception("La factura no existe");
 
-            // Operaciones
+            if (entidad.Total <= 0)
+                throw new Exception("El total debe ser mayor a 0");
+
             entidad._Cliente = null;
             entidad._Reparacion = null;
-
-            var facturaExistente = this.IConexion!.Facturas!.FirstOrDefault(x => x.Id == entidad.Id);
-
-            if (facturaExistente == null)
-                throw new Exception("La factura que intenta modificar no existe");
 
             var entry = this.IConexion!.Entry<Facturas>(entidad);
             entry.State = EntityState.Modified;
             this.IConexion.SaveChanges();
             return entidad;
+        }
+
+        public Facturas? Borrar(Facturas? entidad)
+        {
+            if (entidad == null)
+                throw new Exception("Falta información de la factura");
+
+            if (entidad.Id == 0)
+                throw new Exception("La factura no existe");
+
+            entidad._Cliente = null;
+            entidad._Reparacion = null;
+
+            this.IConexion!.Facturas!.Remove(entidad);
+            this.IConexion.SaveChanges();
+            return entidad;
+        }
+
+        public List<Facturas> ListarPorCliente(int idCliente)
+        {
+            return this.IConexion!.Facturas!
+                .Where(f => f.Id_cliente == idCliente)
+                .Include(f => f._Cliente)
+                .ToList();
         }
     }
 }
