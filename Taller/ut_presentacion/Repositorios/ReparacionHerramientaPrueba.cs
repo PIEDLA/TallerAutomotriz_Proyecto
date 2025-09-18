@@ -29,7 +29,10 @@ namespace ut_presentacion.Repositorios
 
         public bool Listar()
         {
-            this.lista = this.iConexion!.Reparacion_Herramienta!.ToList();
+            this.lista = this.iConexion!.Reparacion_Herramienta!
+            .Include(x => x._Herramienta)
+            .Include(x => x._Reparacion)
+            .ToList();
             return lista.Count > 0;
         }
 

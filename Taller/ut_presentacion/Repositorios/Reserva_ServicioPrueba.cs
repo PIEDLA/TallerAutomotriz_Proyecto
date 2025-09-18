@@ -7,13 +7,13 @@ using ut_presentacion.Nucleo;
 namespace ut_presentacion.Repositorios
 {
     [TestClass]
-    public class Detalle_FacturaPrueba
+    public class Reserva_ServicioPrueba
     {
         private readonly IConexion? iConexion;
-        private List<Detalle_Factura>? lista;
-        private Detalle_Factura? entidad;
+        private List<Reserva_Servicio>? lista;
+        private Reserva_Servicio? entidad;
 
-        public Detalle_FacturaPrueba()
+        public Reserva_ServicioPrueba()
         {
             iConexion = new Conexion();
             iConexion.StringConexion = Configuracion.ObtenerValor("StringConexion");
@@ -30,25 +30,26 @@ namespace ut_presentacion.Repositorios
 
         public bool Listar()
         {
-            this.lista = this.iConexion!.Detalle_Factura!.ToList();
+            this.lista = this.iConexion!.Reserva_Servicio!
+            .Include(x => x._Reserva)
+            .Include(x => x._Servicio)
+            .ToList();
             return lista.Count > 0;
         }
 
         public bool Guardar()
         {
-            this.entidad = EntidadesNucleo.Detalle_Factura()!;
-
-            this.iConexion!.Detalle_Factura!.Add(this.entidad);
+            this.entidad = EntidadesNucleo.Reserva_Servicio()!;
+            this.iConexion!.Reserva_Servicio!.Add(this.entidad);
             this.iConexion!.SaveChanges();
-
             return true;
         }
 
         public bool Modificar()
         {
-            this.entidad!.Subtotal = 16.5m;
+            this.entidad!.Servicio = 2;
 
-            var entry = this.iConexion!.Entry<Detalle_Factura>(this.entidad);
+            var entry = this.iConexion!.Entry<Reserva_Servicio>(this.entidad);
             entry.State = EntityState.Modified;
             this.iConexion!.SaveChanges();
 
@@ -57,7 +58,7 @@ namespace ut_presentacion.Repositorios
 
         public bool Borrar()
         {
-            this.iConexion!.Detalle_Factura!.Remove(this.entidad!);
+            this.iConexion!.Reserva_Servicio!.Remove(this.entidad!);
             this.iConexion!.SaveChanges();
             return true;
         }

@@ -2,18 +2,19 @@
 using lib_repositorios.Implementaciones;
 using lib_repositorios.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using ut_presentacion.Nucleo;
 
 namespace ut_presentacion.Repositorios
 {
     [TestClass]
-    public class HerramientasPrueba
+    public class Detalles_ServicioPrueba
     {
         private readonly IConexion? iConexion;
-        private List<Herramientas>? lista;
-        private Herramientas? entidad;
+        private List<Detalles_Servicio>? lista;
+        private Detalles_Servicio? entidad;
 
-        public HerramientasPrueba()
+        public Detalles_ServicioPrueba()
         {
             iConexion = new Conexion();
             iConexion.StringConexion = Configuracion.ObtenerValor("StringConexion");
@@ -30,40 +31,36 @@ namespace ut_presentacion.Repositorios
 
         public bool Listar()
         {
-            this.lista = this.iConexion!.Herramientas!.ToList();
+
+            this.lista = this.iConexion!.Detalles_Servicio!
+            .Include(x => x._Factura)
+            .Include(x => x._Servicio)
+            .ToList();
             return lista.Count > 0;
         }
 
         public bool Guardar()
         {
-            this.entidad = new Herramientas
-            {
-                Nombre = "Llave Inglesa",
-                Tipo = "Manual",
-                Estado = "Disponible",
-                Ubicacion = "Estante A1"
-            };
-            this.iConexion!.Herramientas!.Add(this.entidad);
+            this.entidad = EntidadesNucleo.Detalles_Servicio()!;
+            this.iConexion!.Detalles_Servicio!.Add(this.entidad);
             this.iConexion!.SaveChanges();
             return true;
         }
 
         public bool Modificar()
         {
-<<<<<<< HEAD
-            this.entidad!.Estado = "En uso";
-=======
-            this.entidad!.Estado = "En reparación";
->>>>>>> main
-            var entry = this.iConexion!.Entry<Herramientas>(this.entidad);
+            this.entidad!.Servicio = 2;
+
+            var entry = this.iConexion!.Entry<Detalles_Servicio>(this.entidad);
             entry.State = EntityState.Modified;
             this.iConexion!.SaveChanges();
+
             return true;
         }
 
         public bool Borrar()
         {
-            this.iConexion!.Herramientas!.Remove(this.entidad!);
+            this.iConexion!.Detalles_Servicio!.Remove(this.entidad!);
             this.iConexion!.SaveChanges();
             return true;
         }

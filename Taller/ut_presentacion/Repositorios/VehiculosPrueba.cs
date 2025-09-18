@@ -7,13 +7,13 @@ using ut_presentacion.Nucleo;
 namespace ut_presentacion.Repositorios
 {
     [TestClass]
-    public class HerramientasPrueba
+    public class VehiculosPrueba
     {
         private readonly IConexion? iConexion;
-        private List<Herramientas>? lista;
-        private Herramientas? entidad;
+        private List<Vehiculos>? lista;
+        private Vehiculos? entidad;
 
-        public HerramientasPrueba()
+        public VehiculosPrueba()
         {
             iConexion = new Conexion();
             iConexion.StringConexion = Configuracion.ObtenerValor("StringConexion");
@@ -30,40 +30,36 @@ namespace ut_presentacion.Repositorios
 
         public bool Listar()
         {
-            this.lista = this.iConexion!.Herramientas!.ToList();
+            this.lista = this.iConexion!.Vehiculos!
+            .Include(x => x._Cliente)
+            .ToList();
             return lista.Count > 0;
         }
 
         public bool Guardar()
         {
-            this.entidad = new Herramientas
-            {
-                Nombre = "Llave Inglesa",
-                Tipo = "Manual",
-                Estado = "Disponible",
-                Ubicacion = "Estante A1"
-            };
-            this.iConexion!.Herramientas!.Add(this.entidad);
+            this.entidad = EntidadesNucleo.Vehiculos()!;
+
+            this.iConexion!.Vehiculos!.Add(this.entidad);
             this.iConexion!.SaveChanges();
+
             return true;
         }
 
         public bool Modificar()
         {
-<<<<<<< HEAD
-            this.entidad!.Estado = "En uso";
-=======
-            this.entidad!.Estado = "En reparación";
->>>>>>> main
-            var entry = this.iConexion!.Entry<Herramientas>(this.entidad);
+            this.entidad!.Placa = "Test";
+
+            var entry = this.iConexion!.Entry<Vehiculos>(this.entidad);
             entry.State = EntityState.Modified;
             this.iConexion!.SaveChanges();
+
             return true;
         }
 
         public bool Borrar()
         {
-            this.iConexion!.Herramientas!.Remove(this.entidad!);
+            this.iConexion!.Vehiculos!.Remove(this.entidad!);
             this.iConexion!.SaveChanges();
             return true;
         }

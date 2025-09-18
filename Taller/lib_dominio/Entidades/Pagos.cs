@@ -12,5 +12,6 @@ namespace lib_dominio.Entidades
         public decimal Monto_total { get; set; }
         public DateTime Fecha_pago { get; set; }
         public string? Estado { get; set; }
+
     }
 }

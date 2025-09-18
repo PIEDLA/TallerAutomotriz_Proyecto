@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace lib_dominio.Entidades
 {
     public class Empleados
@@ -8,5 +10,7 @@ namespace lib_dominio.Entidades
         public string? Apellido { get; set; }
         public string? Cargo { get; set; }
         public string? Telefono { get; set; }
+
+        [ForeignKey("Id_sede")] public Sedes? _Sede { get; set; }
     }
 }
