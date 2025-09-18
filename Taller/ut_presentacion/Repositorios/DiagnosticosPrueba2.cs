@@ -7,13 +7,13 @@ using ut_presentacion.Nucleo;
 namespace ut_presentacion.Repositorios
 {
     [TestClass]
-    public class HerramientasPrueba
+    public class DiagnosticosPrueba2
     {
         private readonly IConexion? iConexion;
-        private List<Herramientas>? lista;
-        private Herramientas? entidad;
+        private List<Diagnosticos>? lista;
+        private Diagnosticos? entidad;
 
-        public HerramientasPrueba()
+        public DiagnosticosPrueba2()
         {
             iConexion = new Conexion();
             iConexion.StringConexion = Configuracion.ObtenerValor("StringConexion");
@@ -30,32 +30,28 @@ namespace ut_presentacion.Repositorios
 
         public bool Listar()
         {
-            this.lista = this.iConexion!.Herramientas!.ToList();
+            this.lista = this.iConexion!.Diagnosticos!.ToList();
             return lista.Count > 0;
         }
 
         public bool Guardar()
         {
-            this.entidad = new Herramientas
+            this.entidad = new Diagnosticos
             {
-                Nombre = "Llave Inglesa",
-                Tipo = "Manual",
-                Estado = "Disponible",
-                Ubicacion = "Estante A1"
+                Id_vehiculo = 2,
+                Id_empleado = 2,
+                Descripcion = "Prueba con otra fecha",
+                Fecha = DateTime.Now
             };
-            this.iConexion!.Herramientas!.Add(this.entidad);
+            this.iConexion!.Diagnosticos!.Add(this.entidad);
             this.iConexion!.SaveChanges();
             return true;
         }
 
         public bool Modificar()
         {
-<<<<<<< HEAD
-            this.entidad!.Estado = "En uso";
-=======
-            this.entidad!.Estado = "En reparación";
->>>>>>> main
-            var entry = this.iConexion!.Entry<Herramientas>(this.entidad);
+            this.entidad!.Fecha = DateTime.Now.AddDays(2);
+            var entry = this.iConexion!.Entry<Diagnosticos>(this.entidad);
             entry.State = EntityState.Modified;
             this.iConexion!.SaveChanges();
             return true;
@@ -63,7 +59,7 @@ namespace ut_presentacion.Repositorios
 
         public bool Borrar()
         {
-            this.iConexion!.Herramientas!.Remove(this.entidad!);
+            this.iConexion!.Diagnosticos!.Remove(this.entidad!);
             this.iConexion!.SaveChanges();
             return true;
         }

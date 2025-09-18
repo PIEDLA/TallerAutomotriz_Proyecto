@@ -38,7 +38,14 @@ namespace ut_presentacion.Repositorios
 
         public bool Guardar()
         {
-            this.entidad = EntidadesNucleo.Repuestos()!;
+            this.entidad = new Repuestos
+            {
+                Id_proveedor = 1, 
+                Nombre_repuesto = "Filtro de Aceite",
+                Marca = "Bosch",
+                Precio = 45.50m,
+                Stock = 10
+            };
             this.iConexion!.Repuestos!.Add(this.entidad);
             this.iConexion!.SaveChanges();
             return true;
@@ -46,7 +53,7 @@ namespace ut_presentacion.Repositorios
 
         public bool Modificar()
         {
-            this.entidad!.Marca = "Marca actualizada prueba";
+            this.entidad!.Stock = 20;
             var entry = this.iConexion!.Entry<Repuestos>(this.entidad);
             entry.State = EntityState.Modified;
             this.iConexion!.SaveChanges();
@@ -61,4 +68,3 @@ namespace ut_presentacion.Repositorios
         }
     }
 }
-

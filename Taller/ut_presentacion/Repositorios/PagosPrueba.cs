@@ -38,7 +38,13 @@ namespace ut_presentacion.Repositorios
 
         public bool Guardar()
         {
-            this.entidad = EntidadesNucleo.Pagos()!;
+            this.entidad = new Pagos
+            {
+                Id_factura = 1,
+                Monto_total = 500.00m,
+                Fecha_pago = DateTime.Now,
+                Estado = "Pendiente"
+            };
             this.iConexion!.Pagos!.Add(this.entidad);
             this.iConexion!.SaveChanges();
             return true;
@@ -46,7 +52,7 @@ namespace ut_presentacion.Repositorios
 
         public bool Modificar()
         {
-            this.entidad!.Estado = "Pagado - Prueba";
+            this.entidad!.Estado = "Pagado";
             var entry = this.iConexion!.Entry<Pagos>(this.entidad);
             entry.State = EntityState.Modified;
             this.iConexion!.SaveChanges();
