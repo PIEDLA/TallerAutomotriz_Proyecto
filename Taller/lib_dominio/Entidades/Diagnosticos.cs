@@ -20,9 +20,6 @@ namespace lib_dominio.Entidades
 
         public string? Descripcion { get; set; }
         public DateTime Fecha { get; set; }
-
-        public List<Reparaciones>? reparaciones;
-
-
+        public List<Reparaciones>? Reparaciones;
     }
 }

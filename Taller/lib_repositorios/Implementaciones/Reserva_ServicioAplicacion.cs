@@ -55,6 +55,12 @@ namespace lib_repositorios.Implementaciones
             if (v != null)
                 throw new Exception(v);
 
+            var servicio = this.IConexion!.Servicios!.Find(entidad!.Servicio);
+            servicio!.Reserva_Servicio!.Add(entidad);
+
+            var reserva = this.IConexion!.Reservas!.Find(entidad!.Reserva);
+            servicio!.Reserva_Servicio!.Add(entidad);
+
             this.IConexion!.Reserva_Servicio!.Add(entidad);
             this.IConexion.SaveChanges();
             return entidad;

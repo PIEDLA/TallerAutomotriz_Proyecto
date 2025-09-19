@@ -18,11 +18,12 @@ namespace lib_repositorios.Implementaciones
             this.IConexion!.StringConexion = StringConexion;
         }
 
-
         public List<Reparacion_Herramienta> Listar()
         {
             return this.IConexion!.Reparacion_Herramienta!
-                .Take(5)
+                .Include(rh => rh._Reparacion)
+                .Include(rh => rh._Herramienta)
+                .Take(10)
                 .ToList();
         }
 
@@ -34,8 +35,29 @@ namespace lib_repositorios.Implementaciones
             if (entidad.Id != 0)
                 throw new Exception("Ya se guardó");
 
+            // Regla: una herramienta no puede asignarse dos veces a la misma reparación
+            bool yaAsignada = this.IConexion!.Reparacion_Herramienta!
+                .Any(rh => rh.Id_reparacion == entidad.Id_reparacion && rh.Id_herramienta == entidad.Id_herramienta);
+
+            if (yaAsignada)
+                throw new Exception("Esta herramienta ya fue asignada a esta reparación");
+
+            // Regla: la herramienta debe estar disponible
+            var herramienta = this.IConexion!.Herramientas!.FirstOrDefault(h => h.Id == entidad.Id_herramienta);
+            if (herramienta == null)
+                throw new Exception("La herramienta no existe");
+
+            if (herramienta.Estado != "Disponible")
+                throw new Exception("La herramienta no está disponible");
+
             entidad._Reparacion = null;
             entidad._Herramienta = null;
+
+            var reparacion = this.IConexion!.Reparaciones!.Find(entidad!.Id_reparacion);
+            reparacion!.Reparacion_Herramienta!.Add(entidad);
+
+            var herramient = this.IConexion!.Herramientas!.Find(entidad!.Id_herramienta);
+            herramient!.Reparacion_Herramienta!.Add(entidad);
 
             this.IConexion!.Reparacion_Herramienta!.Add(entidad);
             this.IConexion.SaveChanges();
@@ -75,7 +97,6 @@ namespace lib_repositorios.Implementaciones
             return entidad;
         }
 
-
         public List<Herramientas> HerramientasPorReparacion(int idReparacion)
         {
             return this.IConexion!.Reparacion_Herramienta!
@@ -96,13 +117,6 @@ namespace lib_repositorios.Implementaciones
         {
             return this.IConexion!.Reparacion_Herramienta!
                 .Count(rh => rh.Id_herramienta == idHerramienta);
-        }
-
-        public List<Reparacion_Herramienta> PorSede(int idSede)
-        {
-            return this.IConexion!.Reparacion_Herramienta!
-                .Where(rh => rh._Reparacion!._Diagnostico!._Vehiculo!.Id_cliente == idSede)
-                .ToList();
         }
     }
 }

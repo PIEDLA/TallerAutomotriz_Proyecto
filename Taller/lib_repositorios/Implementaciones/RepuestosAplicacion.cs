@@ -18,11 +18,10 @@ namespace lib_repositorios.Implementaciones
             this.IConexion!.StringConexion = StringConexion;
         }
 
-
         public List<Repuestos> Listar()
         {
             return this.IConexion!.Repuestos!
-                .Take(5)
+                .Take(20)
                 .ToList();
         }
 
@@ -33,6 +32,21 @@ namespace lib_repositorios.Implementaciones
 
             if (entidad.Id != 0)
                 throw new Exception("Ya se guardó");
+
+            if (string.IsNullOrWhiteSpace(entidad.Nombre_repuesto))
+                throw new Exception("El repuesto debe tener un nombre");
+
+            if (string.IsNullOrWhiteSpace(entidad.Marca))
+                throw new Exception("El repuesto debe tener una marca");
+
+            if (entidad.Precio <= 0)
+                throw new Exception("El precio debe ser mayor a cero");
+
+            if (entidad.Stock < 0)
+                throw new Exception("El stock no puede ser negativo");
+
+            var proveedor = this.IConexion!.Proveedores!.Find(entidad!.Id_proveedor);
+            proveedor!.Repuestos!.Add(entidad);
 
             this.IConexion!.Repuestos!.Add(entidad);
             this.IConexion.SaveChanges();
@@ -46,6 +60,18 @@ namespace lib_repositorios.Implementaciones
 
             if (entidad.Id == 0)
                 throw new Exception("No se guardó");
+
+            if (string.IsNullOrWhiteSpace(entidad.Nombre_repuesto))
+                throw new Exception("El repuesto debe tener un nombre");
+
+            if (string.IsNullOrWhiteSpace(entidad.Marca))
+                throw new Exception("El repuesto debe tener una marca");
+
+            if (entidad.Precio <= 0)
+                throw new Exception("El precio debe ser mayor a cero");
+
+            if (entidad.Stock < 0)
+                throw new Exception("El stock no puede ser negativo");
 
             var entry = this.IConexion!.Entry<Repuestos>(entidad);
             entry.State = EntityState.Modified;
@@ -61,11 +87,13 @@ namespace lib_repositorios.Implementaciones
             if (entidad.Id == 0)
                 throw new Exception("No se guardó");
 
+            if (entidad.Stock > 0)
+                throw new Exception("No se puede borrar un repuesto con stock disponible");
+
             this.IConexion!.Repuestos!.Remove(entidad);
             this.IConexion.SaveChanges();
             return entidad;
         }
-
 
         public List<Repuestos> StockBajo(int limite = 5)
         {
@@ -77,7 +105,7 @@ namespace lib_repositorios.Implementaciones
         public List<Repuestos> PorMarca(string marca)
         {
             return this.IConexion!.Repuestos!
-                .Where(r => r.Marca.Contains(marca))
+                .Where(r => r.Marca!.Contains(marca))
                 .ToList();
         }
 

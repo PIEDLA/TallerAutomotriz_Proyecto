@@ -26,12 +26,6 @@ namespace lib_repositorios.Implementaciones
             if (entidad!.Id == 0)
                 throw new Exception("lbNoSeGuardo");
 
-            // Operaciones
-
-            var servicioExistente = this.IConexion!.Servicios!.FirstOrDefault(x => x.Id == entidad.Id);
-
-            if (servicioExistente == null)
-                throw new Exception("El servicio que intenta eliminar no existe");
 
             this.IConexion!.Servicios!.Remove(entidad);
             this.IConexion.SaveChanges();
@@ -46,7 +40,14 @@ namespace lib_repositorios.Implementaciones
             if (entidad.Id != 0)
                 throw new Exception("lbYaSeGuardo");
 
-            // Operaciones
+            if (string.IsNullOrWhiteSpace(entidad.Nombre_servicio))
+                throw new Exception("El servicio debe tener un nombre");
+
+            if (entidad.Precio <= 0)
+                throw new Exception("El precio del servicio debe ser mayor que 0");
+
+            if (string.IsNullOrWhiteSpace(entidad.Duracion_aprox))
+                throw new Exception("Debe especificar la duración aproximada del servicio");
 
             this.IConexion!.Servicios!.Add(entidad);
             this.IConexion.SaveChanges();
@@ -58,16 +59,6 @@ namespace lib_repositorios.Implementaciones
             return this.IConexion!.Servicios!.ToList();
         }
 
-        public List<Servicios> BuscarPorNombre(string nombre)
-        {
-            if (string.IsNullOrWhiteSpace(nombre))
-                throw new Exception("Debe especificar un nombre para buscar");
-
-            return this.IConexion!.Servicios!.Where(x => x.Nombre_servicio!.ToLower().Contains(nombre.ToLower()) ||
-                                                            x.Descripcion!.ToLower().Contains(nombre.ToLower()))
-                                                            .OrderBy(s => s.Nombre_servicio).ToList();
-        }
-
         public Servicios? Modificar(Servicios? entidad)
         {
             if (entidad == null)
@@ -76,12 +67,14 @@ namespace lib_repositorios.Implementaciones
             if (entidad!.Id == 0)
                 throw new Exception("lbNoSeGuardo");
 
-            // Operaciones
+            if (string.IsNullOrWhiteSpace(entidad.Nombre_servicio))
+                throw new Exception("El servicio debe tener un nombre");
 
-            var servicioExistente = this.IConexion!.Servicios!.FirstOrDefault(x => x.Id == entidad.Id);
+            if (entidad.Precio <= 0)
+                throw new Exception("El precio del servicio debe ser mayor que 0");
 
-            if (servicioExistente == null)
-                throw new Exception("El servicio que intenta modificar no existe");
+            if (string.IsNullOrWhiteSpace(entidad.Duracion_aprox))
+                throw new Exception("Debe especificar la duración aproximada del servicio");
 
             var entry = this.IConexion!.Entry<Servicios>(entidad);
             entry.State = EntityState.Modified;

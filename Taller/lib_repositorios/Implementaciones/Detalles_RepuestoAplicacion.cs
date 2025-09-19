@@ -62,7 +62,7 @@ namespace lib_repositorios.Implementaciones
                 throw new Exception(v);
 
             var repuesto = this.IConexion!.Repuestos!.Find(entidad!.Repuesto);
-            repuesto!.detalles_Repuestos!.Add(entidad);
+            repuesto!.Detalles_Repuesto!.Add(entidad);
 
             this.IConexion!.Detalles_Repuesto!.Add(entidad);
             this.IConexion.SaveChanges();

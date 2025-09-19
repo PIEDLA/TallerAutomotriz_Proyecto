@@ -21,18 +21,16 @@ namespace lib_repositorios.Implementaciones
         public Empleados? Borrar(Empleados? entidad)
         {
             if (entidad == null)
-                throw new Exception("lbFaltaInformacion");
+                throw new Exception("Falta informacion del empleado");
 
             if (entidad!.Id == 0)
-                throw new Exception("lbNoSeGuardo");
+                throw new Exception("El empleado no existe");
 
-            // Operaciones
             entidad._Sede = null;
 
-            var empleadoExistente = this.IConexion!.Empleados!.Include(x => x._Sede).FirstOrDefault(x => x.Id == entidad.Id);
-
-            if (empleadoExistente == null)
-                throw new Exception("El empleado que intenta eliminar no existe");
+            bool tieneDiagnosticos = this.IConexion!.Diagnosticos!.Any(d => d.Id_empleado == entidad.Id);
+            if (tieneDiagnosticos)
+                throw new Exception("No se puede eliminar un empleado con diagnósticos asociados");
 
             this.IConexion!.Empleados!.Remove(entidad);
             this.IConexion.SaveChanges();
@@ -42,13 +40,21 @@ namespace lib_repositorios.Implementaciones
         public Empleados? Guardar(Empleados? entidad)
         {
             if (entidad == null)
-                throw new Exception("lbFaltaInformacion");
+                throw new Exception("Falta informacion del empleado");
 
             if (entidad.Id != 0)
-                throw new Exception("lbYaSeGuardo");
+                throw new Exception("El empleado ya existe");
 
-            // Operaciones
             entidad._Sede = null;
+
+            if (string.IsNullOrWhiteSpace(entidad.Nombre) || string.IsNullOrWhiteSpace(entidad.Apellido))
+                throw new Exception("Nombre y apellido son obligatorios.");
+
+            if (string.IsNullOrWhiteSpace(entidad.Telefono))
+                throw new Exception("El teléfono es obligatorio.");
+
+            var sede = this.IConexion!.Sedes!.Find(entidad!.Id_sede);
+            sede!.empleados!.Add(entidad);
 
             this.IConexion!.Empleados!.Add(entidad);
             this.IConexion.SaveChanges();
@@ -77,13 +83,13 @@ namespace lib_repositorios.Implementaciones
             if (entidad!.Id == 0)
                 throw new Exception("lbNoSeGuardo");
 
-            // Operaciones
             entidad._Sede = null;
 
-            var empleadoExistente = this.IConexion!.Empleados!.FirstOrDefault(x => x.Id == entidad.Id);
+            if (string.IsNullOrWhiteSpace(entidad.Nombre) || string.IsNullOrWhiteSpace(entidad.Apellido))
+                throw new Exception("Nombre y apellido son obligatorios.");
 
-            if (empleadoExistente == null)
-                throw new Exception("El empleado que intenta modificar no existe");
+            if (string.IsNullOrWhiteSpace(entidad.Telefono))
+                throw new Exception("El teléfono es obligatorio.");
 
             var entry = this.IConexion!.Entry<Empleados>(entidad);
             entry.State = EntityState.Modified;

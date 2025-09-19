@@ -17,5 +17,7 @@ namespace lib_dominio.Entidades
 
         public int Id_herramienta { get; set; }
         [ForeignKey("Id_herramienta")] public Herramientas? _Herramienta { get; set; }
+
+
     }
 }

@@ -18,11 +18,10 @@ namespace lib_repositorios.Implementaciones
             this.IConexion!.StringConexion = StringConexion;
         }
 
-
         public List<Pagos> Listar()
         {
             return this.IConexion!.Pagos!
-                .Include(p => p._Factura) 
+                .Include(p => p._Factura)
                 .Take(20)
                 .ToList();
         }
@@ -30,15 +29,29 @@ namespace lib_repositorios.Implementaciones
         public Pagos? Guardar(Pagos? entidad)
         {
             if (entidad == null)
-                throw new Exception("Falta información");
+                throw new Exception("Falta información del pago");
 
             if (entidad.Id != 0)
-                throw new Exception("Ya se guardó");
+                throw new Exception("El pago ya existe");
 
+            if (entidad.Monto_total <= 0)
+                throw new Exception("El monto debe ser mayor a 0");
 
-            entidad._Factura = null; 
+            if (entidad.Fecha_pago > DateTime.Now)
+                throw new Exception("La fecha no puede ser futura");
 
-            this.IConexion!.Pagos!.Add(entidad);
+            var factura = this.IConexion!.Facturas!.FirstOrDefault(f => f.Id == entidad.Id_factura);
+            if (factura == null)
+                throw new Exception("La factura no existe");
+
+            entidad.Estado = entidad.Monto_total >= factura.Total ? "Pagado" : "Pendiente";
+
+            entidad._Factura = null;
+
+            var factur = this.IConexion!.Facturas!.Find(entidad!.Id_factura);
+            factur!.Pagos!.Add(entidad);
+
+            this.IConexion.Pagos!.Add(entidad);
             this.IConexion.SaveChanges();
             return entidad;
         }
@@ -46,14 +59,25 @@ namespace lib_repositorios.Implementaciones
         public Pagos? Modificar(Pagos? entidad)
         {
             if (entidad == null)
-                throw new Exception("Falta información");
+                throw new Exception("Falta información del pago");
 
             if (entidad.Id == 0)
-                throw new Exception("No se guardó");
+                throw new Exception("El pago no existe");
 
+            if (entidad.Monto_total <= 0)
+                throw new Exception("El monto debe ser mayor a 0");
+
+            if (entidad.Fecha_pago > DateTime.Now)
+                throw new Exception("La fecha no puede ser futura");
+
+            var factura = this.IConexion!.Facturas!.FirstOrDefault(f => f.Id == entidad.Id_factura);
+            if (factura == null)
+                throw new Exception("La factura no existe");
+
+            entidad.Estado = entidad.Monto_total >= factura.Total ? "Pagado" : "Pendiente";
             entidad._Factura = null;
 
-            var entry = this.IConexion!.Entry<Pagos>(entidad);
+            var entry = this.IConexion.Entry<Pagos>(entidad);
             entry.State = EntityState.Modified;
             this.IConexion.SaveChanges();
             return entidad;
@@ -62,11 +86,10 @@ namespace lib_repositorios.Implementaciones
         public Pagos? Borrar(Pagos? entidad)
         {
             if (entidad == null)
-                throw new Exception("Falta información");
+                throw new Exception("Falta información del pago");
 
             if (entidad.Id == 0)
-                throw new Exception("No se guardó");
-
+                throw new Exception("El pago no existe");
 
             entidad._Factura = null;
 
@@ -74,7 +97,6 @@ namespace lib_repositorios.Implementaciones
             this.IConexion.SaveChanges();
             return entidad;
         }
-
 
         public List<Pagos> PorFactura(int idFactura)
         {

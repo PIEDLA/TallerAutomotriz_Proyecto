@@ -21,22 +21,15 @@ namespace lib_repositorios.Implementaciones
         public Clientes? Borrar(Clientes? entidad)
         {
             if (entidad == null)
-                throw new Exception("lbFaltaInformacion");
+                throw new Exception("Falta información del cliente");
 
             if (entidad!.Id == 0)
-                throw new Exception("lbNoSeGuardo");
+                throw new Exception("El cliente no existe");
 
-            // Operaciones
-            var clienteExistente = this.IConexion!.Clientes!.FirstOrDefault(x => x.Id == entidad.Id);
-
-            if (clienteExistente == null)
-                throw new Exception("El cliente que intenta eliminar no existe");
-
-            var tieneFacturas = this.IConexion!.Facturas!.Any(x => x.Id_cliente == entidad.Id);
+           var tieneFacturas = this.IConexion!.Facturas!.Any(x => x.Id_cliente == entidad.Id);
             if (tieneFacturas)
             {
-                throw new Exception("No se puede eliminar el cliente porque tiene facturas registradas. " +
-                                  "Debe eliminar o reasignar las facturas primero.");
+                throw new Exception("No se puede eliminar el cliente porque tiene facturas registradas.");
             }
 
             this.IConexion!.Clientes!.Remove(entidad);
@@ -47,12 +40,19 @@ namespace lib_repositorios.Implementaciones
         public Clientes? Guardar(Clientes? entidad)
         {
             if (entidad == null)
-                throw new Exception("lbFaltaInformacion");
+                throw new Exception("Falta información del cliente");
 
             if (entidad.Id != 0)
-                throw new Exception("lbYaSeGuardo");
+                throw new Exception("El cliente ya existe");
 
-            // Operaciones
+            if (string.IsNullOrWhiteSpace(entidad.Nombre) || string.IsNullOrWhiteSpace(entidad.Apellido))
+                throw new Exception("Nombre y apellido son obligatorios.");
+
+            if (string.IsNullOrWhiteSpace(entidad.Telefono))
+                throw new Exception("El teléfono es obligatorio.");
+
+            if (string.IsNullOrWhiteSpace(entidad.Correo))
+                throw new Exception("El correo es obligatorio.");
 
             this.IConexion!.Clientes!.Add(entidad);
             this.IConexion.SaveChanges();
@@ -61,7 +61,8 @@ namespace lib_repositorios.Implementaciones
 
         public List<Clientes> Listar()
         {
-            return this.IConexion!.Clientes!.ToList();
+            return this.IConexion!.Clientes!
+                        .Include(c => c.Vehiculos).ToList();
         }
 
         public List<Clientes> PorNombre(string nombre)
@@ -74,7 +75,7 @@ namespace lib_repositorios.Implementaciones
                 .OrderBy(x => x.Apellido).ThenBy(x => x.Nombre).ToList();
         }
 
-    
+
 
         public Clientes? Modificar(Clientes? entidad)
         {
@@ -84,11 +85,14 @@ namespace lib_repositorios.Implementaciones
             if (entidad!.Id == 0)
                 throw new Exception("lbNoSeGuardo");
 
-            // Operaciones
-            var clienteExistente = this.IConexion!.Clientes!.FirstOrDefault(x => x.Id == entidad.Id);
+            if (string.IsNullOrWhiteSpace(entidad.Nombre) || string.IsNullOrWhiteSpace(entidad.Apellido))
+                throw new Exception("Nombre y apellido son obligatorios.");
 
-            if (clienteExistente == null)
-                throw new Exception("El cliente que intenta modificar no existe");
+            if (string.IsNullOrWhiteSpace(entidad.Telefono))
+                throw new Exception("El teléfono es obligatorio.");
+
+            if (string.IsNullOrWhiteSpace(entidad.Correo))
+                throw new Exception("El correo es obligatorio.");
 
             var entry = this.IConexion!.Entry<Clientes>(entidad);
             entry.State = EntityState.Modified;
@@ -97,4 +101,4 @@ namespace lib_repositorios.Implementaciones
         }
 
     }
-}
+ }

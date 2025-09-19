@@ -59,7 +59,7 @@ namespace lib_repositorios.Implementaciones
                 throw new Exception(v);
 
             var servicio = this.IConexion!.Servicios!.Find(entidad!.Servicio);
-            servicio!.detalles_Servicios!.Add(entidad);
+            servicio!.Detalles_Servicio!.Add(entidad);
 
             this.IConexion!.Detalles_Servicio!.Add(entidad);
             this.IConexion.SaveChanges();

@@ -18,8 +18,8 @@ namespace lib_dominio.Entidades
         public decimal Costo_estimado { get; set; }
         public DateTime Fecha_inicio { get; set; }
 
-        public List<Reparacion_Herramienta>? reparacion_Herramientas;
-        public List<Facturas>? facturas;
+        public List<Facturas>? Facturas;
+        public List<Reparacion_Herramienta>? Reparacion_Herramienta;
 
 
     }

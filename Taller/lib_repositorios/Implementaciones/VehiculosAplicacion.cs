@@ -26,13 +26,7 @@ namespace lib_repositorios.Implementaciones
             if (entidad!.Id == 0)
                 throw new Exception("lbNoSeGuardo");
 
-            // Operaciones
             entidad._Cliente = null;
-
-            var vehiculoExistente = this.IConexion!.Vehiculos!.FirstOrDefault(x => x.Id == entidad.Id);
-
-            if (vehiculoExistente == null)
-                throw new Exception("El vehículo que intenta eliminar no existe");
 
             this.IConexion!.Vehiculos!.Remove(entidad);
             this.IConexion.SaveChanges();
@@ -55,6 +49,18 @@ namespace lib_repositorios.Implementaciones
             if (vehiculoExistente != null)
                 throw new Exception("Ya existe un vehículo registrado con esta placa");
 
+            if (string.IsNullOrWhiteSpace(entidad.Placa))
+                throw new Exception("La placa es obligatoria.");
+
+            if (string.IsNullOrWhiteSpace(entidad.Marca))
+                throw new Exception("La marca es obligatoria.");
+
+            if (string.IsNullOrWhiteSpace(entidad.Modelo))
+                throw new Exception("El modelo es obligatorio.");
+
+            var cliente = this.IConexion!.Clientes!.Find(entidad!.Id_cliente);
+            cliente!.Vehiculos!.Add(entidad);
+
             this.IConexion!.Vehiculos!.Add(entidad);
             this.IConexion.SaveChanges();
             return entidad;
@@ -73,13 +79,17 @@ namespace lib_repositorios.Implementaciones
             if (entidad!.Id == 0)
                 throw new Exception("lbNoSeGuardo");
 
-            // Operaciones
+
+            if (string.IsNullOrWhiteSpace(entidad.Placa))
+                throw new Exception("La placa es obligatoria.");
+
+            if (string.IsNullOrWhiteSpace(entidad.Marca))
+                throw new Exception("La marca es obligatoria.");
+
+            if (string.IsNullOrWhiteSpace(entidad.Modelo))
+                throw new Exception("El modelo es obligatorio.");
+
             entidad._Cliente = null;
-
-            var vehiculoExistente = this.IConexion!.Vehiculos!.FirstOrDefault(x => x.Id == entidad.Id);
-
-            if (vehiculoExistente == null)
-                throw new Exception("El vehículo que intenta modificar no existe");
 
             var entry = this.IConexion!.Entry<Vehiculos>(entidad);
             entry.State = EntityState.Modified;

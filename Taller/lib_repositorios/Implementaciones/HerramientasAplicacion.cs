@@ -18,11 +18,10 @@ namespace lib_repositorios.Implementaciones
             this.IConexion!.StringConexion = StringConexion;
         }
 
-
         public List<Herramientas> Listar()
         {
             return this.IConexion!.Herramientas!
-                .Take(5)
+                .Take(20)
                 .ToList();
         }
 
@@ -33,6 +32,19 @@ namespace lib_repositorios.Implementaciones
 
             if (entidad.Id != 0)
                 throw new Exception("Ya se guardó");
+
+            if (string.IsNullOrWhiteSpace(entidad.Nombre))
+                throw new Exception("La herramienta debe tener un nombre");
+
+            if (string.IsNullOrWhiteSpace(entidad.Tipo))
+                throw new Exception("La herramienta debe tener un tipo");
+
+            if (string.IsNullOrWhiteSpace(entidad.Estado))
+                throw new Exception("La herramienta debe tener un estado");
+
+            if (string.IsNullOrWhiteSpace(entidad.Ubicacion))
+                throw new Exception("La herramienta debe tener una ubicación");
+
 
             this.IConexion!.Herramientas!.Add(entidad);
             this.IConexion.SaveChanges();
@@ -46,6 +58,18 @@ namespace lib_repositorios.Implementaciones
 
             if (entidad.Id == 0)
                 throw new Exception("No se guardó");
+
+            if (string.IsNullOrWhiteSpace(entidad.Nombre))
+                throw new Exception("La herramienta debe tener un nombre");
+
+            if (string.IsNullOrWhiteSpace(entidad.Tipo))
+                throw new Exception("La herramienta debe tener un tipo");
+
+            if (string.IsNullOrWhiteSpace(entidad.Estado))
+                throw new Exception("La herramienta debe tener un estado");
+
+            if (string.IsNullOrWhiteSpace(entidad.Ubicacion))
+                throw new Exception("La herramienta debe tener una ubicación");
 
             var entry = this.IConexion!.Entry<Herramientas>(entidad);
             entry.State = EntityState.Modified;
@@ -66,7 +90,6 @@ namespace lib_repositorios.Implementaciones
             return entidad;
         }
 
-
         public List<Herramientas> Disponibles()
         {
             return this.IConexion!.Herramientas!
@@ -77,7 +100,7 @@ namespace lib_repositorios.Implementaciones
         public List<Herramientas> EnMantenimiento()
         {
             return this.IConexion!.Herramientas!
-                .Where(h => h.Estado == "Mantenimiento")
+                .Where(h => h.Estado == "En reparación" || h.Estado == "Mantenimiento")
                 .ToList();
         }
 

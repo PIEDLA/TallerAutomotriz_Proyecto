@@ -10,10 +10,8 @@ namespace lib_dominio.Entidades
         public string? Apellido { get; set; }
         public string? Cargo { get; set; }
         public string? Telefono { get; set; }
-
-        public List<Diagnosticos>? diagnosticos;
-
-
         [ForeignKey("Id_sede")] public Sedes? _Sede { get; set; }
+
+        public List<Diagnosticos>? Diagnosticos;
     }
 }
