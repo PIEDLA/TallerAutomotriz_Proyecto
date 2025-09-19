@@ -13,7 +13,7 @@ namespace lib_dominio.Entidades
         public DateTime Fecha_pago { get; set; }
         public string? Estado { get; set; }
 
-        List<Detalles_Pago> detalles_Pagos = new List<Detalles_Pago>();
+        public List<Detalles_Pago>? detalles_Pagos;
 
 
     }

@@ -20,7 +20,7 @@ namespace lib_repositorios.Implementaciones
 
         private string? Validar(Detalles_Producto entidad)
         {
-            if (entidad.Cantidad < 0) return "No pueden haber cantidad negativa";
+            if (entidad.PrecioProducto < 0) return "No puede haber precio negativo";
             bool existe = this.IConexion!.Productos!.Any(x => x.Id == entidad!.Producto);
             if (!existe)
                 return "No existe producto";
@@ -30,8 +30,6 @@ namespace lib_repositorios.Implementaciones
             var producto = this.IConexion!.Productos!.Find(entidad!.Producto);
             if (producto!.Stock == 0)
                 return "Producto fuera de stock";
-            if (entidad!.Cantidad > producto!.Stock)
-                return "Stock insuficiente";
 
             return null;
         }
@@ -62,6 +60,9 @@ namespace lib_repositorios.Implementaciones
             var v = Validar(entidad!);
             if (v != null)
                 throw new Exception(v);
+
+            var producto = this.IConexion!.Productos!.Find(entidad!.Producto);
+            producto!.detalles_Productos!.Add(entidad);
 
             this.IConexion!.Detalles_Producto!.Add(entidad);
             this.IConexion.SaveChanges();

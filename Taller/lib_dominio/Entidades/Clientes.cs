@@ -8,11 +8,11 @@ namespace lib_dominio.Entidades
         public string? Telefono { get; set; }
         public string? Correo { get; set; }
 
-        List<Vehiculos> vehiculos = new List<Vehiculos>();
+        public List<Vehiculos>? vehiculos;
 
-        List<Reservas> reservas = new List<Reservas>();
+        public List<Reservas>? reservas;
 
-        List<Facturas> facturas = new List<Facturas>();
+        public List<Facturas>? facturas;
 
     }
 }

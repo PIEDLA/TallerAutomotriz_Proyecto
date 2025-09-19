@@ -21,7 +21,7 @@ namespace lib_dominio.Entidades
         public string? Descripcion { get; set; }
         public DateTime Fecha { get; set; }
 
-        List<Reparaciones> reparaciones = new List<Reparaciones>();
+        public List<Reparaciones>? reparaciones;
 
 
     }

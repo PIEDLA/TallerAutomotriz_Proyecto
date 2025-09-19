@@ -19,7 +19,7 @@ namespace lib_dominio.Entidades
         public decimal Precio { get; set; }
         public int Stock { get; set; }
 
-        List<Detalles_Repuesto> detalles_Repuestos = new List<Detalles_Repuesto>();
+        public List<Detalles_Repuesto>? detalles_Repuestos;
 
 
     }

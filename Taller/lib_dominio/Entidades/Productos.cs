@@ -8,7 +8,7 @@
         public string? Categoria { get; set; }
         public int Stock { get; set; }
 
-        List<Detalles_Producto> detalles_Productos = new List<Detalles_Producto>();
+        public List<Detalles_Producto>? detalles_Productos;
 
     }
 }

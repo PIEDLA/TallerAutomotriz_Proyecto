@@ -20,6 +20,7 @@ namespace lib_repositorios.Implementaciones
 
         private string? Validar(Detalles_Servicio entidad)
         {
+            if (entidad.PrecioServicio < 0) return "No puede haber precio negativo";
             bool existe = this.IConexion!.Servicios!.Any(x => x.Id == entidad.Servicio);
             if (!existe)
                 return "No existe servicio";
@@ -56,6 +57,9 @@ namespace lib_repositorios.Implementaciones
             var v = Validar(entidad!);
             if (v != null)
                 throw new Exception(v);
+
+            var servicio = this.IConexion!.Servicios!.Find(entidad!.Servicio);
+            servicio!.detalles_Servicios!.Add(entidad);
 
             this.IConexion!.Detalles_Servicio!.Add(entidad);
             this.IConexion.SaveChanges();
