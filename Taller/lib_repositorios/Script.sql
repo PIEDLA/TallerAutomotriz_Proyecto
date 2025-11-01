@@ -175,6 +175,27 @@ CREATE TABLE [Reparacion_Herramienta] (
     [Id_herramienta] INT NOT NULL REFERENCES [Herramientas] ([Id]),
 );
 
+CREATE TABLE [Usuarios] (
+    [Id] INT NOT NULL PRIMARY KEY IDENTITY(1,1),
+    [Nombre] NVARCHAR(50) NOT NULL UNIQUE,
+    [Contraseña] NVARCHAR(250) NOT NULL,
+    [Funcion] INT NOT NULL REFERENCES [Funciones] ([Id])
+);
+
+CREATE TABLE [Funciones] (
+    [Id] INT NOT NULL PRIMARY KEY IDENTITY(1,1),
+    [Nombre] NVARCHAR(25) NOT NULL UNIQUE,
+    [Permisos] NVARCHAR(MAX) NOT NULL
+);
+
+CREATE TABLE [Auditorias] (
+    [Id] INT NOT NULL PRIMARY KEY IDENTITY(1,1),
+    [Usuario] INT NOT NULL REFERENCES [Usuarios] ([Id]),
+    [Cambio] NVARCHAR(120) NOT NULL,
+    [Descripcion] NVARCHAR(MAX) NOT NULL,
+    [Fecha] DATETIME NOT NULL
+);
+
 GO
 
 -- Clientes
@@ -355,5 +376,13 @@ INSERT INTO Reparacion_Herramienta (Id_reparacion, Id_herramienta) VALUES
 (3, 3),
 (4, 4),
 (5, 5);
+
+INSERT INTO Usuarios(Nombre, Contraseña, Funcion) VALUES
+('Prueba', '123lI', 1);
+
+INSERT INTO Funciones(Nombre, Permisos) VALUES
+('Admin', '{ñ}'),
+('Mecanico', '{}'),
+('Recepcionista', '{}');
 
 GO

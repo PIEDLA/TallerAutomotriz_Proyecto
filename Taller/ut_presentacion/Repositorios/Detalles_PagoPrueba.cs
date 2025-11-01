@@ -49,6 +49,9 @@ namespace ut_presentacion.Repositorios
         public bool Modificar()
         {
             this.entidad!.Id_pago = 2;
+            this.entidad!.Metodo_pago = "Test";
+            this.entidad!.Monto = 2.0m;
+            this.entidad!.Fecha_pago = DateTime.Today;
 
             var entry = this.iConexion!.Entry<Detalles_Pago>(this.entidad);
             entry.State = EntityState.Modified;

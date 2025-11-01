@@ -48,6 +48,8 @@ namespace ut_presentacion.Repositorios
         public bool Modificar()
         {
             this.entidad!.Producto = 2;
+            this.entidad!.PrecioProducto = 2;
+            this.entidad!.Factura = 2;
 
             var entry = this.iConexion!.Entry<Detalles_Producto>(this.entidad);
             entry.State = EntityState.Modified;

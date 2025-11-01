@@ -46,7 +46,10 @@ namespace ut_presentacion.Repositorios
 
         public bool Modificar()
         {
-            this.entidad!.Telefono = "Test";
+            this.entidad!.Nombre = "Pruebas";
+            this.entidad!.Apellido = "Pruebas";
+            this.entidad!.Correo = "Pruebas";
+            this.entidad!.Telefono = "Pruebas";
 
             var entry = this.iConexion!.Entry<Clientes>(this.entidad);
             entry.State = EntityState.Modified;
