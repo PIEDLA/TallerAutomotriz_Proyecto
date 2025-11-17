@@ -1,6 +1,7 @@
 ﻿using lib_dominio.Entidades;
 using lib_repositorios.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.Metrics;
 
 namespace lib_repositorios.Implementaciones
 {
@@ -24,7 +25,7 @@ namespace lib_repositorios.Implementaciones
             if (entidad.Monto < 0) return "No puede haber monto negativo";
             bool existe = this.IConexion!.Pagos!.Any(x => x.Id == entidad.Id_pago);
             if (!existe)
-                throw new Exception("No existe producto");
+                throw new Exception("No existe el pago");
             return null;
         }
 
@@ -35,8 +36,6 @@ namespace lib_repositorios.Implementaciones
 
             if (entidad!.Id == 0)
                 throw new Exception("Detalle de pago no guardado");
-
-
 
             this.IConexion!.Detalles_Pago!.Remove(entidad);
             this.IConexion.SaveChanges();
@@ -56,6 +55,9 @@ namespace lib_repositorios.Implementaciones
             if (v != null)
                 throw new Exception(v);
 
+            var pago = this.IConexion!.Pagos!.Find(entidad!.Id_pago);
+            pago!.Detalles_Pago!.Add(entidad);
+
 
             this.IConexion!.Detalles_Pago!.Add(entidad);
             this.IConexion.SaveChanges();
@@ -64,16 +66,18 @@ namespace lib_repositorios.Implementaciones
 
         public List<Detalles_Pago> Listar()
         {
-            return this.IConexion!.Detalles_Pago!.Take(5).ToList();
+            return this.IConexion!.Detalles_Pago!
+                .Take(50)
+                .Include(c => c._Pago)
+                .ToList();
         }
 
-        public Detalles_Pago? Buscar(int Id)
+        public List<Detalles_Pago> PorMetodoPago(Detalles_Pago? entidad)
         {
-            var entidad = this.IConexion!.Detalles_Pago!.Find(Id);
-            if (entidad == null)
-                throw new Exception("Detalle de pago no existente");
-            
-            return entidad;
+            return this.IConexion!.Detalles_Pago!
+                .Where(x => x.Metodo_pago!.Contains(entidad!.Metodo_pago!))
+                .Take(50)
+                .ToList();
         }
 
         public Detalles_Pago? Modificar(Detalles_Pago? entidad)

@@ -1,6 +1,7 @@
 ﻿using lib_dominio.Entidades;
 using lib_repositorios.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.Metrics;
 
 namespace lib_repositorios.Implementaciones
 {
@@ -68,16 +69,23 @@ namespace lib_repositorios.Implementaciones
 
         public List<Reserva_Servicio> Listar()
         {
-            return this.IConexion!.Reserva_Servicio!.Take(5).ToList();
+            return this.IConexion!.Reserva_Servicio!.Take(50).ToList();
         }
 
-        public Reserva_Servicio? Buscar(int Id)
+        public List<Reserva_Servicio> PorReserva(Reserva_Servicio? entidad)
         {
-            var entidad = this.IConexion!.Reserva_Servicio!.Find(Id);
-            if (entidad == null)
-                throw new Exception("Reserva del servicio no existente");
+            return this.IConexion!.Reserva_Servicio!
+                .Where(x => x.Reserva! == entidad!.Reserva!)
+                .Take(50)
+                .ToList();
+        }
 
-            return entidad;
+        public List<Reserva_Servicio> PorServicio(Reserva_Servicio? entidad)
+        {
+            return this.IConexion!.Reserva_Servicio!
+                .Where(x => x.Servicio! == entidad!.Servicio!)
+                .Take(50)
+                .ToList();
         }
 
         public Reserva_Servicio? Modificar(Reserva_Servicio? entidad)
