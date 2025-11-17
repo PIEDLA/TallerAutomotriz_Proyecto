@@ -6,7 +6,8 @@ namespace lib_repositorios.Interfaces
     {
         void Configurar(string StringConexion);
         List<Detalles_Servicio> Listar();
-        Detalles_Servicio? Buscar(int Id);
+        List<Detalles_Servicio> PorServicio(Detalles_Servicio? entidad);
+        List<Detalles_Servicio> PorFactura(Detalles_Servicio? entidad);
         Detalles_Servicio? Guardar(Detalles_Servicio? entidad);
         Detalles_Servicio? Modificar(Detalles_Servicio? entidad);
         Detalles_Servicio? Borrar(Detalles_Servicio? entidad);

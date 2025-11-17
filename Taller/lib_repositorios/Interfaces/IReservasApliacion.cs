@@ -6,7 +6,7 @@ namespace lib_repositorios.Interfaces
     {
         void Configurar(string StringConexion);
         List<Reservas> Listar();
-        Reservas? Buscar(int Id);
+        List<Reservas> PorEstado(Reservas? entidad);
         Reservas? Guardar(Reservas? entidad);
         Reservas? Modificar(Reservas? entidad);
         Reservas? Borrar(Reservas? entidad);

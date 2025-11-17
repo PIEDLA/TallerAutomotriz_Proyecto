@@ -39,8 +39,6 @@ namespace lib_repositorios.Implementaciones
             if (entidad!.Id == 0)
                 throw new Exception("Detalle de servicio no guardado");
 
-
-
             this.IConexion!.Detalles_Servicio!.Remove(entidad);
             this.IConexion.SaveChanges();
             return entidad;
@@ -61,6 +59,9 @@ namespace lib_repositorios.Implementaciones
             var servicio = this.IConexion!.Servicios!.Find(entidad!.Servicio);
             servicio!.Detalles_Servicio!.Add(entidad);
 
+            var factura = this.IConexion!.Facturas!.Find(entidad!.Factura);
+            factura!.Detalles_Servicio!.Add(entidad);
+
             this.IConexion!.Detalles_Servicio!.Add(entidad);
             this.IConexion.SaveChanges();
             return entidad;
@@ -68,16 +69,27 @@ namespace lib_repositorios.Implementaciones
 
         public List<Detalles_Servicio> Listar()
         {
-            return this.IConexion!.Detalles_Servicio!.Take(5).ToList();
+            return this.IConexion!.Detalles_Servicio!
+                .Take(50)
+                .Include(c => c._Factura)
+                .Include(s => s._Servicio)
+                .ToList();
         }
 
-        public Detalles_Servicio? Buscar(int Id)
+        public List<Detalles_Servicio> PorServicio(Detalles_Servicio? entidad)
         {
-            var entidad = this.IConexion!.Detalles_Servicio!.Find(Id);
-            if (entidad == null)
-                throw new Exception("Detalle de servicio no existente");
+            return this.IConexion!.Detalles_Servicio!
+                .Where(x => x.Servicio! == entidad!.Servicio!)
+                .Take(50)
+                .ToList();
+        }
 
-            return entidad;
+        public List<Detalles_Servicio> PorFactura(Detalles_Servicio? entidad)
+        {
+            return this.IConexion!.Detalles_Servicio!
+                .Where(x => x.Factura! == entidad!.Factura!)
+                .Take(50)
+                .ToList();
         }
 
         public Detalles_Servicio? Modificar(Detalles_Servicio? entidad)

@@ -1,6 +1,7 @@
 ﻿using lib_dominio.Entidades;
 using lib_repositorios.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.Metrics;
 
 namespace lib_repositorios.Implementaciones
 {
@@ -36,7 +37,12 @@ namespace lib_repositorios.Implementaciones
             if (entidad!.Id == 0)
                 throw new Exception("Sede no guardada");
 
+            if (entidad!.empleados != null)
+                throw new Exception("Esta sede aún posee empleados registrados");
 
+            var tieneReservas = this.IConexion!.Reservas!.Any(x => x.Id == entidad.Id && !String.Equals(x.Estado!, "Cancelada"));
+            if (tieneReservas)
+                throw new Exception("Esta sede aún posee reservas agendadas");
 
             this.IConexion!.Sedes!.Remove(entidad);
             this.IConexion.SaveChanges();
@@ -62,16 +68,15 @@ namespace lib_repositorios.Implementaciones
 
         public List<Sedes> Listar()
         {
-            return this.IConexion!.Sedes!.Take(5).ToList();
+            return this.IConexion!.Sedes!.Take(50).ToList();
         }
 
-        public Sedes? Buscar(int Id)
+        public List<Sedes> PorCiudad(Sedes? entidad)
         {
-            var entidad = this.IConexion!.Sedes!.Find(Id);
-            if (entidad == null)
-                throw new Exception("Sede no existente");
-
-            return entidad;
+            return this.IConexion!.Sedes!
+                .Where(x => x.Ciudad!.Contains(entidad!.Ciudad!))
+                .Take(50)
+                .ToList();
         }
 
         public Sedes? Modificar(Sedes? entidad)

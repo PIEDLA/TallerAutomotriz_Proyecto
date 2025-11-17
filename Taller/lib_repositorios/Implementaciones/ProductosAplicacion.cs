@@ -1,6 +1,7 @@
 ﻿using lib_dominio.Entidades;
 using lib_repositorios.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.Metrics;
 
 namespace lib_repositorios.Implementaciones
 {
@@ -36,6 +37,9 @@ namespace lib_repositorios.Implementaciones
             if (entidad!.Id == 0)
                 throw new Exception("Producto no guardado");
 
+            if(entidad.Stock > 0)
+                throw new Exception("Aún existe stock del producto");
+
             this.IConexion!.Productos!.Remove(entidad);
             this.IConexion.SaveChanges();
             return entidad;
@@ -60,16 +64,15 @@ namespace lib_repositorios.Implementaciones
 
         public List<Productos> Listar()
         {
-            return this.IConexion!.Productos!.Take(5).ToList();
+            return this.IConexion!.Productos!.Take(50).ToList();
         }
 
-        public Productos? Buscar(int Id)
+        public List<Productos> PorCategoria(Productos? entidad)
         {
-            var entidad = this.IConexion!.Productos!.Find(Id);
-            if (entidad == null)
-                throw new Exception("Producto no existente");
-
-            return entidad;
+            return this.IConexion!.Productos!
+                .Where(x => x.Categoria!.Contains(entidad!.Categoria!))
+                .Take(50)
+                .ToList();
         }
 
         public Productos? Modificar(Productos? entidad)
