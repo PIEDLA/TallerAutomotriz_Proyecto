@@ -6,7 +6,7 @@ namespace lib_repositorios.Interfaces
     {
         void Configurar(string StringConexion);
         List<Sedes> Listar();
-        Sedes? Buscar(int Id);
+        List<Sedes> PorCiudad(Sedes? entidad);
         Sedes? Guardar(Sedes? entidad);
         Sedes? Modificar(Sedes? entidad);
         Sedes? Borrar(Sedes? entidad);

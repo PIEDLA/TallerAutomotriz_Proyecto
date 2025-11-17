@@ -1,4 +1,5 @@
 ﻿using asp_servicios.Controllers;
+using lib_dominio.Entidades;
 using lib_repositorios.Implementaciones;
 using lib_repositorios.Interfaces;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
@@ -26,6 +27,15 @@ namespace asp_servicios
 
             // Repositorios
             services.AddScoped<IConexion, Conexion>();
+            services.AddScoped<IReservasAplicacion, ReservasAplicacion>();
+            services.AddScoped<IProductosAplicacion, ProductosAplicacion>();
+            services.AddScoped<IReserva_ServicioAplicacion, Reserva_ServicioAplicacion>();
+            services.AddScoped<IDetalles_ServicioAplicacion, Detalles_ServicioAplicacion>();
+            services.AddScoped<IDetalles_ProductoAplicacion, Detalles_ProductoAplicacion>();
+            services.AddScoped<IDetalles_RepuestoAplicacion, Detalles_RepuestoAplicacion>();
+            services.AddScoped<IProveedoresAplicacion, ProveedoresAplicacion>();
+            services.AddScoped<IDetalles_PagoAplicacion, Detalles_PagoAplicacion>();
+            services.AddScoped<ISedesAplicacion, SedesAplicacion>();
             services.AddScoped<TokenAplicacion, TokenAplicacion>();
             // Controladores
             services.AddScoped<TokenController, TokenController>();

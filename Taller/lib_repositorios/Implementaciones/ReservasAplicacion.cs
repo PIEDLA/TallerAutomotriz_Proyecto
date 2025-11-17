@@ -1,6 +1,7 @@
 ﻿using lib_dominio.Entidades;
 using lib_repositorios.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.Metrics;
 
 namespace lib_repositorios.Implementaciones
 {
@@ -38,6 +39,9 @@ namespace lib_repositorios.Implementaciones
             if (entidad!.Id == 0)
                 throw new Exception("Reserva no guardado");
 
+            if(!String.Equals(entidad!.Estado, "Cancelada"))
+                throw new Exception("La reserva aún se encuentra en proceso");
+
             this.IConexion!.Reservas!.Remove(entidad);
             this.IConexion.SaveChanges();
             return entidad;
@@ -49,7 +53,7 @@ namespace lib_repositorios.Implementaciones
                 throw new Exception("Información incompleta");
 
             if (entidad!.Id == 0)
-                throw new Exception("Reserva no guardado");
+                throw new Exception("Reserva no guardada");
 
             var v = Validar(entidad!);
             if (v != null)
@@ -68,16 +72,19 @@ namespace lib_repositorios.Implementaciones
 
         public List<Reservas> Listar()
         {
-            return this.IConexion!.Reservas!.Take(5).ToList();
+            return this.IConexion!.Reservas!
+                .Take(50)
+                .Include(c => c._Cliente)
+                .Include(s => s._Cliente)
+                .ToList();
         }
 
-        public Reservas? Buscar(int Id)
+        public List<Reservas> PorEstado(Reservas? entidad)
         {
-            var entidad = this.IConexion!.Reservas!.Find(Id);
-            if (entidad == null)
-                throw new Exception("Reserva no existente");
-
-            return entidad;
+            return this.IConexion!.Reservas!
+                .Where(x => x.Estado!.Contains(entidad!.Estado!))
+                .Take(50)
+                .ToList();
         }
 
         public Reservas? Modificar(Reservas? entidad)

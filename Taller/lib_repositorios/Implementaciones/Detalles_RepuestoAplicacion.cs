@@ -20,12 +20,8 @@ namespace lib_repositorios.Implementaciones
 
         private string? Validar(Detalles_Repuesto entidad)
         {
-            if (entidad.PrecioRepuesto < 0) return "No puede haber precio negativo";
-            bool existe = this.IConexion!.Repuestos!.Any(x => x.Id == entidad!.Repuesto);
-            if (!existe)
-                return "No existe producto";
-            bool e = this.IConexion!.Facturas!.Any(x => x.Id == entidad!.Factura);
-            if (!existe)
+            bool factura = this.IConexion!.Facturas!.Any(x => x.Id == entidad!.Factura);
+            if (!factura)
                 return "No existe factura";
             var repuesto = this.IConexion!.Repuestos!.Find(entidad!.Repuesto);
             if (repuesto!.Stock == 0)
@@ -64,6 +60,9 @@ namespace lib_repositorios.Implementaciones
             var repuesto = this.IConexion!.Repuestos!.Find(entidad!.Repuesto);
             repuesto!.Detalles_Repuesto!.Add(entidad);
 
+            var facturas = this.IConexion!.Facturas!.Find(entidad!.Factura);
+            facturas!.Detalles_Repuesto!.Add(entidad);
+
             this.IConexion!.Detalles_Repuesto!.Add(entidad);
             this.IConexion.SaveChanges();
             return entidad;
@@ -71,16 +70,23 @@ namespace lib_repositorios.Implementaciones
 
         public List<Detalles_Repuesto> Listar()
         {
-            return this.IConexion!.Detalles_Repuesto!.Take(5).ToList();
+            return this.IConexion!.Detalles_Repuesto!.Take(50).ToList();
         }
 
-        public Detalles_Repuesto? Buscar(int Id)
+        public List<Detalles_Repuesto> PorRepuesto(Detalles_Repuesto? entidad)
         {
-            var entidad = this.IConexion!.Detalles_Repuesto!.Find(Id);
-            if (entidad == null)
-                throw new Exception("Sin repuestos agregados");
+            return this.IConexion!.Detalles_Repuesto!
+                .Where(x => x.Repuesto! == entidad!.Repuesto!)
+                .Take(50)
+                .ToList();
+        }
 
-            return entidad;
+        public List<Detalles_Repuesto> PorFactura(Detalles_Repuesto? entidad)
+        {
+            return this.IConexion!.Detalles_Repuesto!
+                .Where(x => x.Factura! == entidad!.Factura!)
+                .Take(50)
+                .ToList();
         }
 
         public Detalles_Repuesto? Modificar(Detalles_Repuesto? entidad)

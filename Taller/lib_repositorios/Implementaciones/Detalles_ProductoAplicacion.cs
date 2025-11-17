@@ -1,4 +1,5 @@
-﻿using lib_dominio.Entidades;
+﻿using Azure.Core;
+using lib_dominio.Entidades;
 using lib_repositorios.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -42,8 +43,6 @@ namespace lib_repositorios.Implementaciones
             if (entidad!.Id == 0)
                 throw new Exception("Detalle de producto no guardado");
 
-
-
             this.IConexion!.Detalles_Producto!.Remove(entidad);
             this.IConexion.SaveChanges();
             return entidad;
@@ -64,6 +63,9 @@ namespace lib_repositorios.Implementaciones
             var producto = this.IConexion!.Productos!.Find(entidad!.Producto);
             producto!.detalles_Productos!.Add(entidad);
 
+            var facturas = this.IConexion!.Facturas!.Find(entidad!.Factura);
+            facturas!.Detalles_Producto!.Add(entidad);
+
             this.IConexion!.Detalles_Producto!.Add(entidad);
             this.IConexion.SaveChanges();
             return entidad;
@@ -71,16 +73,23 @@ namespace lib_repositorios.Implementaciones
 
         public List<Detalles_Producto> Listar()
         {
-            return this.IConexion!.Detalles_Producto!.Take(5).ToList();
+            return this.IConexion!.Detalles_Producto!.Take(50).ToList();
         }
 
-        public Detalles_Producto? Buscar(int Id)
+        public List<Detalles_Producto> PorProducto(Detalles_Producto? entidad)
         {
-            var entidad = this.IConexion!.Detalles_Producto!.Find(Id);
-            if (entidad == null)
-                throw new Exception("Sin productos agregados");
+            return this.IConexion!.Detalles_Producto!
+                .Where(x => x.Producto! == entidad!.Producto!)
+                .Take(50)
+                .ToList();
+        }
 
-            return entidad;
+        public List<Detalles_Producto> PorFactura(Detalles_Producto? entidad)
+        {
+            return this.IConexion!.Detalles_Producto!
+                .Where(x => x.Factura! == entidad!.Factura!)
+                .Take(50)
+                .ToList();
         }
 
         public Detalles_Producto? Modificar(Detalles_Producto? entidad)
