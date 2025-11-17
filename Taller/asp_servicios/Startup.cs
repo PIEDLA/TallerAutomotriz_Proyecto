@@ -25,7 +25,7 @@ namespace asp_servicios
             services.AddEndpointsApiExplorer();
             //services.AddSwaggerGen();
 
-            // Repositorios
+            //Repositorios
             services.AddScoped<IConexion, Conexion>();
             services.AddScoped<IReservasAplicacion, ReservasAplicacion>();
             services.AddScoped<IProductosAplicacion, ProductosAplicacion>();
@@ -36,8 +36,21 @@ namespace asp_servicios
             services.AddScoped<IProveedoresAplicacion, ProveedoresAplicacion>();
             services.AddScoped<IDetalles_PagoAplicacion, Detalles_PagoAplicacion>();
             services.AddScoped<ISedesAplicacion, SedesAplicacion>();
+            services.AddScoped<IClientesAplicacion, ClientesAplicacion>();
+            services.AddScoped<IDiagnosticosAplicacion, DiagnosticosAplicacion>();
+            services.AddScoped<IEmpleadosAplicacion, EmpleadosAplicacion>();
+            services.AddScoped<IFacturasAplicacion, FacturasAplicacion>();
+            services.AddScoped<IHerramientasAplicacion, HerramientasAplicacion>();
+            services.AddScoped<IPagosAplicacion, PagosAplicacion>();
+            services.AddScoped<IReparacionHerramientaAplicacion, ReparacionHerramientaAplicacion>();
+            services.AddScoped<IReparacionesAplicacion, ReparacionesAplicacion>();
+            services.AddScoped<IRepuestosAplicacion, RepuestosAplicacion>();
+            services.AddScoped<IReservasAplicacion, ReservasAplicacion>();
+            services.AddScoped<IServiciosAplicacion, ServiciosAplicacion>();
+            services.AddScoped<IVehiculosAplicacion, VehiculosAplicacion>();
             services.AddScoped<TokenAplicacion, TokenAplicacion>();
-            // Controladores
+
+            //Controladores
             services.AddScoped<TokenController, TokenController>();
             services.AddCors(o => o.AddDefaultPolicy(b => b.AllowAnyOrigin()));
         }
