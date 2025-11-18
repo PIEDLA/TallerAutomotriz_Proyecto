@@ -52,6 +52,27 @@ namespace asp_servicios
 
             //Controladores
             services.AddScoped<TokenController, TokenController>();
+            services.AddScoped<ReservasController, ReservasController>();
+            services.AddScoped<ProductosController, ProductosController>();
+            services.AddScoped<Reserva_ServicioController, Reserva_ServicioController>();
+            services.AddScoped<Detalles_ServicioController, Detalles_ServicioController>();
+            services.AddScoped<Detalles_ProductoController, Detalles_ProductoController>();
+            services.AddScoped<Detalles_RepuestoController, Detalles_RepuestoController>();
+            services.AddScoped<ProveedoresController, ProveedoresController>();
+            services.AddScoped<Detalles_PagoController, Detalles_PagoController>();
+            services.AddScoped<SedesController, SedesController>();
+            services.AddScoped<ClientesController, ClientesController>();
+            services.AddScoped<DiagnosticosController, DiagnosticosController>();
+            services.AddScoped<EmpleadosController, EmpleadosController>();
+            services.AddScoped<FacturasController, FacturasController>();
+            services.AddScoped<HerramientasController, HerramientasController>();
+            services.AddScoped<PagosController, PagosController>();
+            services.AddScoped<Reparacion_HerramientaController, Reparacion_HerramientaController>();
+            services.AddScoped<ReparacionesController, ReparacionesController>();
+            services.AddScoped<RepuestosController, RepuestosController>();
+            services.AddScoped<ReservasController, ReservasController>();
+            services.AddScoped<ServiciosController, ServiciosController>();
+            services.AddScoped<VehiculosController, VehiculosController>();
             services.AddCors(o => o.AddDefaultPolicy(b => b.AllowAnyOrigin()));
         }
 

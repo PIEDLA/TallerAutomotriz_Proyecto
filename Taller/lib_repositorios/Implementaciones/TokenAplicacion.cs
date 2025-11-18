@@ -8,7 +8,7 @@ namespace lib_repositorios.Implementaciones
     {
         private IConexion? IConexion = null;
         // El profe dice mejore las llaves
-        private string llave = TokenGenerator.GenerateToken();
+        private static string llave = "";
 
         public TokenAplicacion(IConexion iConexion)
         {
@@ -22,6 +22,7 @@ namespace lib_repositorios.Implementaciones
 
         public string Llave(Usuarios? entidad)
         {
+            llave = TokenGenerator.GenerateToken();
             var usuario = this.IConexion!.Usuarios!
                 .FirstOrDefault(x => x.Nombre == entidad!.Nombre && 
                                 x.Contraseña == entidad.Contraseña);
@@ -34,7 +35,7 @@ namespace lib_repositorios.Implementaciones
         {
             if (!datos.ContainsKey("Llave"))
                 return false;
-            return this.llave == datos["Llave"].ToString();
+            return llave == datos["Llave"].ToString();
         }
     }
 }

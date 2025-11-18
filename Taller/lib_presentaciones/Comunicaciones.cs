@@ -7,7 +7,7 @@ namespace lib_presentaciones
         private string? URL = string.Empty,
             llave = null;
 
-        public Comunicaciones(string url = "http://localhost:5080/")
+        public Comunicaciones(string url = "http://localhost:5093/")
         {
             URL = url;
         }
@@ -78,8 +78,8 @@ namespace lib_presentaciones
                 var temp = new Dictionary<string, object>();
                 temp["Entidad"] = new Dictionary<string, object>()
                 {
-                    { "Nombre", "Pepito@email.com" },
-                    { "Contraseña", "JHGjkhtu6387456yssdf" }
+                    { "Nombre", "Prueba" },
+                    { "Contraseña", "123lI" }
                 };
                 var stringData = JsonConversor.ConvertirAString(temp);
 
