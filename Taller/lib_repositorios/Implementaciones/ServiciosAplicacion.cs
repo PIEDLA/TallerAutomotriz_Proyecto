@@ -54,6 +54,16 @@ namespace lib_repositorios.Implementaciones
             return entidad;
         }
 
+        public List<Servicios> ListarPorDuracion(string duracion)
+        {
+  
+                return this.IConexion!.Servicios!
+                    .Where(x => x.Duracion_aprox == duracion)
+                    .ToList();
+            
+        }
+
+
         public List<Servicios> Listar()
         {
             return this.IConexion!.Servicios!.ToList();
