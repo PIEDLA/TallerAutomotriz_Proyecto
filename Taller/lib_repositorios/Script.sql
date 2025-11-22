@@ -97,7 +97,7 @@ CREATE TABLE [Pagos] (
     [Id] INT NOT NULL PRIMARY KEY IDENTITY(1,1),
     [Id_factura] INT NOT NULL REFERENCES [Facturas] ([Id]),
     [Monto_total] DECIMAL(10,2) NOT NULL,
-    [Fecha_pago] DATE NOT NULL,
+    [Fecha_pago] DATE,
     [Estado] NVARCHAR(20) NOT NULL,
 );
 
@@ -381,7 +381,7 @@ INSERT INTO Usuarios(Nombre, Contraseña, Funcion) VALUES
 ('Prueba', '123lI', 1);
 
 INSERT INTO Funciones(Nombre, Permisos) VALUES
-('Admin', '{ñ}'),
+('Admin', '{}'),
 ('Mecanico', '{}'),
 ('Recepcionista', '{}');
 

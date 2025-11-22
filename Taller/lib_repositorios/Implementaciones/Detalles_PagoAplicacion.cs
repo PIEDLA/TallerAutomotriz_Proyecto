@@ -74,9 +74,18 @@ namespace lib_repositorios.Implementaciones
 
         public List<Detalles_Pago> PorMetodoPago(Detalles_Pago? entidad)
         {
+            if (entidad!.Id_pago == 0)
+            {
+                return this.IConexion!.Detalles_Pago!
+                    .Include(c => c._Pago)
+                    .Take(50)
+                    .ToList();
+            }
+
             return this.IConexion!.Detalles_Pago!
-                .Where(x => x.Metodo_pago!.Contains(entidad!.Metodo_pago!))
+                .Where(x => x.Id_pago == entidad!.Id_pago)
                 .Take(50)
+                .Include(c => c._Pago)
                 .ToList();
         }
 
