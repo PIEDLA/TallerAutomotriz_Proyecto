@@ -1,6 +1,5 @@
-﻿
-@page
-@model asp_presentacion.Pages.Ventanas.Detalles_PagoModel
+﻿@page
+@model asp_presentacion.Pages.Ventanas.FacturacionModel
 @{
     ViewData["Titulo"] = "";
 }
@@ -11,7 +10,7 @@
             @Html.AntiForgeryToken()
 
             <div align="left">
-                <h3>Detalles de pagos</h3>
+                <h3>Proveedores</h3>
             </div>
             <div align="left"
                  class="bt_panel_buttons">
@@ -48,47 +47,59 @@
 
 
                 <input type="hidden"
-                       asp-for="@Model.Actual!.Metodo_pago" />
+                       asp-for="@Model.Actual!.Nombre" />
                 <input type="hidden"
-                       asp-for="@Model.Actual!.Monto" />
+                       asp-for="@Model.Actual!.Telefono" />
                 <input type="hidden"
-                       asp-for="@Model.Actual!.Fecha_pago" />
+                       asp-for="@Model.Actual!.Correo" />
+                <input type="hidden"
+                       asp-for="@Model.Actual!.Direccion" />
             }
 
             @if (Model.Accion == lib_dominio.Nucleo.Enumerables.Ventanas.Editar)
             {
                 <div class="containers_vn panel panel-default">
-                    <h3>Detalles del pagos</h3>
+                    <h3>Proveedores</h3>
 
                     <div>
                         <div class="form-group">
                             <label class="col-lg-4 control-label">
-                                Metodo de pago
+                                Nombre
                             </label>
                             <div class="col-lg-6">
-                                <input id="nmMetodo_pago"
+                                <input id="nmNombre"
                                        class="cts_forms form-control"
-                                       asp-for="@Model.Actual!.Metodo_pago" />
+                                       asp-for="@Model.Actual!.Nombre" />
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-lg-4 control-label">
-                                Monto
+                                Telefono
                             </label>
                             <div class="col-lg-6">
-                                <input id="nmMonto"
+                                <input id="nmTelefono"
                                        class="cts_forms form-control"
-                                       asp-for="@Model.Actual!.Monto" />
+                                       asp-for="@Model.Actual!.Telefono" />
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-lg-4 control-label">
-                                Fecha de pago
+                                Correo
                             </label>
                             <div class="col-lg-6">
-                                <input id="nmFecha_pago"
+                                <input id="nmCorreo"
                                        class="cts_forms form-control"
-                                       asp-for="@Model.Actual!.Fecha_pago" />
+                                       asp-for="@Model.Actual!.Correo" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-4 control-label">
+                                Direccion
+                            </label>
+                            <div class="col-lg-6">
+                                <input id="nmDireccion"
+                                       class="cts_forms form-control"
+                                       asp-for="@Model.Actual!.Direccion" />
                             </div>
                         </div>
                     </div>
@@ -101,7 +112,7 @@
                        asp-for="@Model.Accion" />
                 @await Html.PartialAsync("../Emergentes/Mensajes.cshtml")
                 ;
-            }@* 
+            }
 
             @if (Model.Accion == lib_dominio.Nucleo.Enumerables.Ventanas.Borrar)
             {
@@ -116,7 +127,7 @@
                                 Desea borrar la entidad?
                             </h4>
                             <h6 align="left">
-                                @Model.Actual!.Nombre_producto
+                                @Model.Actual!.Nombre
                             </h6>
                             <br />
                             <br />
@@ -131,15 +142,15 @@
                         </div>
                     </div>
                 </div>
-            } *@
+            }
 
             @if (Model.Accion == lib_dominio.Nucleo.Enumerables.Ventanas.Listas ||
                         Model.Accion == lib_dominio.Nucleo.Enumerables.Ventanas.Borrar)
             {
-                <input id="flId_pago"
+                <input id="flNombre"
                        class="cts_forms form-control"
-                       asp-for="@Model.Filtro!.Id_pago"
-                       placeholder="Id del pago" />
+                       asp-for="@Model.Filtro!.Nombre"
+                       placeholder="Nombre" />
                 <br />
 
                 <div class="containers_vn panel panel-default">
@@ -148,16 +159,16 @@
                     <table class="tb_data table table-striped table-bordered table hover">
                         <tr>
                             <th>
-                                Método de pago
+                                Nombre
                             </th>
                             <th>
-                                Total
+                                Telefono
                             </th>
                             <th>
-                                Monto
+                                Correo
                             </th>
                             <th>
-                                Fecha
+                                Direccion
                             </th>
                             <th class="cl_actions">
                                 Accion
@@ -169,16 +180,16 @@
                             {
                                 <tr>
                                     <td>
-                                        @elemento.Metodo_pago
+                                        @elemento.Nombre
                                     </td>
                                     <td>
-                                        @elemento._Pago!.Monto_total
+                                        @elemento.Telefono
                                     </td>
                                     <td>
-                                        @elemento.Monto
+                                        @elemento.Correo
                                     </td>
                                     <td>
-                                        @elemento.Fecha_pago.ToString("dd/MM/yyyy")
+                                        @elemento.Direccion
                                     </td>
                                     <td>
                                         <input type="submit"
