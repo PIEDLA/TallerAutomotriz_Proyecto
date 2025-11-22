@@ -1,0 +1,181 @@
+﻿@page
+@model asp_presentacion.Pages.Ventanas.ReparacionesModel
+@{
+    ViewData["Titulo"] = "";
+}
+
+<center>
+    <div>
+        <form method="POST" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+
+            <div align="left">
+                <h3>Reparaciones</h3>
+            </div>
+
+            <div align="left" class="bt_panel_buttons">
+                <input type="submit" value="Refrescar" asp-page-handler="BtRefrescar"
+                       class="btn btn-secondary"
+                       disabled="@(Model.Accion != lib_dominio.Nucleo.Enumerables.Ventanas.Listas)" />
+                <input type="submit" value="Nuevo" asp-page-handler="BtNuevo"
+                       class="btn btn-secondary"
+                       disabled="@(Model.Accion != lib_dominio.Nucleo.Enumerables.Ventanas.Listas)" />
+                <input type="submit" value="Guardar" asp-page-handler="BtGuardar"
+                       class="btn btn-secondary"
+                       disabled="@(Model.Accion == lib_dominio.Nucleo.Enumerables.Ventanas.Listas)" />
+                <input type="submit" value="Cancelar" asp-page-handler="BtCancelar"
+                       class="btn btn-secondary"
+                       disabled="@(Model.Accion == lib_dominio.Nucleo.Enumerables.Ventanas.Listas)" />
+            </div>
+
+
+            @if (Model.Accion != lib_dominio.Nucleo.Enumerables.Ventanas.Listas ||
+                        Model.Accion == lib_dominio.Nucleo.Enumerables.Ventanas.Borrar)
+            {
+                <input type="hidden" asp-for="@Model.Actual!.Id" />
+            }
+
+
+            @if (Model.Accion == lib_dominio.Nucleo.Enumerables.Ventanas.Borrar)
+            {
+                <input type="hidden" asp-for="@Model.Actual!.Id_diagnostico" />
+                <input type="hidden" asp-for="@Model.Actual!.Descripcion_trabajo" />
+                <input type="hidden" asp-for="@Model.Actual!.Costo_estimado" />
+                <input type="hidden" asp-for="@Model.Actual!.Fecha_inicio" />
+            }
+
+
+            @if (Model.Accion == lib_dominio.Nucleo.Enumerables.Ventanas.Editar)
+            {
+                <div class="containers_vn panel panel-default">
+                    <h3>Reparación</h3>
+
+                    <div>
+                        <div class="form-group">
+                            <label class="col-lg-4 control-label">ID Diagnóstico</label>
+                            <div class="col-lg-6">
+                                <input class="cts_forms form-control" asp-for="@Model.Actual!.Id_diagnostico" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-4 control-label">Descripción del trabajo</label>
+                            <div class="col-lg-6">
+                                <textarea class="cts_forms form-control" asp-for="@Model.Actual!.Descripcion_trabajo"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-4 control-label">Costo estimado</label>
+                            <div class="col-lg-6">
+                                <input class="cts_forms form-control" asp-for="@Model.Actual!.Costo_estimado" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-4 control-label">Fecha inicio</label>
+                            <div class="col-lg-6">
+                                <input type="date" class="cts_forms form-control" asp-for="@Model.Actual!.Fecha_inicio" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+
+            @if (ViewData.ContainsKey("Mensaje"))
+            {
+                <input type="hidden" asp-for="@Model.Accion" />
+                @await Html.PartialAsync("../Emergentes/Mensajes.cshtml")
+            }
+
+
+            @if (Model.Accion == lib_dominio.Nucleo.Enumerables.Ventanas.Borrar)
+            {
+                <div class='popup'>
+                    <div class='pp_del_inner'>
+                        <div style='width:95%'>
+                            <h2 align="left">Mensaje</h2>
+                            <h4 align="left">¿Desea borrar la reparación?</h4>
+                            <h6 align="left">
+                                ID Diagnóstico: @Model.Actual!.Id_diagnostico
+                                - Fecha: @Model.Actual!.Fecha_inicio.ToShortDateString()
+                            </h6>
+                            <br /><br />
+                            <input type="submit" value="Borrar" asp-page-handler="BtBorrar" class="btn btn-secondary" />
+                            <input type="submit" value="Cerrar" asp-page-handler="BtCancelar" class="btn btn-secondary" />
+                        </div>
+                    </div>
+                </div>
+            }
+
+
+            @if (Model.Accion == lib_dominio.Nucleo.Enumerables.Ventanas.Listas)
+            {
+                <div class="containers_vn panel panel-default" style="margin-bottom:20px;">
+                    <h4>Resumen Reparaciones</h4>
+                    <p><strong>Total estimado:</strong> @Model.TotalEstimado</p>
+                    @if (Model.UltimaReparacion != null)
+                    {
+                        <p>
+                            <strong>Última reparación:</strong>
+                            @Model.UltimaReparacion.Fecha_inicio.ToShortDateString()
+                            - Costo: @Model.UltimaReparacion.Costo_estimado
+                        </p>
+                    }
+                </div>
+            }
+
+¿
+            @if (Model.Accion == lib_dominio.Nucleo.Enumerables.Ventanas.Listas ||
+                        Model.Accion == lib_dominio.Nucleo.Enumerables.Ventanas.Borrar)
+            {
+                <div class="containers_vn panel panel-default">
+                    <h4>Filtros</h4>
+
+                    <input class="cts_forms form-control" asp-for="@Model.Filtro!.Id_diagnostico" placeholder="ID Diagnóstico (opcional)" />
+                    <br />
+                    <input class="cts_forms form-control" asp-for="@Model.Filtro!.Descripcion_trabajo" placeholder="Descripción (opcional)" />
+                    <br />
+                    <input class="cts_forms form-control" asp-for="@Model.Filtro!.Costo_estimado" placeholder="Costo estimado (opcional)" />
+                    <br />
+                    <label>Fecha inicio (desde)</label>
+                    <input type="date" class="cts_forms form-control" asp-for="@Model.FechaInicioFiltro" />
+                    <br />
+                    <label>Fecha inicio (hasta)</label>
+                    <input type="date" class="cts_forms form-control" asp-for="@Model.FechaFinFiltro" />
+                    <br />
+
+                    <table class="tb_data table table-striped table-bordered table-hover">
+                        <tr>
+                            <th>ID Diagnóstico</th>
+                            <th>Descripción</th>
+                            <th>Costo estimado</th>
+                            <th>Fecha inicio</th>
+                            <th class="cl_actions">Acción</th>
+                        </tr>
+
+                        @if (Model.Lista != null)
+                        {
+                            @foreach (var r in Model.Lista)
+                            {
+                                <tr>
+                                    <td>@r.Id_diagnostico</td>
+                                    <td>@r.Descripcion_trabajo</td>
+                                    <td>@r.Costo_estimado</td>
+                                    <td>@r.Fecha_inicio.ToShortDateString()</td>
+                                    <td>
+                                        <input type="submit" value="Modificar" asp-page-handler="BtModificar"
+                                               class="btn btn-secondary" asp-route-data="@r.Id" />
+                                        <input type="submit" value="Borrar" asp-page-handler="BtBorrarVal"
+                                               class="btn btn-secondary" asp-route-data="@r.Id" />
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </table>
+                </div>
+            }
+        </form>
+    </div>
+</center>
