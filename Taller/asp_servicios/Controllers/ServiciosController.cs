@@ -56,6 +56,38 @@ namespace asp_servicios.Controllers
         }
 
         [HttpPost]
+        public string ListarPorDuracion()
+        {
+            var respuesta = new Dictionary<string, object>();
+            try
+            {
+                var datos = ObtenerDatos();
+
+                if (!iAplicacionToken!.Validar(datos))
+                {
+                    respuesta["Error"] = "lbNoAutenticacion";
+                    return JsonConversor.ConvertirAString(respuesta);
+                }
+                var entidad = JsonConversor.ConvertirAObjeto<Servicios>(
+                    JsonConversor.ConvertirAString(datos["Entidad"])
+                );
+                this.iAplicacion!.Configurar(Configuracion.ObtenerValor("StringConexion"));
+                respuesta["Entidades"] = this.iAplicacion!.ListarPorDuracion(entidad.Duracion_aprox!);
+                respuesta["Respuesta"] = "OK";
+                respuesta["Fecha"] = DateTime.Now.ToString();
+
+                return JsonConversor.ConvertirAString(respuesta);
+            }
+            catch (Exception ex)
+            {
+                respuesta["Error"] = ex.Message.ToString();
+                respuesta["Respuesta"] = "Error";
+                return JsonConversor.ConvertirAString(respuesta);
+            }
+        }
+
+
+        [HttpPost]
         public string Guardar()
         {
             var respuesta = new Dictionary<string, object>();
