@@ -30,9 +30,7 @@ namespace asp_presentacion.Pages.Ventanas
         [BindProperty] public Detalles_Pago? Actual { get; set; }
         [BindProperty] public Detalles_Pago? Filtro { get; set; }
         [BindProperty]
-        public List<Detalles_Pago>
-    ? Lista
-        { get; set; }
+        public List<Detalles_Pago>? Lista{ get; set; }
 
         public virtual void OnGet() { OnPostBtRefrescar(); }
 
@@ -46,8 +44,6 @@ namespace asp_presentacion.Pages.Ventanas
                 //    HttpContext.Response.Redirect("/");
                 //    return;
                 //}
-
-
                 Accion = Enumerables.Ventanas.Listas;
                 var task = this.iPresentacion!.PorMetodoPago(Filtro!);
                 task.Wait();
