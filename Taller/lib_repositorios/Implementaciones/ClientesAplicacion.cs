@@ -67,9 +67,6 @@ namespace lib_repositorios.Implementaciones
 
         public List<Clientes> PorNombre(string nombre)
         {
-            if (string.IsNullOrWhiteSpace(nombre))
-                throw new Exception("Debe especificar un nombre para buscar");
-
             return this.IConexion!.Clientes!
                 .Where(x => x.Nombre!.ToLower().Contains(nombre.ToLower()) || x.Apellido!.ToLower().Contains(nombre.ToLower()))
                 .OrderBy(x => x.Apellido).ThenBy(x => x.Nombre).ToList();
