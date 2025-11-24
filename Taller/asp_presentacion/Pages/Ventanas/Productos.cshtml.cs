@@ -6,16 +6,16 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace asp_presentacion.Pages.Ventanas
 {
-    public class EmpleadosModel : PageModel
+    public class ProductosModel : PageModel
     {
-        private IEmpleadosPresentacion? iPresentacion = null;
+        private IProductosPresentacion? iPresentacion = null;
 
-        public EmpleadosModel(IEmpleadosPresentacion iPresentacion)
+        public ProductosModel(IProductosPresentacion iPresentacion)
         {
             try
             {
                 this.iPresentacion = iPresentacion;
-                Filtro = new Empleados();
+                Filtro = new Productos();
             }
             catch (Exception ex)
             {
@@ -27,9 +27,12 @@ namespace asp_presentacion.Pages.Ventanas
         [BindProperty] public Enumerables.Ventanas Accion { get; set; }
 
 
-        [BindProperty] public Empleados? Actual { get; set; }
-        [BindProperty] public Empleados? Filtro { get; set; }
-        [BindProperty] public List<Empleados>? Lista { get; set; }
+        [BindProperty] public Productos? Actual { get; set; }
+        [BindProperty] public Productos? Filtro { get; set; }
+        [BindProperty]
+        public List<Productos>
+    ? Lista
+        { get; set; }
 
         public virtual void OnGet() { OnPostBtRefrescar(); }
 
@@ -44,13 +47,10 @@ namespace asp_presentacion.Pages.Ventanas
                 //    return;
                 //}
 
-<<<<<<< HEAD
-                Filtro!.Id_sede = Filtro!.Id_sede;
+                Filtro!.Categoria = Filtro!.Categoria ?? "";
 
-=======
->>>>>>> main
                 Accion = Enumerables.Ventanas.Listas;
-                var task = this.iPresentacion!.ListarPorSede(Filtro!);
+                var task = this.iPresentacion!.PorCategoria(Filtro!);
                 task.Wait();
                 Lista = task.Result;
                 Actual = null;
@@ -66,7 +66,7 @@ namespace asp_presentacion.Pages.Ventanas
             try
             {
                 Accion = Enumerables.Ventanas.Editar;
-                Actual = new Empleados();
+                Actual = new Productos();
             }
             catch (Exception ex)
             {
@@ -96,7 +96,8 @@ namespace asp_presentacion.Pages.Ventanas
             {
                 Accion = Enumerables.Ventanas.Editar;
 
-                Task<Empleados>? task = null;
+                Task<Productos>
+                    ? task = null;
                 if (Actual!.Id == 0)
                     task = this.iPresentacion!.Guardar(Actual!)!;
                 else

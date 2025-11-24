@@ -6,16 +6,16 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace asp_presentacion.Pages.Ventanas
 {
-    public class EmpleadosModel : PageModel
+    public class Detalles_PagoModel : PageModel
     {
-        private IEmpleadosPresentacion? iPresentacion = null;
+        private IDetalles_PagoPresentacion? iPresentacion = null;
 
-        public EmpleadosModel(IEmpleadosPresentacion iPresentacion)
+        public Detalles_PagoModel(IDetalles_PagoPresentacion iPresentacion)
         {
             try
             {
                 this.iPresentacion = iPresentacion;
-                Filtro = new Empleados();
+                Filtro = new Detalles_Pago();
             }
             catch (Exception ex)
             {
@@ -27,9 +27,12 @@ namespace asp_presentacion.Pages.Ventanas
         [BindProperty] public Enumerables.Ventanas Accion { get; set; }
 
 
-        [BindProperty] public Empleados? Actual { get; set; }
-        [BindProperty] public Empleados? Filtro { get; set; }
-        [BindProperty] public List<Empleados>? Lista { get; set; }
+        [BindProperty] public Detalles_Pago? Actual { get; set; }
+        [BindProperty] public Detalles_Pago? Filtro { get; set; }
+        [BindProperty]
+        public List<Detalles_Pago>
+    ? Lista
+        { get; set; }
 
         public virtual void OnGet() { OnPostBtRefrescar(); }
 
@@ -44,13 +47,9 @@ namespace asp_presentacion.Pages.Ventanas
                 //    return;
                 //}
 
-<<<<<<< HEAD
-                Filtro!.Id_sede = Filtro!.Id_sede;
 
-=======
->>>>>>> main
                 Accion = Enumerables.Ventanas.Listas;
-                var task = this.iPresentacion!.ListarPorSede(Filtro!);
+                var task = this.iPresentacion!.PorMetodoPago(Filtro!);
                 task.Wait();
                 Lista = task.Result;
                 Actual = null;
@@ -66,7 +65,7 @@ namespace asp_presentacion.Pages.Ventanas
             try
             {
                 Accion = Enumerables.Ventanas.Editar;
-                Actual = new Empleados();
+                Actual = new Detalles_Pago();
             }
             catch (Exception ex)
             {
@@ -96,7 +95,8 @@ namespace asp_presentacion.Pages.Ventanas
             {
                 Accion = Enumerables.Ventanas.Editar;
 
-                Task<Empleados>? task = null;
+                Task<Detalles_Pago>
+                    ? task = null;
                 if (Actual!.Id == 0)
                     task = this.iPresentacion!.Guardar(Actual!)!;
                 else

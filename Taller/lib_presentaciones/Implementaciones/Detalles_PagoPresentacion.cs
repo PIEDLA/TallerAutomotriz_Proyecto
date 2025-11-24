@@ -33,7 +33,7 @@ namespace lib_presentaciones.Implementaciones
             datos["Entidad"] = entidad!;
             
             comunicaciones = new Comunicaciones();
-            datos = comunicaciones.ConstruirUrl(datos, "Detalles_Pago/PorMetodo_Pago");
+            datos = comunicaciones.ConstruirUrl(datos, "Detalles_Pago/PorMetodoPago");
             var respuesta = await comunicaciones!.Ejecutar(datos);
             
             if (respuesta.ContainsKey("Error"))
