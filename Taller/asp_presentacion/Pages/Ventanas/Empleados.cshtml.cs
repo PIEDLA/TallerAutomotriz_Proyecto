@@ -44,14 +44,6 @@ namespace asp_presentacion.Pages.Ventanas
                 //    return;
                 //}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-                Filtro!.Id_sede = Filtro!.Id_sede;
-
-=======
->>>>>>> main
-=======
->>>>>>> 8806d25d277149f7014a26b717d6b416a3944ad4
                 Accion = Enumerables.Ventanas.Listas;
                 var task = this.iPresentacion!.ListarPorSede(Filtro!);
                 task.Wait();
