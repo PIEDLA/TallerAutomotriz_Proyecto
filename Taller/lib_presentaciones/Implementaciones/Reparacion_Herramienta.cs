@@ -101,7 +101,7 @@ namespace lib_presentaciones.Implementaciones
         {
             var lista = new List<Herramientas>();
             var datos = new Dictionary<string, object>();
-            datos["IdReparacion"] = idReparacion;
+            datos["idReparacion"] = idReparacion;
 
             comunicaciones = new Comunicaciones();
             datos = comunicaciones.ConstruirUrl(datos, "Reparacion_Herramienta/HerramientasPorReparacion");
@@ -122,7 +122,7 @@ namespace lib_presentaciones.Implementaciones
         {
             var lista = new List<Reparaciones>();
             var datos = new Dictionary<string, object>();
-            datos["IdHerramienta"] = idHerramienta;
+            datos["idHerramienta"] = idHerramienta;
 
             comunicaciones = new Comunicaciones();
             datos = comunicaciones.ConstruirUrl(datos, "Reparacion_Herramienta/ReparacionesPorHerramienta");
@@ -142,7 +142,7 @@ namespace lib_presentaciones.Implementaciones
         public async Task<int> VecesUsadaHerramienta(int idHerramienta)
         {
             var datos = new Dictionary<string, object>();
-            datos["IdHerramienta"] = idHerramienta;
+            datos["idHerramienta"] = idHerramienta;
 
             comunicaciones = new Comunicaciones();
             datos = comunicaciones.ConstruirUrl(datos, "Reparacion_Herramienta/VecesUsadaHerramienta");

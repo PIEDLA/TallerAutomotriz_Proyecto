@@ -1,4 +1,6 @@
-﻿using lib_dominio.Entidades;
+﻿// lib_repositorios.Implementaciones/ProductosAplicacion.cs (MODIFICADO)
+
+using lib_dominio.Entidades;
 using lib_repositorios.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.Metrics;
@@ -25,6 +27,7 @@ namespace lib_repositorios.Implementaciones
             if (string.IsNullOrWhiteSpace(entidad.Categoria)) return "Categoría de producto requerido";
             if (entidad.Precio <= 0) return "Precio del producto requerido";
             if (entidad.Stock < 0) return "No puede haber stock negativa";
+            if (string.IsNullOrWhiteSpace(entidad.Imagen_Base64)) return "Se requiere la imagen del producto";
 
             return null;
         }
@@ -37,7 +40,7 @@ namespace lib_repositorios.Implementaciones
             if (entidad!.Id == 0)
                 throw new Exception("Producto no guardado");
 
-            if(entidad.Stock > 0)
+            if (entidad.Stock > 0)
                 throw new Exception("Aún existe stock del producto");
 
             this.IConexion!.Productos!.Remove(entidad);
@@ -50,12 +53,13 @@ namespace lib_repositorios.Implementaciones
             if (entidad == null)
                 throw new Exception("Información incompleta");
 
-            if (entidad!.Id == 0)
-                throw new Exception("Producto no guardado");
+            if (entidad!.Id != 0)
+                throw new Exception("Producto ya guardado. Use Modificar.");
 
             var v = Validar(entidad!);
             if (v != null)
                 throw new Exception(v);
+
 
             this.IConexion!.Productos!.Add(entidad);
             this.IConexion.SaveChanges();
@@ -86,6 +90,7 @@ namespace lib_repositorios.Implementaciones
             var v = Validar(entidad!);
             if (v != null)
                 throw new Exception(v);
+
 
             var entry = this.IConexion!.Entry<Productos>(entidad);
             entry.State = EntityState.Modified;

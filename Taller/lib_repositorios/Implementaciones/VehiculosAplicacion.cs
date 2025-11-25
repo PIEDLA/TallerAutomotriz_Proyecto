@@ -71,6 +71,15 @@ namespace lib_repositorios.Implementaciones
             return this.IConexion!.Vehiculos!.ToList();
         }
 
+        public List<Vehiculos> ListarPorCliente(int idCliente)
+        {
+            return this.IConexion!.Vehiculos!
+                .Where(f => f.Id_cliente == idCliente)
+                .Include(f => f._Cliente)
+                .ToList();
+        }
+
+
         public Vehiculos? Modificar(Vehiculos? entidad)
         {
             if (entidad == null)

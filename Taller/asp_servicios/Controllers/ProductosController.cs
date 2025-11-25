@@ -1,3 +1,4 @@
+
 using asp_servicios.Nucleo;
 using lib_repositorios.Interfaces;
 using lib_dominio.Entidades;
@@ -41,7 +42,7 @@ namespace asp_servicios.Controllers
                     return JsonConversor.ConvertirAString(respuesta);
                 }
                 this.iAplicacion!.Configurar(Configuracion.ObtenerValor("StringConexion"));
-                
+
                 respuesta["Entidades"] = this.iAplicacion!.Listar();
                 respuesta["Respuesta"] = "OK";
                 respuesta["Fecha"] = DateTime.Now.ToString();
@@ -96,9 +97,19 @@ namespace asp_servicios.Controllers
                     respuesta["Error"] = "lbNoAutenticacion";
                     return JsonConversor.ConvertirAString(respuesta);
                 }
+
+
+                if (!datos.ContainsKey("Entidad"))
+                {
+                    respuesta["Error"] = "Falta la entidad Producto a guardar.";
+                    return JsonConversor.ConvertirAString(respuesta);
+                }
+
+
                 var entidad = JsonConversor.ConvertirAObjeto<Productos>(
                     JsonConversor.ConvertirAString(datos["Entidad"]));
                 this.iAplicacion!.Configurar(Configuracion.ObtenerValor("StringConexion"));
+
 
                 entidad = this.iAplicacion!.Guardar(entidad);
                 respuesta["Entidad"] = entidad!;
@@ -126,9 +137,18 @@ namespace asp_servicios.Controllers
                     respuesta["Error"] = "lbNoAutenticacion";
                     return JsonConversor.ConvertirAString(respuesta);
                 }
+
+
+                if (!datos.ContainsKey("Entidad"))
+                {
+                    respuesta["Error"] = "Falta la entidad Producto a modificar.";
+                    return JsonConversor.ConvertirAString(respuesta);
+                }
+
                 var entidad = JsonConversor.ConvertirAObjeto<Productos>(
                     JsonConversor.ConvertirAString(datos["Entidad"]));
                 this.iAplicacion!.Configurar(Configuracion.ObtenerValor("StringConexion"));
+
 
                 entidad = this.iAplicacion!.Modificar(entidad);
                 respuesta["Entidad"] = entidad!;

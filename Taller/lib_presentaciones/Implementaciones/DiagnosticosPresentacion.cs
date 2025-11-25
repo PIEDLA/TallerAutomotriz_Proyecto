@@ -29,7 +29,7 @@ namespace lib_presentaciones.Implementaciones
         public async Task<List<Diagnosticos>> PorVehiculo(int idVehiculo)
         {
             var lista = new List<Diagnosticos>();
-            var datos = new Dictionary<string, object> { ["IdVehiculo"] = idVehiculo };
+            var datos = new Dictionary<string, object> { ["idVehiculo"] = idVehiculo };
             comunicaciones = new Comunicaciones();
             datos = comunicaciones.ConstruirUrl(datos, "Diagnosticos/PorVehiculo");
 
@@ -47,7 +47,7 @@ namespace lib_presentaciones.Implementaciones
         public async Task<List<Diagnosticos>> PorEmpleado(int idEmpleado)
         {
             var lista = new List<Diagnosticos>();
-            var datos = new Dictionary<string, object> { ["IdEmpleado"] = idEmpleado };
+            var datos = new Dictionary<string, object> { ["idEmpleado"] = idEmpleado };
             comunicaciones = new Comunicaciones();
             datos = comunicaciones.ConstruirUrl(datos, "Diagnosticos/PorEmpleado");
 
@@ -67,8 +67,8 @@ namespace lib_presentaciones.Implementaciones
             var lista = new List<Diagnosticos>();
             var datos = new Dictionary<string, object>
             {
-                ["Inicio"] = inicio,
-                ["Fin"] = fin
+                ["FechaInicio"] = inicio,
+                ["FechaFin"] = fin
             };
             comunicaciones = new Comunicaciones();
             datos = comunicaciones.ConstruirUrl(datos, "Diagnosticos/PorRangoFechas");
@@ -86,7 +86,7 @@ namespace lib_presentaciones.Implementaciones
 
         public async Task<Diagnosticos?> Guardar(Diagnosticos? entidad)
         {
-            if (entidad!.Id != 0)
+            if (entidad == null || entidad.Id != 0)
                 throw new Exception("lbFaltaInformacion");
 
             var datos = new Dictionary<string, object> { ["Entidad"] = entidad };
@@ -104,7 +104,7 @@ namespace lib_presentaciones.Implementaciones
 
         public async Task<Diagnosticos?> Modificar(Diagnosticos? entidad)
         {
-            if (entidad!.Id == 0)
+           if (entidad == null || entidad.Id <= 0)
                 throw new Exception("lbFaltaInformacion");
 
             var datos = new Dictionary<string, object> { ["Entidad"] = entidad };
@@ -122,7 +122,7 @@ namespace lib_presentaciones.Implementaciones
 
         public async Task<Diagnosticos?> Borrar(Diagnosticos? entidad)
         {
-            if (entidad!.Id == 0)
+           if (entidad == null || entidad.Id <= 0)
                 throw new Exception("lbFaltaInformacion");
 
             var datos = new Dictionary<string, object> { ["Entidad"] = entidad };
@@ -140,7 +140,7 @@ namespace lib_presentaciones.Implementaciones
 
         public async Task<int> ContarPorVehiculo(int idVehiculo)
         {
-            var datos = new Dictionary<string, object> { ["IdVehiculo"] = idVehiculo };
+            var datos = new Dictionary<string, object> { ["idVehiculo"] = idVehiculo };
             comunicaciones = new Comunicaciones();
             datos = comunicaciones.ConstruirUrl(datos, "Diagnosticos/ContarPorVehiculo");
 

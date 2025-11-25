@@ -182,7 +182,7 @@ namespace lib_presentaciones.Implementaciones
             if (respuesta.ContainsKey("Error"))
                 throw new Exception(respuesta["Error"].ToString()!);
 
-            return int.Parse(respuesta["Valor"].ToString()!);
+            return int.Parse(respuesta["TotalStock"].ToString()!);
         }
     }
 }

@@ -3,35 +3,43 @@ using lib_dominio.Nucleo;
 using lib_presentaciones.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Collections.Generic;
+using System.Linq; 
+using System.Threading.Tasks;
+using System;
 
 namespace asp_presentacion.Pages.Ventanas
 {
     public class ReparacionesModel : PageModel
     {
-        private IReparacionesPresentacion? iReparaciones = null;
+        private IReparacionesPresentacion? iPresentacion = null;
 
         public ReparacionesModel(IReparacionesPresentacion iReparaciones)
         {
-            this.iReparaciones = iReparaciones;
-            Filtro = new Reparaciones();
+            try
+            {
+                this.iPresentacion = iReparaciones;
+                Filtro = new Reparaciones();
+            }
+            catch (Exception ex)
+            {
+                LogConversor.Log(ex, ViewData!);
+            }
         }
+
+        public IFormFile? FormFile { get; set; }
+        [BindProperty] public Enumerables.Ventanas Accion { get; set; }
 
         [BindProperty] public Reparaciones? Actual { get; set; }
         [BindProperty] public Reparaciones? Filtro { get; set; }
         [BindProperty] public List<Reparaciones>? Lista { get; set; }
 
-        [BindProperty] public DateTime FechaInicioFiltro { get; set; }
-        [BindProperty] public DateTime FechaFinFiltro { get; set; }
 
-        [BindProperty] public Reparaciones? UltimaReparacion { get; set; }
-        [BindProperty] public decimal TotalEstimado { get; set; }
+        [BindProperty] public DateTime? Fecha_inicio_filtro { get; set; }
+        [BindProperty] public DateTime? Fecha_fin_filtro { get; set; }
 
-        [BindProperty] public Enumerables.Ventanas Accion { get; set; }
 
-        public void OnGet()
-        {
-            OnPostBtRefrescar();
-        }
+        public virtual void OnGet() { OnPostBtRefrescar(); }
 
         public void OnPostBtRefrescar()
         {
@@ -39,36 +47,33 @@ namespace asp_presentacion.Pages.Ventanas
             {
                 Accion = Enumerables.Ventanas.Listas;
 
-                Lista = iReparaciones!.Listar().Result;
+
+                Task<List<Reparaciones>> task = this.iPresentacion!.Listar();
+                task.Wait();
+                Lista = task.Result;
 
 
-                if (Filtro != null)
+                if (Filtro!.Id_diagnostico > 0)
                 {
-
-                    if (Filtro.Id_diagnostico != 0)
-                        Lista = iReparaciones
-                            .PorDiagnostico(Filtro.Id_diagnostico)
-                            .Result;
-
-
-                    if (Filtro.Costo_estimado > 0)
-                        Lista = iReparaciones
-                            .Costosas(Filtro.Costo_estimado)
-                            .Result;
-
-
-                    if (FechaInicioFiltro != DateTime.MinValue &&
-                        FechaFinFiltro != DateTime.MinValue)
-                    {
-                        Lista = iReparaciones
-                            .EntreFechas(FechaInicioFiltro, FechaFinFiltro)
-                            .Result;
-                    }
+                    Lista = Lista!.Where(x => x.Id_diagnostico == Filtro.Id_diagnostico).ToList();
                 }
 
 
-                UltimaReparacion = iReparaciones.UltimaReparacion().Result;
-                TotalEstimado = iReparaciones.TotalEstimado().Result;
+                if (Filtro!.Costo_estimado > 0)
+                {
+                    Lista = Lista!.Where(x => x.Costo_estimado >= Filtro.Costo_estimado).ToList();
+                }
+
+                if (Fecha_inicio_filtro.HasValue && Fecha_fin_filtro.HasValue)
+                {
+                    DateTime inicio = Fecha_inicio_filtro.Value.Date;
+                    DateTime fin = Fecha_fin_filtro.Value.Date;
+
+                    DateTime finInclusivo = fin.AddDays(1).AddSeconds(-1);
+
+                    Lista = Lista!.Where(r => r.Fecha_inicio >= inicio && r.Fecha_inicio <= finInclusivo).ToList();
+                }
+
 
                 Actual = null;
             }
@@ -78,24 +83,12 @@ namespace asp_presentacion.Pages.Ventanas
             }
         }
 
-        public void OnPostBtNuevo()
-        {
-            Accion = Enumerables.Ventanas.Editar;
-            Actual = new Reparaciones
-            {
-                Fecha_inicio = DateTime.Now
-            };
-        }
-
-        public void OnPostBtModificar(string data)
+        public virtual void OnPostBtNuevo()
         {
             try
             {
-                OnPostBtRefrescar();
                 Accion = Enumerables.Ventanas.Editar;
-
-                Actual = Lista!
-                    .FirstOrDefault(x => x.Id.ToString() == data);
+                Actual = new Reparaciones();
             }
             catch (Exception ex)
             {
@@ -103,18 +96,31 @@ namespace asp_presentacion.Pages.Ventanas
             }
         }
 
-        public void OnPostBtGuardar()
+        public virtual void OnPostBtModificar(string data)
+        {
+            try
+            {
+                OnPostBtRefrescar();
+                Accion = Enumerables.Ventanas.Editar;
+                Actual = Lista!.FirstOrDefault(x => x.Id.ToString() == data);
+            }
+            catch (Exception ex)
+            {
+                LogConversor.Log(ex, ViewData!);
+            }
+        }
+
+        public virtual void OnPostBtGuardar()
         {
             try
             {
                 Accion = Enumerables.Ventanas.Editar;
 
-                Task<Reparaciones>? task = null;
-
+                Task<Reparaciones?>? task = null;
                 if (Actual!.Id == 0)
-                    task = iReparaciones!.Guardar(Actual)!;
+                    task = this.iPresentacion!.Guardar(Actual!);
                 else
-                    task = iReparaciones!.Modificar(Actual)!;
+                    task = this.iPresentacion!.Modificar(Actual!);
 
                 task.Wait();
                 Actual = task.Result;
@@ -125,18 +131,18 @@ namespace asp_presentacion.Pages.Ventanas
             catch (Exception ex)
             {
                 LogConversor.Log(ex, ViewData!);
+
+                Accion = Enumerables.Ventanas.Editar;
             }
         }
 
-        public void OnPostBtBorrarVal(string data)
+        public virtual void OnPostBtBorrarVal(string data)
         {
             try
             {
                 OnPostBtRefrescar();
                 Accion = Enumerables.Ventanas.Borrar;
-
-                Actual = Lista!
-                    .FirstOrDefault(x => x.Id.ToString() == data);
+                Actual = Lista!.FirstOrDefault(x => x.Id.ToString() == data);
             }
             catch (Exception ex)
             {
@@ -144,13 +150,13 @@ namespace asp_presentacion.Pages.Ventanas
             }
         }
 
-        public void OnPostBtBorrar()
+        public virtual void OnPostBtBorrar()
         {
             try
             {
-                var task = iReparaciones!.Borrar(Actual!);
+                var task = this.iPresentacion!.Borrar(Actual!);
                 task.Wait();
-
+                Actual = task.Result;
                 OnPostBtRefrescar();
             }
             catch (Exception ex)

@@ -66,13 +66,13 @@ namespace lib_repositorios.Implementaciones
             return this.IConexion!.Empleados!.ToList();
         }
 
-        public List<Empleados> ListarPorSede(int sedeId)
+        public List<Empleados> ListarPorSede(Empleados? entidad)
         {
-            if (sedeId <= 0)
-                throw new Exception("Debe especificar una sede válida");
+            if (entidad!.Id_sede == 0)
+                return this.IConexion!.Empleados!.Include(x => x._Sede).Take(50).ToList();
 
             return this.IConexion!.Empleados!
-                .Include(x => x._Sede).Where(x => x.Id_sede == sedeId).ToList();
+                .Include(x => x._Sede).Where(x => x.Id_sede == entidad.Id_sede).ToList();
         }
 
         public Empleados? Modificar(Empleados? entidad)

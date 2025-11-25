@@ -9,5 +9,7 @@ namespace lib_repositorios.Interfaces
         Servicios? Guardar(Servicios? entidad);
         Servicios? Modificar(Servicios? entidad);
         Servicios? Borrar(Servicios? entidad);
+        public List<Servicios> ListarPorDuracion(string Duracion_aprox);
+
     }
 }

@@ -3,46 +3,68 @@ using lib_dominio.Nucleo;
 using lib_presentaciones.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace asp_presentacion.Pages.Ventanas
 {
     public class HerramientasModel : PageModel
     {
-        private IHerramientasPresentacion? iHerramientas = null;
+        private IHerramientasPresentacion? iPresentacion = null;
 
         public HerramientasModel(IHerramientasPresentacion iHerramientas)
         {
-            this.iHerramientas = iHerramientas;
-            Filtro = new Herramientas();
+            try
+            {
+                this.iPresentacion = iHerramientas;
+                Filtro = new Herramientas();
+                Lista = new List<Herramientas>();
+            }
+            catch (Exception ex)
+            {
+                LogConversor.Log(ex, ViewData!);
+            }
         }
+
+        public IFormFile? FormFile { get; set; }
+        [BindProperty] public Enumerables.Ventanas Accion { get; set; }
 
         [BindProperty] public Herramientas? Actual { get; set; }
         [BindProperty] public Herramientas? Filtro { get; set; }
         [BindProperty] public List<Herramientas>? Lista { get; set; }
 
-        [BindProperty] public Enumerables.Ventanas Accion { get; set; }
-
-        public void OnGet()
-        {
-            OnPostBtRefrescar();
-        }
+        public virtual void OnGet() { OnPostBtRefrescar(); }
 
         public void OnPostBtRefrescar()
         {
             try
             {
                 Accion = Enumerables.Ventanas.Listas;
-                Lista = iHerramientas!.Listar().Result;
 
-                if (!string.IsNullOrEmpty(Filtro!.Tipo))
-                    Lista = Lista.Where(x => x.Tipo == Filtro.Tipo).ToList();
+                Task<List<Herramientas>> task = this.iPresentacion!.Listar();
 
-                if (!string.IsNullOrEmpty(Filtro.Estado))
-                    Lista = Lista.Where(x => x.Estado == Filtro.Estado).ToList();
+                if (!string.IsNullOrWhiteSpace(Filtro?.Tipo))
+                {
+                    task = this.iPresentacion!.PorTipo(Filtro.Tipo);
+                }
 
-                if (!string.IsNullOrEmpty(Filtro.Ubicacion))
-                    Lista = Lista.Where(x => x.Ubicacion!.Contains(Filtro.Ubicacion)).ToList();
+                else if (!string.IsNullOrWhiteSpace(Filtro?.Estado))
+                {
+                    if (Filtro.Estado.Equals("Disponible", StringComparison.OrdinalIgnoreCase))
+                    {
+                        task = this.iPresentacion!.Disponibles();
+                    }
+                    else if (Filtro.Estado.Equals("En Mantenimiento", StringComparison.OrdinalIgnoreCase))
+                    {
+                        task = this.iPresentacion!.EnMantenimiento();
+                    }
 
+                }
+
+                task.Wait();
+                Lista = task.Result;
                 Actual = null;
             }
             catch (Exception ex)
@@ -51,13 +73,21 @@ namespace asp_presentacion.Pages.Ventanas
             }
         }
 
-        public void OnPostBtNuevo()
+
+        public virtual void OnPostBtNuevo()
         {
-            Accion = Enumerables.Ventanas.Editar;
-            Actual = new Herramientas();
+            try
+            {
+                Accion = Enumerables.Ventanas.Editar;
+                Actual = new Herramientas();
+            }
+            catch (Exception ex)
+            {
+                LogConversor.Log(ex, ViewData!);
+            }
         }
 
-        public void OnPostBtModificar(string data)
+        public virtual void OnPostBtModificar(string data)
         {
             try
             {
@@ -71,17 +101,17 @@ namespace asp_presentacion.Pages.Ventanas
             }
         }
 
-        public void OnPostBtGuardar()
+        public virtual void OnPostBtGuardar()
         {
             try
             {
                 Accion = Enumerables.Ventanas.Editar;
 
-                Task<Herramientas>? task = null;
+                Task<Herramientas?>? task = null;
                 if (Actual!.Id == 0)
-                    task = iHerramientas!.Guardar(Actual)!;
+                    task = this.iPresentacion!.Guardar(Actual!)!;
                 else
-                    task = iHerramientas!.Modificar(Actual)!;
+                    task = this.iPresentacion!.Modificar(Actual!)!;
 
                 task.Wait();
                 Actual = task.Result;
@@ -92,10 +122,12 @@ namespace asp_presentacion.Pages.Ventanas
             catch (Exception ex)
             {
                 LogConversor.Log(ex, ViewData!);
+
+                Accion = Enumerables.Ventanas.Editar;
             }
         }
 
-        public void OnPostBtBorrarVal(string data)
+        public virtual void OnPostBtBorrarVal(string data)
         {
             try
             {
@@ -109,12 +141,13 @@ namespace asp_presentacion.Pages.Ventanas
             }
         }
 
-        public void OnPostBtBorrar()
+        public virtual void OnPostBtBorrar()
         {
             try
             {
-                var task = iHerramientas!.Borrar(Actual!);
+                var task = this.iPresentacion!.Borrar(Actual!);
                 task.Wait();
+                Actual = task.Result;
                 OnPostBtRefrescar();
             }
             catch (Exception ex)

@@ -1,8 +1,11 @@
+// asp_presentacion.Pages.Ventanas/ProductosModel.cs (CÓDIGO COMPLETO CON IMPLEMENTACIÓN DE IMAGEN)
+
 using lib_dominio.Entidades;
 using lib_dominio.Nucleo;
 using lib_presentaciones.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.IO;
 
 namespace asp_presentacion.Pages.Ventanas
 {
@@ -23,16 +26,27 @@ namespace asp_presentacion.Pages.Ventanas
             }
         }
 
-        public IFormFile? FormFile { get; set; }
+        [BindProperty] public IFormFile? ImagenFile { get; set; }
+
         [BindProperty] public Enumerables.Ventanas Accion { get; set; }
-
-
         [BindProperty] public Productos? Actual { get; set; }
         [BindProperty] public Productos? Filtro { get; set; }
-        [BindProperty]
-        public List<Productos>
-    ? Lista
-        { get; set; }
+        [BindProperty] public List<Productos>? Lista { get; set; }
+
+
+        private string? ConvertirIFormFileToBase64(IFormFile? file)
+        {
+            if (file == null || file.Length == 0)
+                return null;
+
+            using (var memoryStream = new MemoryStream())
+            {
+                file.CopyTo(memoryStream);
+                byte[] fileBytes = memoryStream.ToArray();
+                return Convert.ToBase64String(fileBytes);
+            }
+        }
+
 
         public virtual void OnGet() { OnPostBtRefrescar(); }
 
@@ -40,13 +54,6 @@ namespace asp_presentacion.Pages.Ventanas
         {
             try
             {
-                //var variable_session = HttpContext.Session.GetString("Usuario");
-                //if (String.IsNullOrEmpty(variable_session))
-                //{
-                //    HttpContext.Response.Redirect("/");
-                //    return;
-                //}
-
                 Filtro!.Categoria = Filtro!.Categoria ?? "";
 
                 Accion = Enumerables.Ventanas.Listas;
@@ -83,8 +90,6 @@ namespace asp_presentacion.Pages.Ventanas
                 Actual = Lista!.FirstOrDefault(x => x.Id.ToString() == data);
             }
             catch (Exception ex)
-
-
             {
                 LogConversor.Log(ex, ViewData!);
             }
@@ -96,12 +101,18 @@ namespace asp_presentacion.Pages.Ventanas
             {
                 Accion = Enumerables.Ventanas.Editar;
 
-                Task<Productos>
-                    ? task = null;
+                // PASO CLAVE: Convertir la imagen subida a Base64 y asignarla a la entidad
+                if (ImagenFile != null)
+                {
+                    Actual!.Imagen_Base64 = ConvertirIFormFileToBase64(ImagenFile);
+                }
+
+                Task<Productos>? task = null;
                 if (Actual!.Id == 0)
                     task = this.iPresentacion!.Guardar(Actual!)!;
                 else
                     task = this.iPresentacion!.Modificar(Actual!)!;
+
                 task.Wait();
                 Actual = task.Result;
                 Accion = Enumerables.Ventanas.Listas;
@@ -132,6 +143,7 @@ namespace asp_presentacion.Pages.Ventanas
             try
             {
                 var task = this.iPresentacion!.Borrar(Actual!);
+                task.Wait();
                 Actual = task.Result;
                 OnPostBtRefrescar();
             }
@@ -140,8 +152,6 @@ namespace asp_presentacion.Pages.Ventanas
                 LogConversor.Log(ex, ViewData!);
             }
         }
-
-
 
         public void OnPostBtCancelar()
         {

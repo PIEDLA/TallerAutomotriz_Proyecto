@@ -3,27 +3,35 @@
 @{
     ViewData["Titulo"] = "";
 }
-
 <center>
     <div>
-        <form method="POST" enctype="multipart/form-data">
+        <form method="POST"
+              enctype="multipart/form-data">
             @Html.AntiForgeryToken()
 
             <div align="left">
                 <h3>Pagos</h3>
             </div>
-
-            <div align="left" class="bt_panel_buttons">
-                <input type="submit" value="Refrescar" asp-page-handler="BtRefrescar"
+            <div align="left"
+                 class="bt_panel_buttons">
+                <input type="submit"
+                       value="Refrescar"
+                       asp-page-handler="BtRefrescar"
                        class="btn btn-secondary"
                        disabled="@(Model.Accion != lib_dominio.Nucleo.Enumerables.Ventanas.Listas)" />
-                <input type="submit" value="Nuevo" asp-page-handler="BtNuevo"
+                <input type="submit"
+                       value="Nuevo"
+                       asp-page-handler="BtNuevo"
                        class="btn btn-secondary"
                        disabled="@(Model.Accion != lib_dominio.Nucleo.Enumerables.Ventanas.Listas)" />
-                <input type="submit" value="Guardar" asp-page-handler="BtGuardar"
+                <input type="submit"
+                       value="Guardar"
+                       asp-page-handler="BtGuardar"
                        class="btn btn-secondary"
                        disabled="@(Model.Accion == lib_dominio.Nucleo.Enumerables.Ventanas.Listas)" />
-                <input type="submit" value="Cancelar" asp-page-handler="BtCancelar"
+                <input type="submit"
+                       value="Cancelar"
+                       asp-page-handler="BtCancelar"
                        class="btn btn-secondary"
                        disabled="@(Model.Accion == lib_dominio.Nucleo.Enumerables.Ventanas.Listas)" />
             </div>
@@ -31,15 +39,19 @@
             @if (Model.Accion != lib_dominio.Nucleo.Enumerables.Ventanas.Listas ||
                         Model.Accion == lib_dominio.Nucleo.Enumerables.Ventanas.Borrar)
             {
-                <input type="hidden" asp-for="@Model.Actual!.Id" />
+                <input type="hidden"
+                       asp-for="@Model.Actual!.Id" />
             }
-
             @if (Model.Accion == lib_dominio.Nucleo.Enumerables.Ventanas.Borrar)
             {
-                <input type="hidden" asp-for="@Model.Actual!.Id_factura" />
-                <input type="hidden" asp-for="@Model.Actual!.Monto_total" />
-                <input type="hidden" asp-for="@Model.Actual!.Fecha_pago" />
-                <input type="hidden" asp-for="@Model.Actual!.Estado" />
+                <input type="hidden"
+                       asp-for="@Model.Actual!.Id_factura" />
+                <input type="hidden"
+                       asp-for="@Model.Actual!.Monto_total" />
+                <input type="hidden"
+                       asp-for="@Model.Actual!.Fecha_pago" />
+                <input type="hidden"
+                       asp-for="@Model.Actual!.Estado" />
             }
 
             @if (Model.Accion == lib_dominio.Nucleo.Enumerables.Ventanas.Editar)
@@ -49,35 +61,43 @@
 
                     <div>
                         <div class="form-group">
-                            <label class="col-lg-4 control-label">Factura ID</label>
+                            <label class="col-lg-4 control-label">
+                                ID Factura
+                            </label>
                             <div class="col-lg-6">
-                                <input class="cts_forms form-control" asp-for="@Model.Actual!.Id_factura" />
+                                <input id="nmId_factura"
+                                       class="cts_forms form-control"
+                                       asp-for="@Model.Actual!.Id_factura" />
                             </div>
                         </div>
-
                         <div class="form-group">
-                            <label class="col-lg-4 control-label">Monto total</label>
+                            <label class="col-lg-4 control-label">
+                                Monto Total
+                            </label>
                             <div class="col-lg-6">
-                                <input class="cts_forms form-control" asp-for="@Model.Actual!.Monto_total" />
+                                <input id="nmMonto_total"
+                                       class="cts_forms form-control"
+                                       asp-for="@Model.Actual!.Monto_total" />
                             </div>
                         </div>
-
                         <div class="form-group">
-                            <label class="col-lg-4 control-label">Fecha de pago</label>
+                            <label class="col-lg-4 control-label">
+                                Fecha de Pago
+                            </label>
                             <div class="col-lg-6">
-                                <input type="date" class="cts_forms form-control" asp-for="@Model.Actual!.Fecha_pago" />
+                                <input id="nmFecha_pago"
+                                       class="cts_forms form-control"
+                                       asp-for="@Model.Actual!.Fecha_pago" />
                             </div>
                         </div>
-
                         <div class="form-group">
-                            <label class="col-lg-4 control-label">Estado</label>
+                            <label class="col-lg-4 control-label">
+                                Estado
+                            </label>
                             <div class="col-lg-6">
-                                <select class="cts_forms form-control" asp-for="@Model.Actual!.Estado">
-                                    <option value="">Seleccione...</option>
-                                    <option value="Pendiente">Pendiente</option>
-                                    <option value="Pagado">Pagado</option>
-                                    <option value="Cancelado">Cancelado</option>
-                                </select>
+                                <input id="nmEstado"
+                                       class="cts_forms form-control"
+                                       asp-for="@Model.Actual!.Estado" />
                             </div>
                         </div>
                     </div>
@@ -86,8 +106,10 @@
 
             @if (ViewData.ContainsKey("Mensaje"))
             {
-                <input type="hidden" asp-for="@Model.Accion" />
+                <input type="hidden"
+                       asp-for="@Model.Accion" />
                 @await Html.PartialAsync("../Emergentes/Mensajes.cshtml")
+                ;
             }
 
             @if (Model.Accion == lib_dominio.Nucleo.Enumerables.Ventanas.Borrar)
@@ -95,31 +117,28 @@
                 <div class='popup'>
                     <div class='pp_del_inner'>
                         <div style='width:95%'>
-                            <h2 align="left">Mensaje</h2>
-                            <h4 align="left">Desea borrar el pago?</h4>
-                            <h6 align="left">ID Factura: @Model.Actual!.Id_factura - Monto: @Model.Actual!.Monto_total</h6>
-                            <br /><br />
-                            <input type="submit" value="Borrar" asp-page-handler="BtBorrar" class="btn btn-secondary" />
-                            <input type="submit" value="Cerrar" asp-page-handler="BtCancelar" class="btn btn-secondary" />
+                            <h2 align="left">
+                                Mensaje
+                            </h2>
+
+                            <h4 align="left">
+                                ¿Desea borrar el pago de la factura **@Model.Actual!.Id_factura**?
+                            </h4>
+                            <h6 align="left">
+                                Monto: @Model.Actual!.Monto_total
+                            </h6>
+                            <br />
+                            <br />
+                            <input type="submit"
+                                   value="Borrar"
+                                   asp-page-handler="BtBorrar"
+                                   class="btn btn-secondary" />
+                            <input type="submit"
+                                   value="Cerrar"
+                                   asp-page-handler="BtCancelar"
+                                   class="btn btn-secondary" />
                         </div>
                     </div>
-                </div>
-            }
-
-
-            @if (Model.Accion == lib_dominio.Nucleo.Enumerables.Ventanas.Listas)
-            {
-                <div class="containers_vn panel panel-default" style="margin-bottom:20px;">
-                    <h4>Resumen Pagos</h4>
-                    <p><strong>Total de Pagos Registrados:</strong> @Model.TotalPagos</p>
-                    @if (Model.UltimoPago != null)
-                    {
-                        <p>
-                            <strong>Último Pago:</strong> @Model.UltimoPago.Fecha_pago.ToShortDateString()
-                            - Monto: @Model.UltimoPago.Monto_total
-                            - Estado: @Model.UltimoPago.Estado
-                        </p>
-                    }
                 </div>
             }
 
@@ -129,21 +148,27 @@
                 <div class="containers_vn panel panel-default">
                     <h4>Filtros</h4>
 
-                    <input class="cts_forms form-control" asp-for="@Model.Filtro!.Id_factura" placeholder="ID Factura (opcional)" />
-                    <br />
-                    <input class="cts_forms form-control" asp-for="@Model.Filtro!.Monto_total" placeholder="Monto (opcional)" />
-                    <br />
-                    <input type="date" class="cts_forms form-control" asp-for="@Model.Filtro!.Fecha_pago" />
-                    <br />
-                    <select asp-for="@Model.Filtro!.Estado" class="cts_forms form-control">
-                        <option value="">-- Estado --</option>
-                        <option value="Pendiente">Pendiente</option>
-                        <option value="Pagado">Pagado</option>
-                        <option value="Cancelado">Cancelado</option>
-                    </select>
+
+                    <input id="flId_factura"
+                           class="cts_forms form-control"
+                           asp-for="@Model.Filtro!.Id_factura"
+                           placeholder="ID Factura" />
                     <br />
 
-                    <table class="tb_data table table-striped table-bordered table-hover">
+                    <input id="flFecha_pago"
+                           class="cts_forms form-control"
+                           asp-for="@Model.Filtro!.Fecha_pago"
+                           placeholder="Fecha de Pago" />
+                    <br />
+
+                    <input id="flEstado"
+                           class="cts_forms form-control"
+                           asp-for="@Model.Filtro!.Estado"
+                           placeholder="Estado" />
+                    <br />
+
+
+                    <table class="tb_data table table-striped table-bordered table hover">
                         <tr>
                             <th>ID Factura</th>
                             <th>Monto Total</th>
@@ -151,21 +176,26 @@
                             <th>Estado</th>
                             <th class="cl_actions">Accion</th>
                         </tr>
-
-                        @if (Model.Lista != null)
+                        @if (Model != null && Model.Lista != null)
                         {
-                            @foreach (var p in Model.Lista)
+                            @foreach (var elemento in Model.Lista)
                             {
                                 <tr>
-                                    <td>@p.Id_factura</td>
-                                    <td>@p.Monto_total</td>
-                                    <td>@p.Fecha_pago.ToShortDateString()</td>
-                                    <td>@p.Estado</td>
+                                    <td>@elemento.Id_factura</td>
+                                    <td>@elemento.Monto_total</td>
+                                    <td>@elemento.Fecha_pago</td>
+                                    <td>@elemento.Estado</td>
                                     <td>
-                                        <input type="submit" value="Modificar" asp-page-handler="BtModificar"
-                                               class="btn btn-secondary" asp-route-data="@p.Id" />
-                                        <input type="submit" value="Borrar" asp-page-handler="BtBorrarVal"
-                                               class="btn btn-secondary" asp-route-data="@p.Id" />
+                                        <input type="submit"
+                                               value="Modificar"
+                                               asp-page-handler="BtModificar"
+                                               class="btn btn-secondary"
+                                               asp-route-data="@elemento.Id" />
+                                        <input type="submit"
+                                               value="Borrar"
+                                               asp-page-handler="BtBorrarVal"
+                                               class="btn btn-secondary"
+                                               asp-route-data="@elemento.Id" />
                                     </td>
                                 </tr>
                             }
@@ -173,7 +203,6 @@
                     </table>
                 </div>
             }
-
         </form>
     </div>
 </center>

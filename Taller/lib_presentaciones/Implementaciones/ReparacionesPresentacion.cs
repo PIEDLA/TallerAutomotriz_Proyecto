@@ -94,7 +94,7 @@ namespace lib_presentaciones.Implementaciones
         {
             var lista = new List<Reparaciones>();
             var datos = new Dictionary<string, object>();
-            datos["Id"] = idDiagnostico;
+            datos["IdDiagnostico"] = idDiagnostico;
 
             comunicaciones = new Comunicaciones();
             datos = comunicaciones.ConstruirUrl(datos, "Reparaciones/PorDiagnostico");
@@ -174,7 +174,7 @@ namespace lib_presentaciones.Implementaciones
             if (respuesta.ContainsKey("Error"))
                 throw new Exception(respuesta["Error"].ToString()!);
 
-            return Convert.ToDecimal(respuesta["Valor"]);
+            return Convert.ToDecimal(respuesta["TotalEstimado"]);
         }
     }
 }

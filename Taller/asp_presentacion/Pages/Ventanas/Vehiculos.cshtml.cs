@@ -3,23 +3,19 @@ using lib_dominio.Nucleo;
 using lib_presentaciones.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Collections.Generic;
-using System.Linq; 
-using System.Threading.Tasks;
-using System;
 
 namespace asp_presentacion.Pages.Ventanas
 {
-    public class RepuestosModel : PageModel
+    public class VehiculosModel : PageModel
     {
-        private IRepuestosPresentacion? iPresentacion = null;
+        private IVehiculosPresentacion? iPresentacion = null;
 
-        public RepuestosModel(IRepuestosPresentacion iRepuestos)
+        public VehiculosModel(IVehiculosPresentacion iPresentacion)
         {
             try
             {
-                this.iPresentacion = iRepuestos;
-                Filtro = new Repuestos();
+                this.iPresentacion = iPresentacion;
+                Filtro = new Vehiculos();
             }
             catch (Exception ex)
             {
@@ -30,9 +26,10 @@ namespace asp_presentacion.Pages.Ventanas
         public IFormFile? FormFile { get; set; }
         [BindProperty] public Enumerables.Ventanas Accion { get; set; }
 
-        [BindProperty] public Repuestos? Actual { get; set; }
-        [BindProperty] public Repuestos? Filtro { get; set; }
-        [BindProperty] public List<Repuestos>? Lista { get; set; }
+
+        [BindProperty] public Vehiculos? Actual { get; set; }
+        [BindProperty] public Vehiculos? Filtro { get; set; }
+        [BindProperty] public List<Vehiculos>? Lista { get; set; }
 
         public virtual void OnGet() { OnPostBtRefrescar(); }
 
@@ -40,35 +37,23 @@ namespace asp_presentacion.Pages.Ventanas
         {
             try
             {
+                if (Filtro == null)
+                    Filtro = new Vehiculos();
+
+
+                if (Filtro.Id_cliente == 0)
+                {
+                    Lista = new List<Vehiculos>();
+                    return;
+                }
+
                 Accion = Enumerables.Ventanas.Listas;
 
 
-                Task<List<Repuestos>> task = this.iPresentacion!.Listar();
+                var task = this.iPresentacion!.ListarPorCliente(Filtro.Id_cliente);
                 task.Wait();
+
                 Lista = task.Result;
-
-                if (Filtro!.Id_proveedor > 0)
-                {
-                    Lista = Lista!.Where(x => x.Id_proveedor == Filtro.Id_proveedor).ToList();
-                }
-
-
-                if (!string.IsNullOrEmpty(Filtro!.Marca))
-                {
-                    string filtroMarca = Filtro.Marca.Trim();
-
-                    Lista = Lista!.Where(x => x.Marca != null &&
-                                             x.Marca.Contains(filtroMarca, StringComparison.OrdinalIgnoreCase))
-                                 .ToList();
-                }
-
-
-                if (Filtro!.Stock > 0)
-                {
-
-                    Lista = Lista!.Where(x => x.Stock <= Filtro.Stock).ToList();
-                }
-
                 Actual = null;
             }
             catch (Exception ex)
@@ -77,13 +62,12 @@ namespace asp_presentacion.Pages.Ventanas
             }
         }
 
-
         public virtual void OnPostBtNuevo()
         {
             try
             {
                 Accion = Enumerables.Ventanas.Editar;
-                Actual = new Repuestos();
+                Actual = new Vehiculos();
             }
             catch (Exception ex)
             {
@@ -100,6 +84,8 @@ namespace asp_presentacion.Pages.Ventanas
                 Actual = Lista!.FirstOrDefault(x => x.Id.ToString() == data);
             }
             catch (Exception ex)
+
+
             {
                 LogConversor.Log(ex, ViewData!);
             }
@@ -111,24 +97,19 @@ namespace asp_presentacion.Pages.Ventanas
             {
                 Accion = Enumerables.Ventanas.Editar;
 
-                Task<Repuestos?>? task = null;
-
+                Task<Vehiculos>? task = null;
                 if (Actual!.Id == 0)
                     task = this.iPresentacion!.Guardar(Actual!)!;
                 else
                     task = this.iPresentacion!.Modificar(Actual!)!;
-
                 task.Wait();
                 Actual = task.Result;
-
                 Accion = Enumerables.Ventanas.Listas;
                 OnPostBtRefrescar();
             }
             catch (Exception ex)
             {
                 LogConversor.Log(ex, ViewData!);
-
-                Accion = Enumerables.Ventanas.Editar;
             }
         }
 
@@ -151,7 +132,6 @@ namespace asp_presentacion.Pages.Ventanas
             try
             {
                 var task = this.iPresentacion!.Borrar(Actual!);
-                task.Wait();
                 Actual = task.Result;
                 OnPostBtRefrescar();
             }
@@ -160,6 +140,8 @@ namespace asp_presentacion.Pages.Ventanas
                 LogConversor.Log(ex, ViewData!);
             }
         }
+
+
 
         public void OnPostBtCancelar()
         {

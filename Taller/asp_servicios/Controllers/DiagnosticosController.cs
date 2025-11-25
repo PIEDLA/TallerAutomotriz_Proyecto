@@ -116,6 +116,12 @@ namespace asp_servicios.Controllers
                     return JsonConversor.ConvertirAString(respuesta);
                 }
 
+                if (!datos.ContainsKey("Entidad"))
+                {
+                    respuesta["Error"] = "Falta la entidad a modificar.";
+                    return JsonConversor.ConvertirAString(respuesta);
+                }
+
                 var entidad = JsonConversor.ConvertirAObjeto<Diagnosticos>(
                     JsonConversor.ConvertirAString(datos["Entidad"])
                 );
@@ -153,6 +159,11 @@ namespace asp_servicios.Controllers
                 if (!iAplicacionToken!.Validar(datos))
                 {
                     respuesta["Error"] = "No autenticado.";
+                    return JsonConversor.ConvertirAString(respuesta);
+                }
+                if (!datos.ContainsKey("Entidad"))
+                {
+                    respuesta["Error"] = "Falta la entidad a modificar.";
                     return JsonConversor.ConvertirAString(respuesta);
                 }
 

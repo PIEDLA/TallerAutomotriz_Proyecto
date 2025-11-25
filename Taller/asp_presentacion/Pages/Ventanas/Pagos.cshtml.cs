@@ -3,56 +3,65 @@ using lib_dominio.Nucleo;
 using lib_presentaciones.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace asp_presentacion.Pages.Ventanas
 {
     public class PagosModel : PageModel
     {
-        private IPagosPresentacion? iPagos = null;
+        private IPagosPresentacion? iPresentacion = null;
 
         public PagosModel(IPagosPresentacion iPagos)
         {
-            this.iPagos = iPagos;
-            Filtro = new Pagos();
+            try
+            {
+                this.iPresentacion = iPagos;
+                Filtro = new Pagos();
+            }
+            catch (Exception ex)
+            {
+                LogConversor.Log(ex, ViewData!);
+            }
         }
+
+        public IFormFile? FormFile { get; set; }
+        [BindProperty] public Enumerables.Ventanas Accion { get; set; }
 
         [BindProperty] public Pagos? Actual { get; set; }
         [BindProperty] public Pagos? Filtro { get; set; }
         [BindProperty] public List<Pagos>? Lista { get; set; }
 
-        [BindProperty] public decimal TotalPagos { get; set; }
-        [BindProperty] public Pagos? UltimoPago { get; set; }
-
-        [BindProperty] public Enumerables.Ventanas Accion { get; set; }
-
-        public void OnGet()
-        {
-            OnPostBtRefrescar();
-        }
+        public virtual void OnGet() { OnPostBtRefrescar(); }
 
         public void OnPostBtRefrescar()
         {
             try
             {
                 Accion = Enumerables.Ventanas.Listas;
-                Lista = iPagos!.Listar().Result;
 
-                if (Filtro != null)
+
+                Task<List<Pagos>> task = this.iPresentacion!.Listar();
+
+                if (Filtro!.Id_factura > 0)
                 {
-                    if (Filtro.Fecha_pago != DateTime.MinValue)
-                        Lista = iPagos.PorFecha(Filtro.Fecha_pago).Result;
-
-                    if (Filtro.Id_factura != 0)
-                        Lista = iPagos.PorFactura(Filtro.Id_factura).Result;
-
-                    if (!string.IsNullOrEmpty(Filtro.Estado))
-                        Lista = iPagos.PorEstado(Filtro.Estado).Result;
+                    task = this.iPresentacion!.PorFactura(Filtro.Id_factura);
                 }
 
+                else if (!string.IsNullOrWhiteSpace(Filtro!.Estado))
+                {
+                    task = this.iPresentacion!.PorEstado(Filtro.Estado);
+                }
 
-                TotalPagos = iPagos.TotalPagos().Result;
-                UltimoPago = iPagos.UltimoPago().Result;
+                else if (Filtro!.Fecha_pago.Year > 1)
+                {
+                    task = this.iPresentacion!.PorFecha(Filtro.Fecha_pago);
+                }
 
+                task.Wait();
+                Lista = task.Result;
                 Actual = null;
             }
             catch (Exception ex)
@@ -62,13 +71,20 @@ namespace asp_presentacion.Pages.Ventanas
         }
 
 
-        public void OnPostBtNuevo()
+        public virtual void OnPostBtNuevo()
         {
-            Accion = Enumerables.Ventanas.Editar;
-            Actual = new Pagos { Fecha_pago = DateTime.Now };
+            try
+            {
+                Accion = Enumerables.Ventanas.Editar;
+                Actual = new Pagos();
+            }
+            catch (Exception ex)
+            {
+                LogConversor.Log(ex, ViewData!);
+            }
         }
 
-        public void OnPostBtModificar(string data)
+        public virtual void OnPostBtModificar(string data)
         {
             try
             {
@@ -82,17 +98,17 @@ namespace asp_presentacion.Pages.Ventanas
             }
         }
 
-        public void OnPostBtGuardar()
+        public virtual void OnPostBtGuardar()
         {
             try
             {
                 Accion = Enumerables.Ventanas.Editar;
 
-                Task<Pagos>? task = null;
+                Task<Pagos?>? task = null;
                 if (Actual!.Id == 0)
-                    task = iPagos!.Guardar(Actual)!;
+                    task = this.iPresentacion!.Guardar(Actual!)!;
                 else
-                    task = iPagos!.Modificar(Actual)!;
+                    task = this.iPresentacion!.Modificar(Actual!)!;
 
                 task.Wait();
                 Actual = task.Result;
@@ -103,10 +119,12 @@ namespace asp_presentacion.Pages.Ventanas
             catch (Exception ex)
             {
                 LogConversor.Log(ex, ViewData!);
+
+                Accion = Enumerables.Ventanas.Editar;
             }
         }
 
-        public void OnPostBtBorrarVal(string data)
+        public virtual void OnPostBtBorrarVal(string data)
         {
             try
             {
@@ -120,12 +138,13 @@ namespace asp_presentacion.Pages.Ventanas
             }
         }
 
-        public void OnPostBtBorrar()
+        public virtual void OnPostBtBorrar()
         {
             try
             {
-                var task = iPagos!.Borrar(Actual!);
+                var task = this.iPresentacion!.Borrar(Actual!);
                 task.Wait();
+                Actual = task.Result;
                 OnPostBtRefrescar();
             }
             catch (Exception ex)

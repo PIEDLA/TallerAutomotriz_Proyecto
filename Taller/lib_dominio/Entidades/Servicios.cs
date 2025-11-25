@@ -6,7 +6,7 @@ namespace lib_dominio.Entidades
         public string? Nombre_servicio { get; set; }
         public string? Descripcion { get; set; }
         public decimal Precio { get; set; }
-        public String? Duracion_aprox { get; set; }
+        public string? Duracion_aprox { get; set; }
 
         public List<Detalles_Servicio>? Detalles_Servicio;
         public List<Reserva_Servicio>? Reserva_Servicio;

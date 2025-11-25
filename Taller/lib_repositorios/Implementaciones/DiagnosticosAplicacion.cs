@@ -57,6 +57,13 @@ namespace lib_repositorios.Implementaciones
             entidad._Empleado = null;
 
             var vehiculo = this.IConexion!.Vehiculos!.Find(entidad!.Id_vehiculo);
+            if (vehiculo == null) 
+                throw new Exception("El vehículo no fue encontrado al intentar asociar el diagnóstico.");
+
+            if (vehiculo.Diagnosticos == null)
+            {
+                vehiculo.Diagnosticos = new List<Diagnosticos>();
+            }
             vehiculo!.Diagnosticos!.Add(entidad);
 
             this.IConexion.Diagnosticos!.Add(entidad);

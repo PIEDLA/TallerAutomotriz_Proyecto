@@ -4,48 +4,48 @@ using lib_presentaciones.Interfaces;
 
 namespace lib_presentaciones.Implementaciones
 {
-    public class ProductosPresentacion : IProductosPresentacion
+    public class EmpleadosPresentacion : IEmpleadosPresentacion
     {
         private Comunicaciones? comunicaciones = null;
 
-        public async Task<List<Productos>> Listar()
+        public async Task<List<Empleados>> Listar()
         {
-            var lista = new List<Productos>();
+            var lista = new List<Empleados>();
             var datos = new Dictionary<string, object>();
-
+            
             comunicaciones = new Comunicaciones();
-            datos = comunicaciones.ConstruirUrl(datos, "Productos/Listar");
+            datos = comunicaciones.ConstruirUrl(datos, "Empleados/Listar");
             var respuesta = await comunicaciones!.Ejecutar(datos);
-
+            
             if (respuesta.ContainsKey("Error"))
             {
                 throw new Exception(respuesta["Error"].ToString()!);
             }
-            lista = JsonConversor.ConvertirAObjeto<List<Productos>>(
+            lista = JsonConversor.ConvertirAObjeto<List<Empleados>>(
                 JsonConversor.ConvertirAString(respuesta["Entidades"]));
             return lista;
         }
 
-        public async Task<List<Productos>> PorCategoria(Productos? entidad)
+        public async Task<List<Empleados>> ListarPorSede(Empleados? entidad)
         {
-            var lista = new List<Productos>();
+            var lista = new List<Empleados>();
             var datos = new Dictionary<string, object>();
             datos["Entidad"] = entidad!;
-
+            
             comunicaciones = new Comunicaciones();
-            datos = comunicaciones.ConstruirUrl(datos, "Productos/PorCategoria");
+            datos = comunicaciones.ConstruirUrl(datos, "Empleados/ListarPorSede");
             var respuesta = await comunicaciones!.Ejecutar(datos);
-
+            
             if (respuesta.ContainsKey("Error"))
             {
                 throw new Exception(respuesta["Error"].ToString()!);
             }
-            lista = JsonConversor.ConvertirAObjeto<List<Productos>>(
+            lista = JsonConversor.ConvertirAObjeto<List<Empleados>>(
                 JsonConversor.ConvertirAString(respuesta["Entidades"]));
             return lista;
         }
 
-        public async Task<Productos?> Guardar(Productos? entidad)
+        public async Task<Empleados?> Guardar(Empleados? entidad)
         {
             if (entidad!.Id != 0)
             {
@@ -53,21 +53,21 @@ namespace lib_presentaciones.Implementaciones
             }
             var datos = new Dictionary<string, object>();
             datos["Entidad"] = entidad;
-
+            
             comunicaciones = new Comunicaciones();
-            datos = comunicaciones.ConstruirUrl(datos, "Productos/Guardar");
+            datos = comunicaciones.ConstruirUrl(datos, "Empleados/Guardar");
             var respuesta = await comunicaciones!.Ejecutar(datos);
-
+            
             if (respuesta.ContainsKey("Error"))
             {
                 throw new Exception(respuesta["Error"].ToString()!);
             }
-            entidad = JsonConversor.ConvertirAObjeto<Productos>(
+            entidad = JsonConversor.ConvertirAObjeto<Empleados>(
                 JsonConversor.ConvertirAString(respuesta["Entidad"]));
             return entidad;
         }
 
-        public async Task<Productos?> Modificar(Productos? entidad)
+        public async Task<Empleados?> Modificar(Empleados? entidad)
         {
             if (entidad!.Id == 0)
             {
@@ -77,19 +77,19 @@ namespace lib_presentaciones.Implementaciones
             datos["Entidad"] = entidad;
 
             comunicaciones = new Comunicaciones();
-            datos = comunicaciones.ConstruirUrl(datos, "Productos/Modificar");
-
+            datos = comunicaciones.ConstruirUrl(datos, "Empleados/Modificar");
+            
             var respuesta = await comunicaciones!.Ejecutar(datos);
             if (respuesta.ContainsKey("Error"))
             {
                 throw new Exception(respuesta["Error"].ToString()!);
             }
-            entidad = JsonConversor.ConvertirAObjeto<Productos>(
+            entidad = JsonConversor.ConvertirAObjeto<Empleados>(
                 JsonConversor.ConvertirAString(respuesta["Entidad"]));
             return entidad;
         }
 
-        public async Task<Productos?> Borrar(Productos? entidad)
+        public async Task<Empleados?> Borrar(Empleados? entidad)
         {
             if (entidad!.Id == 0)
             {
@@ -97,16 +97,16 @@ namespace lib_presentaciones.Implementaciones
             }
             var datos = new Dictionary<string, object>();
             datos["Entidad"] = entidad;
-
+            
             comunicaciones = new Comunicaciones();
-            datos = comunicaciones.ConstruirUrl(datos, "Productos/Borrar");
+            datos = comunicaciones.ConstruirUrl(datos, "Empleados/Borrar");
             var respuesta = await comunicaciones!.Ejecutar(datos);
-
+            
             if (respuesta.ContainsKey("Error"))
             {
                 throw new Exception(respuesta["Error"].ToString()!);
             }
-            entidad = JsonConversor.ConvertirAObjeto<Productos>(
+            entidad = JsonConversor.ConvertirAObjeto<Empleados>(
                 JsonConversor.ConvertirAString(respuesta["Entidad"]));
             return entidad;
         }

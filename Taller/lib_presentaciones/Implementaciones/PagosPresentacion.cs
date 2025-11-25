@@ -94,7 +94,7 @@ namespace lib_presentaciones.Implementaciones
         public async Task<List<Pagos>> PorFecha(DateTime fecha)
         {
             var lista = new List<Pagos>();
-            var datos = new Dictionary<string, object> { ["Fecha"] = fecha };
+            var datos = new Dictionary<string, object> { ["fecha"] = fecha };
 
             comunicaciones = new Comunicaciones();
             datos = comunicaciones.ConstruirUrl(datos, "Pagos/PorFecha");
@@ -114,7 +114,7 @@ namespace lib_presentaciones.Implementaciones
         public async Task<List<Pagos>> PorFactura(int idFactura)
         {
             var lista = new List<Pagos>();
-            var datos = new Dictionary<string, object> { ["IdFactura"] = idFactura };
+            var datos = new Dictionary<string, object> { ["idFactura"] = idFactura };
 
             comunicaciones = new Comunicaciones();
             datos = comunicaciones.ConstruirUrl(datos, "Pagos/PorFactura");
@@ -134,7 +134,7 @@ namespace lib_presentaciones.Implementaciones
         public async Task<List<Pagos>> PorEstado(string estado)
         {
             var lista = new List<Pagos>();
-            var datos = new Dictionary<string, object> { ["Estado"] = estado };
+            var datos = new Dictionary<string, object> { ["estado"] = estado };
 
             comunicaciones = new Comunicaciones();
             datos = comunicaciones.ConstruirUrl(datos, "Pagos/PorEstado");
@@ -162,7 +162,7 @@ namespace lib_presentaciones.Implementaciones
             if (respuesta.ContainsKey("Error"))
                 throw new Exception(respuesta["Error"]!.ToString());
 
-            return decimal.Parse(respuesta["Cantidad"]!.ToString()!);
+            return decimal.Parse(respuesta["Total"]!.ToString()!);
         }
 
         public async Task<Pagos?> UltimoPago()

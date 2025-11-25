@@ -120,7 +120,8 @@ namespace lib_presentaciones.Implementaciones
         public async Task<List<Herramientas>> PorTipo(string tipo)
         {
             var lista = new List<Herramientas>();
-            var datos = new Dictionary<string, object> { ["Tipo"] = tipo };
+            var filtroEntidad = new Herramientas { Tipo = tipo };
+            var datos = new Dictionary<string, object> { ["Entidad"] = filtroEntidad };
             comunicaciones = new Comunicaciones();
             datos = comunicaciones.ConstruirUrl(datos, "Herramientas/PorTipo");
 

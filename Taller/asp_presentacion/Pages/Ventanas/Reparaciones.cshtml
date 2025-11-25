@@ -1,5 +1,5 @@
 ﻿@page
-@model asp_presentacion.Pages.Ventanas.DiagnosticosModel
+@model asp_presentacion.Pages.Ventanas.ReparacionesModel
 @{
     ViewData["Titulo"] = "";
 }
@@ -10,7 +10,7 @@
             @Html.AntiForgeryToken()
 
             <div align="left">
-                <h3>Diagnosticos</h3>
+                <h3>Reparaciones</h3>
             </div>
             <div align="left"
                  class="bt_panel_buttons">
@@ -45,59 +45,59 @@
             @if (Model.Accion == lib_dominio.Nucleo.Enumerables.Ventanas.Borrar)
             {
                 <input type="hidden"
-                       asp-for="@Model.Actual!.Id_vehiculo" />
+                       asp-for="@Model.Actual!.Id_diagnostico" />
                 <input type="hidden"
-                       asp-for="@Model.Actual!.Id_empleado" />
+                       asp-for="@Model.Actual!.Descripcion_trabajo" />
                 <input type="hidden"
-                       asp-for="@Model.Actual!.Fecha" />
+                       asp-for="@Model.Actual!.Costo_estimado" />
                 <input type="hidden"
-                       asp-for="@Model.Actual!.Descripcion" />
+                       asp-for="@Model.Actual!.Fecha_inicio" />
             }
 
             @if (Model.Accion == lib_dominio.Nucleo.Enumerables.Ventanas.Editar)
             {
                 <div class="containers_vn panel panel-default">
-                    <h3>Diagnosticos</h3>
+                    <h3>Reparaciones</h3>
 
                     <div>
                         <div class="form-group">
                             <label class="col-lg-4 control-label">
-                                ID Vehículo
+                                ID Diagnóstico
                             </label>
                             <div class="col-lg-6">
-                                <input id="nmId_vehiculo"
+                                <input id="nmId_diagnostico"
                                        class="cts_forms form-control"
-                                       asp-for="@Model.Actual!.Id_vehiculo" />
+                                       asp-for="@Model.Actual!.Id_diagnostico" />
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-lg-4 control-label">
-                                ID Empleado
+                                Costo Estimado
                             </label>
                             <div class="col-lg-6">
-                                <input id="nmId_empleado"
+                                <input id="nmCosto_estimado"
                                        class="cts_forms form-control"
-                                       asp-for="@Model.Actual!.Id_empleado" />
+                                       asp-for="@Model.Actual!.Costo_estimado" />
                             </div>
+                        </div>
+                            <div class="form-group">
+                                <label class="col-lg-4 control-label">
+                                    Descripcion Trabajo
+                                </label>
+                                <div class="col-lg-6">
+                                    <input id="nmDescripcion_trabajo"
+                                           class="cts_forms form-control"
+                                           asp-for="@Model.Actual!.Descripcion_trabajo" />
+                                </div>
                         </div>
                         <div class="form-group">
                             <label class="col-lg-4 control-label">
-                                Fecha
+                                Fecha de Inicio
                             </label>
                             <div class="col-lg-6">
-                                <input id="nmFecha"
+                                       id="nmFecha_inicio"
                                        class="cts_forms form-control"
-                                       asp-for="@Model.Actual!.Fecha" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-4 control-label">
-                                Descripción
-                            </label>
-                            <div class="col-lg-6">
-                                <input id="nmDescripcion"
-                                       class="cts_forms form-control"
-                                       asp-for="@Model.Actual!.Descripcion" />
+                                       asp-for="@Model.Actual!.Fecha_inicio" />
                             </div>
                         </div>
                     </div>
@@ -122,10 +122,10 @@
                             </h2>
 
                             <h4 align="left">
-                                ¿Desea borrar el diagnóstico?
+                                ¿Desea borrar la reparación?
                             </h4>
                             <h6 align="left">
-                                @Model.Actual!.Descripcion
+                                Diagnóstico #@Model.Actual!.Id_diagnostico - @Model.Actual!.Descripcion_trabajo
                             </h6>
                             <br />
                             <br />
@@ -133,7 +133,6 @@
                                    value="Borrar"
                                    asp-page-handler="BtBorrar"
                                    class="btn btn-secondary" />
-
                             <input type="submit"
                                    value="Cerrar"
                                    asp-page-handler="BtCancelar"
@@ -149,32 +148,25 @@
                 <div class="containers_vn panel panel-default">
                     <h4>Filtros</h4>
 
-
-                    <input id="flId_vehiculo"
-                           class="cts_forms form-control"
-                           asp-for="@Model.Filtro!.Id_vehiculo"
-                           placeholder="ID Vehículo" />
+                    <input id="flId_diagnostico"
+                                         class="cts_forms form-control"
+                                         asp-for="@Model.Filtro!.Id_diagnostico"
+                                         placeholder="ID Diagnóstico" />
                     <br />
 
-                    <input id="flId_empleado"
-                           class="cts_forms form-control"
-                           asp-for="@Model.Filtro!.Id_empleado"
-                           placeholder="ID Empleado" />
+                    <input id="flCosto_estimado"
+                                         class="cts_forms form-control"
+                                         asp-for="@Model.Filtro!.Costo_estimado"
+                                         placeholder="Costo Estimado" />
                     <br />
-
-                    <input id="flFecha"
-                           class="cts_forms form-control"
-                           asp-for="@Model.Filtro!.Fecha" />
-                    <br />
-
 
 
                     <table class="tb_data table table-striped table-bordered table hover">
                         <tr>
-                            <th>Id_vehiculo</th>
-                            <th>Id_empleado</th>
-                            <th>Fecha</th>
-                            <th>Descripción</th>
+                            <th>ID Diagnóstico</th>
+                            <th>Descripción Trabajo</th>
+                            <th>Costo Estimado</th>
+                            <th>Fecha de Inicio</th>
                             <th class="cl_actions">Accion</th>
                         </tr>
                         @if (Model != null && Model.Lista != null)
@@ -182,21 +174,21 @@
                             @foreach (var elemento in Model.Lista)
                             {
                                 <tr>
-                                    <td>@elemento.Id_vehiculo</td>
-                                    <td>@elemento.Id_empleado</td>
-                                    <td>@elemento.Fecha</td>
-                                    <td>@elemento.Descripcion</td>
+                                    <td>@elemento.Id_diagnostico</td>
+                                    <td>@elemento.Descripcion_trabajo</td>
+                                    <td>@elemento.Costo_estimado.</td>
+                                    <td>@elemento.Fecha_inicio.</td>
                                     <td>
                                         <input type="submit"
-                                               value="Modificar"
-                                               asp-page-handler="BtModificar"
-                                               class="btn btn-secondary"
-                                               asp-route-data="@elemento.Id" />
+                                                                       value="Modificar"
+                                                                       asp-page-handler="BtModificar"
+                                                                       class="btn btn-secondary"
+                                                                       asp-route-data="@elemento.Id" />
                                         <input type="submit"
-                                               value="Borrar"
-                                               asp-page-handler="BtBorrarVal"
-                                               class="btn btn-secondary"
-                                               asp-route-data="@elemento.Id" />
+                                                                       value="Borrar"
+                                                                       asp-page-handler="BtBorrarVal"
+                                                                       class="btn btn-secondary"
+                                                                       asp-route-data="@elemento.Id" />
                                     </td>
                                 </tr>
                             }

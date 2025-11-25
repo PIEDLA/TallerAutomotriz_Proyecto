@@ -54,8 +54,8 @@ namespace lib_repositorios.Implementaciones
             if (entidad == null)
                 throw new Exception("Información incompleta");
 
-            if (entidad!.Id == 0)
-                throw new Exception("Sede no guardada");
+           /* if (entidad!.Id == 0)
+                throw new Exception("Sede no guardada");*/
 
             var v = Validar(entidad!);
             if (v != null)
