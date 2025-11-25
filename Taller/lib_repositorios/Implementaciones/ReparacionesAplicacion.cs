@@ -20,10 +20,36 @@ namespace lib_repositorios.Implementaciones
 
         public List<Reparaciones> Listar()
         {
-            return this.IConexion!.Reparaciones!
+            var lista = this.IConexion!.Reparaciones!
                 .Include(r => r._Diagnostico)
                 .Take(10)
                 .ToList();
+
+            foreach (var item in lista)
+            {
+                if (item._Diagnostico != null)
+                    item._Diagnostico.Reparaciones = null;
+
+                if (item.Facturas != null)
+                {
+                    foreach (var factura in item.Facturas)
+                    {
+                        if (factura != null)
+                            factura._Reparacion = null;
+                    }
+                }
+
+                if (item.Reparacion_Herramienta != null)
+                {
+                    foreach (var rh in item.Reparacion_Herramienta)
+                    {
+                        if (rh != null)
+                            rh._Reparacion = null;
+                    }
+                }
+            }
+
+            return lista;
         }
 
         public Reparaciones? Guardar(Reparaciones? entidad)
@@ -48,11 +74,22 @@ namespace lib_repositorios.Implementaciones
 
             entidad._Diagnostico = null;
 
+            // Verificar que el diagnóstico existe e inicializar la lista si es null
             var diagnostico = this.IConexion!.Diagnosticos!.Find(entidad!.Id_diagnostico);
-            diagnostico!.Reparaciones!.Add(entidad);
+
+            if (diagnostico == null)
+                throw new Exception("El diagnóstico no existe");
+
+            if (diagnostico.Reparaciones == null)
+            {
+                diagnostico.Reparaciones = new List<Reparaciones>();
+            }
+
+            diagnostico.Reparaciones.Add(entidad);
 
             this.IConexion!.Reparaciones!.Add(entidad);
             this.IConexion.SaveChanges();
+
             return entidad;
         }
 
@@ -75,6 +112,7 @@ namespace lib_repositorios.Implementaciones
             var entry = this.IConexion!.Entry<Reparaciones>(entidad);
             entry.State = EntityState.Modified;
             this.IConexion.SaveChanges();
+
             return entidad;
         }
 
@@ -86,40 +124,168 @@ namespace lib_repositorios.Implementaciones
             if (entidad.Id == 0)
                 throw new Exception("La reparación no existe");
 
-            entidad._Diagnostico = null;
+            //  Cargar la reparación con sus relaciones
+            var reparacionOriginal = this.IConexion!.Reparaciones!
+                .Include(r => r.Facturas)
+                .Include(r => r.Reparacion_Herramienta)
+                .FirstOrDefault(r => r.Id == entidad.Id);
 
-            this.IConexion!.Reparaciones!.Remove(entidad);
+            if (reparacionOriginal == null)
+                throw new Exception("La reparación no fue encontrada");
+
+            //  Verificar si tiene facturas asociadas
+            var tieneFacturas = reparacionOriginal.Facturas?.Any() ?? false;
+            if (tieneFacturas)
+            {
+                throw new Exception("No se puede borrar la reparación porque tiene facturas asociadas");
+            }
+
+            // Verificar si tiene herramientas asociadas
+            var tieneHerramientas = reparacionOriginal.Reparacion_Herramienta?.Any() ?? false;
+            if (tieneHerramientas)
+            {
+                throw new Exception("No se puede borrar la reparación porque tiene herramientas asociadas");
+            }
+
+            reparacionOriginal._Diagnostico = null;
+
+            this.IConexion.Reparaciones!.Remove(reparacionOriginal);
             this.IConexion.SaveChanges();
-            return entidad;
+
+            return reparacionOriginal;
         }
 
         public List<Reparaciones> PorDiagnostico(int idDiagnostico)
         {
-            return this.IConexion!.Reparaciones!
+            var lista = this.IConexion!.Reparaciones!
                 .Where(r => r.Id_diagnostico == idDiagnostico)
                 .ToList();
+
+
+            foreach (var item in lista)
+            {
+                item._Diagnostico = null;
+
+                if (item.Facturas != null)
+                {
+                    foreach (var factura in item.Facturas)
+                    {
+                        if (factura != null)
+                            factura._Reparacion = null;
+                    }
+                }
+
+                if (item.Reparacion_Herramienta != null)
+                {
+                    foreach (var rh in item.Reparacion_Herramienta)
+                    {
+                        if (rh != null)
+                            rh._Reparacion = null;
+                    }
+                }
+            }
+
+            return lista;
         }
 
         public List<Reparaciones> Costosas(decimal minimo)
         {
-            return this.IConexion!.Reparaciones!
+            var lista = this.IConexion!.Reparaciones!
                 .Where(r => r.Costo_estimado >= minimo)
                 .OrderByDescending(r => r.Costo_estimado)
                 .ToList();
+
+
+            foreach (var item in lista)
+            {
+                item._Diagnostico = null;
+
+                if (item.Facturas != null)
+                {
+                    foreach (var factura in item.Facturas)
+                    {
+                        if (factura != null)
+                            factura._Reparacion = null;
+                    }
+                }
+
+                if (item.Reparacion_Herramienta != null)
+                {
+                    foreach (var rh in item.Reparacion_Herramienta)
+                    {
+                        if (rh != null)
+                            rh._Reparacion = null;
+                    }
+                }
+            }
+
+            return lista;
         }
 
         public List<Reparaciones> EntreFechas(DateTime inicio, DateTime fin)
         {
-            return this.IConexion!.Reparaciones!
+            var lista = this.IConexion!.Reparaciones!
                 .Where(r => r.Fecha_inicio >= inicio && r.Fecha_inicio <= fin)
                 .ToList();
+
+
+            foreach (var item in lista)
+            {
+                item._Diagnostico = null;
+
+                if (item.Facturas != null)
+                {
+                    foreach (var factura in item.Facturas)
+                    {
+                        if (factura != null)
+                            factura._Reparacion = null;
+                    }
+                }
+
+                if (item.Reparacion_Herramienta != null)
+                {
+                    foreach (var rh in item.Reparacion_Herramienta)
+                    {
+                        if (rh != null)
+                            rh._Reparacion = null;
+                    }
+                }
+            }
+
+            return lista;
         }
 
         public Reparaciones? UltimaReparacion()
         {
-            return this.IConexion!.Reparaciones!
+            var reparacion = this.IConexion!.Reparaciones!
                 .OrderByDescending(r => r.Fecha_inicio)
                 .FirstOrDefault();
+
+
+            if (reparacion != null)
+            {
+                reparacion._Diagnostico = null;
+
+                if (reparacion.Facturas != null)
+                {
+                    foreach (var factura in reparacion.Facturas)
+                    {
+                        if (factura != null)
+                            factura._Reparacion = null;
+                    }
+                }
+
+                if (reparacion.Reparacion_Herramienta != null)
+                {
+                    foreach (var rh in reparacion.Reparacion_Herramienta)
+                    {
+                        if (rh != null)
+                            rh._Reparacion = null;
+                    }
+                }
+            }
+
+            return reparacion;
         }
 
         public decimal TotalEstimado()

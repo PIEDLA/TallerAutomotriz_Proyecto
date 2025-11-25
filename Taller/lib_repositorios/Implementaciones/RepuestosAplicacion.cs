@@ -45,8 +45,13 @@ namespace lib_repositorios.Implementaciones
             if (entidad.Stock < 0)
                 throw new Exception("El stock no puede ser negativo");
 
-            var proveedor = this.IConexion!.Proveedores!.Find(entidad!.Id_proveedor);
-            proveedor!.Repuestos!.Add(entidad);
+
+            var proveedorExiste = this.IConexion!.Proveedores!
+                .Any(p => p.Id == entidad.Id_proveedor);
+
+            if (!proveedorExiste)
+                throw new Exception("El proveedor no existe");
+
 
             this.IConexion!.Repuestos!.Add(entidad);
             this.IConexion.SaveChanges();

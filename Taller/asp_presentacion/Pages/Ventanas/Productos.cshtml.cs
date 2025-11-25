@@ -1,5 +1,3 @@
-// asp_presentacion.Pages.Ventanas/ProductosModel.cs (CÓDIGO COMPLETO CON IMPLEMENTACIÓN DE IMAGEN)
-
 using lib_dominio.Entidades;
 using lib_dominio.Nucleo;
 using lib_presentaciones.Interfaces;

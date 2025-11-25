@@ -20,10 +20,18 @@ namespace lib_repositorios.Implementaciones
 
         public List<Pagos> Listar()
         {
-            return this.IConexion!.Pagos!
+            var lista = this.IConexion!.Pagos!
                 .Include(p => p._Factura)
                 .Take(20)
                 .ToList();
+
+            foreach (var item in lista)
+            {
+                if (item._Factura != null)
+                    item._Factura.Pagos = null;
+            }
+
+            return lista;
         }
 
         public Pagos? Guardar(Pagos? entidad)
@@ -45,14 +53,22 @@ namespace lib_repositorios.Implementaciones
                 throw new Exception("La factura no existe");
 
             entidad.Estado = entidad.Monto_total >= factura.Total ? "Pagado" : "Pendiente";
-
             entidad._Factura = null;
 
             var factur = this.IConexion!.Facturas!.Find(entidad!.Id_factura);
-            factur!.Pagos!.Add(entidad);
+
+            if (factur != null)
+            {
+                if (factur.Pagos == null)
+                {
+                    factur.Pagos = new List<Pagos>();
+                }
+                factur.Pagos.Add(entidad);
+            }
 
             this.IConexion.Pagos!.Add(entidad);
             this.IConexion.SaveChanges();
+
             return entidad;
         }
 
@@ -80,6 +96,7 @@ namespace lib_repositorios.Implementaciones
             var entry = this.IConexion.Entry<Pagos>(entidad);
             entry.State = EntityState.Modified;
             this.IConexion.SaveChanges();
+
             return entidad;
         }
 
@@ -91,32 +108,70 @@ namespace lib_repositorios.Implementaciones
             if (entidad.Id == 0)
                 throw new Exception("El pago no existe");
 
-            entidad._Factura = null;
 
-            this.IConexion!.Pagos!.Remove(entidad);
+            var pagoOriginal = this.IConexion!.Pagos!
+                .Include(p => p.Detalles_Pago)
+                .FirstOrDefault(p => p.Id == entidad.Id);
+
+            if (pagoOriginal == null)
+                throw new Exception("El pago no fue encontrado");
+
+
+            if (pagoOriginal.Detalles_Pago != null && pagoOriginal.Detalles_Pago.Any())
+            {
+                throw new Exception("No se puede borrar el pago porque tiene detalles asociados");
+            }
+
+            pagoOriginal._Factura = null;
+
+            this.IConexion.Pagos!.Remove(pagoOriginal);
             this.IConexion.SaveChanges();
-            return entidad;
+
+            return pagoOriginal;
         }
 
         public List<Pagos> PorFactura(int idFactura)
         {
-            return this.IConexion!.Pagos!
+            var lista = this.IConexion!.Pagos!
                 .Where(p => p.Id_factura == idFactura)
                 .ToList();
+
+            foreach (var item in lista)
+            {
+                item._Factura = null;
+            }
+
+            return lista;
         }
 
         public List<Pagos> PorEstado(string estado)
         {
-            return this.IConexion!.Pagos!
+            var lista = this.IConexion!.Pagos!
                 .Where(p => p.Estado == estado)
                 .ToList();
+
+
+            foreach (var item in lista)
+            {
+                item._Factura = null;
+            }
+
+            return lista;
         }
 
         public List<Pagos> PorFecha(DateTime fecha)
         {
-            return this.IConexion!.Pagos!
+            var lista = this.IConexion!.Pagos!
                 .Where(p => p.Fecha_pago.Date == fecha.Date)
                 .ToList();
+
+
+            foreach (var item in lista)
+            {
+                item._Factura = null;
+            }
+
+            return lista;
         }
 
         public decimal TotalPagos()
@@ -126,9 +181,16 @@ namespace lib_repositorios.Implementaciones
 
         public Pagos? UltimoPago()
         {
-            return this.IConexion!.Pagos!
+            var pago = this.IConexion!.Pagos!
                 .OrderByDescending(p => p.Fecha_pago)
                 .FirstOrDefault();
+
+            if (pago != null)
+            {
+                pago._Factura = null;
+            }
+
+            return pago;
         }
     }
 }

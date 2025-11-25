@@ -26,7 +26,7 @@ namespace lib_repositorios.Implementaciones
             if (entidad!.Id == 0)
                 throw new Exception("El cliente no existe");
 
-           var tieneFacturas = this.IConexion!.Facturas!.Any(x => x.Id_cliente == entidad.Id);
+            var tieneFacturas = this.IConexion!.Facturas!.Any(x => x.Id_cliente == entidad.Id);
             if (tieneFacturas)
             {
                 throw new Exception("No se puede eliminar el cliente porque tiene facturas registradas.");
@@ -61,18 +61,47 @@ namespace lib_repositorios.Implementaciones
 
         public List<Clientes> Listar()
         {
-            return this.IConexion!.Clientes!
-                        .Include(c => c.Vehiculos).ToList();
+            var lista = this.IConexion!.Clientes!
+                .Include(c => c.Vehiculos)
+                .ToList();
+
+            foreach (var cliente in lista)
+            {
+                if (cliente.Vehiculos != null)
+                {
+                    foreach (var vehiculo in cliente.Vehiculos)
+                    {
+                        vehiculo._Cliente = null;
+                    }
+                }
+            }
+
+            return lista;
         }
 
         public List<Clientes> PorNombre(string nombre)
         {
-            return this.IConexion!.Clientes!
-                .Where(x => x.Nombre!.ToLower().Contains(nombre.ToLower()) || x.Apellido!.ToLower().Contains(nombre.ToLower()))
-                .OrderBy(x => x.Apellido).ThenBy(x => x.Nombre).ToList();
+            var lista = this.IConexion!.Clientes!
+                .Where(x => x.Nombre!.ToLower().Contains(nombre.ToLower()) ||
+                           x.Apellido!.ToLower().Contains(nombre.ToLower()))
+                .OrderBy(x => x.Apellido)
+                .ThenBy(x => x.Nombre)
+                .ToList();
+
+
+            foreach (var cliente in lista)
+            {
+                if (cliente.Vehiculos != null)
+                {
+                    foreach (var vehiculo in cliente.Vehiculos)
+                    {
+                        vehiculo._Cliente = null;
+                    }
+                }
+            }
+
+            return lista;
         }
-
-
 
         public Clientes? Modificar(Clientes? entidad)
         {
@@ -96,6 +125,5 @@ namespace lib_repositorios.Implementaciones
             this.IConexion.SaveChanges();
             return entidad;
         }
-
     }
- }
+}

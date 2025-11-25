@@ -20,11 +20,29 @@ namespace lib_repositorios.Implementaciones
 
         public List<Reparacion_Herramienta> Listar()
         {
-            return this.IConexion!.Reparacion_Herramienta!
+            var lista = this.IConexion!.Reparacion_Herramienta!
                 .Include(rh => rh._Reparacion)
                 .Include(rh => rh._Herramienta)
                 .Take(10)
                 .ToList();
+
+
+            foreach (var item in lista)
+            {
+                if (item._Reparacion != null)
+                {
+                    item._Reparacion.Reparacion_Herramienta = null;
+                    item._Reparacion._Diagnostico = null;
+                    item._Reparacion.Facturas = null;
+                }
+
+                if (item._Herramienta != null)
+                {
+                    item._Herramienta.Reparacion_Herramienta = null;
+                }
+            }
+
+            return lista;
         }
 
         public Reparacion_Herramienta? Guardar(Reparacion_Herramienta? entidad)
@@ -53,14 +71,30 @@ namespace lib_repositorios.Implementaciones
             entidad._Reparacion = null;
             entidad._Herramienta = null;
 
+
             var reparacion = this.IConexion!.Reparaciones!.Find(entidad!.Id_reparacion);
-            reparacion!.Reparacion_Herramienta!.Add(entidad);
+            if (reparacion != null)
+            {
+                if (reparacion.Reparacion_Herramienta == null)
+                {
+                    reparacion.Reparacion_Herramienta = new List<Reparacion_Herramienta>();
+                }
+                reparacion.Reparacion_Herramienta.Add(entidad);
+            }
 
             var herramient = this.IConexion!.Herramientas!.Find(entidad!.Id_herramienta);
-            herramient!.Reparacion_Herramienta!.Add(entidad);
+            if (herramient != null)
+            {
+                if (herramient.Reparacion_Herramienta == null)
+                {
+                    herramient.Reparacion_Herramienta = new List<Reparacion_Herramienta>();
+                }
+                herramient.Reparacion_Herramienta.Add(entidad);
+            }
 
             this.IConexion!.Reparacion_Herramienta!.Add(entidad);
             this.IConexion.SaveChanges();
+
             return entidad;
         }
 
@@ -78,6 +112,7 @@ namespace lib_repositorios.Implementaciones
             var entry = this.IConexion!.Entry<Reparacion_Herramienta>(entidad);
             entry.State = EntityState.Modified;
             this.IConexion.SaveChanges();
+
             return entidad;
         }
 
@@ -94,23 +129,47 @@ namespace lib_repositorios.Implementaciones
 
             this.IConexion!.Reparacion_Herramienta!.Remove(entidad);
             this.IConexion.SaveChanges();
+
             return entidad;
         }
 
         public List<Herramientas> HerramientasPorReparacion(int idReparacion)
         {
-            return this.IConexion!.Reparacion_Herramienta!
+            var lista = this.IConexion!.Reparacion_Herramienta!
                 .Where(rh => rh.Id_reparacion == idReparacion)
                 .Select(rh => rh._Herramienta!)
                 .ToList();
+
+
+            foreach (var item in lista)
+            {
+                if (item != null)
+                {
+                    item.Reparacion_Herramienta = null;
+                }
+            }
+
+            return lista;
         }
 
         public List<Reparaciones> ReparacionesPorHerramienta(int idHerramienta)
         {
-            return this.IConexion!.Reparacion_Herramienta!
+            var lista = this.IConexion!.Reparacion_Herramienta!
                 .Where(rh => rh.Id_herramienta == idHerramienta)
                 .Select(rh => rh._Reparacion!)
                 .ToList();
+
+            foreach (var item in lista)
+            {
+                if (item != null)
+                {
+                    item._Diagnostico = null;
+                    item.Reparacion_Herramienta = null;
+                    item.Facturas = null;
+                }
+            }
+
+            return lista;
         }
 
         public int VecesUsadaHerramienta(int idHerramienta)

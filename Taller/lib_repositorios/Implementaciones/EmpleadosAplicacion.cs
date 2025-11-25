@@ -26,8 +26,6 @@ namespace lib_repositorios.Implementaciones
             if (entidad!.Id == 0)
                 throw new Exception("El empleado no existe");
 
-            entidad._Sede = null;
-
             bool tieneDiagnosticos = this.IConexion!.Diagnosticos!.Any(d => d.Id_empleado == entidad.Id);
             if (tieneDiagnosticos)
                 throw new Exception("No se puede eliminar un empleado con diagnósticos asociados");
@@ -45,16 +43,16 @@ namespace lib_repositorios.Implementaciones
             if (entidad.Id != 0)
                 throw new Exception("El empleado ya existe");
 
-            entidad._Sede = null;
-
             if (string.IsNullOrWhiteSpace(entidad.Nombre) || string.IsNullOrWhiteSpace(entidad.Apellido))
                 throw new Exception("Nombre y apellido son obligatorios.");
 
             if (string.IsNullOrWhiteSpace(entidad.Telefono))
                 throw new Exception("El teléfono es obligatorio.");
 
-            var sede = this.IConexion!.Sedes!.Find(entidad!.Id_sede);
-            sede!.empleados!.Add(entidad);
+            // Validar que la sede existe
+            var sedeExiste = this.IConexion!.Sedes!.Any(s => s.Id == entidad.Id_sede);
+            if (!sedeExiste)
+                throw new Exception("La sede no existe");
 
             this.IConexion!.Empleados!.Add(entidad);
             this.IConexion.SaveChanges();
@@ -68,11 +66,31 @@ namespace lib_repositorios.Implementaciones
 
         public List<Empleados> ListarPorSede(Empleados? entidad)
         {
-            if (entidad!.Id_sede == 0)
-                return this.IConexion!.Empleados!.Include(x => x._Sede).Take(50).ToList();
+            List<Empleados> lista;
 
-            return this.IConexion!.Empleados!
-                .Include(x => x._Sede).Where(x => x.Id_sede == entidad.Id_sede).ToList();
+            if (entidad!.Id_sede == 0)
+            {
+                lista = this.IConexion!.Empleados!
+                    .Include(x => x._Sede)
+                    .Take(50)
+                    .ToList();
+            }
+            else
+            {
+                lista = this.IConexion!.Empleados!
+                    .Include(x => x._Sede)
+                    .Where(x => x.Id_sede == entidad.Id_sede)
+                    .ToList();
+            }
+
+
+            foreach (var empleado in lista)
+            {
+                if (empleado._Sede != null)
+                    empleado._Sede.empleados = null;
+            }
+
+            return lista;
         }
 
         public Empleados? Modificar(Empleados? entidad)
@@ -82,8 +100,6 @@ namespace lib_repositorios.Implementaciones
 
             if (entidad!.Id == 0)
                 throw new Exception("lbNoSeGuardo");
-
-            entidad._Sede = null;
 
             if (string.IsNullOrWhiteSpace(entidad.Nombre) || string.IsNullOrWhiteSpace(entidad.Apellido))
                 throw new Exception("Nombre y apellido son obligatorios.");
@@ -96,7 +112,5 @@ namespace lib_repositorios.Implementaciones
             this.IConexion.SaveChanges();
             return entidad;
         }
-
-
     }
 }

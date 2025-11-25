@@ -97,25 +97,15 @@
                                        asp-for="@Model.Actual!.Precio" />
                             </div>
                         </div>
-                             <div class="form-group">
+                        <div class="form-group">
                             <label class="col-lg-4 control-label">
-                                Stock
+                                Nombre Repuesto
                             </label>
                             <div class="col-lg-6">
-                                <input id="nmStock"
+                                <input id="nmNombre_repuesto"
                                        class="cts_forms form-control"
-                                       asp-for="@Model.Actual!.Stock" />
+                                       asp-for="@Model.Actual!.Nombre_repuesto" />
                             </div>
-                        </div>
-                                <div class="form-group">
-                                    <label class="col-lg-4 control-label">
-                                        Stock
-                                    </label>
-                                    <div class="col-lg-6">
-                                        <input id="nmNombre_repuesto"
-                                               class="cts_forms form-control"
-                                               asp-for="@Model.Actual!.Nombre_repuesto" />
-                                    </div>
                         </div>
                     </div>
                 </div>
@@ -131,7 +121,32 @@
 
             @if (Model.Accion == lib_dominio.Nucleo.Enumerables.Ventanas.Borrar)
             {
- 
+                <div class='popup'>
+                    <div class='pp_del_inner'>
+                        <div style='width:95%'>
+                            <h2 align="left">
+                                Mensaje
+                            </h2>
+
+                            <h4 align="left">
+                                ¿Desea borrar el repuesto?
+                            </h4>
+                            <h6 align="left">
+                                @Model.Actual!.Nombre_repuesto - @Model.Actual!.Marca
+                            </h6>
+                            <br />
+                            <br />
+                            <input type="submit"
+                                   value="Borrar"
+                                   asp-page-handler="BtBorrar"
+                                   class="btn btn-secondary" />
+                            <input type="submit"
+                                   value="Cerrar"
+                                   asp-page-handler="BtCancelar"
+                                   class="btn btn-secondary" />
+                        </div>
+                    </div>
+                </div>
             }
 
             @if (Model.Accion == lib_dominio.Nucleo.Enumerables.Ventanas.Listas ||
@@ -175,8 +190,8 @@
                                     <td>@elemento.Id_proveedor</td>
                                     <td>@elemento.Marca</td>
                                     <td>@elemento.Stock</td>
-                                    <td>@elemento.Precio.</td>
-                                    <td>@elemento.Nombre_repuesto.</td>
+                                    <td>@elemento.Precio</td>
+                                    <td>@elemento.Nombre_repuesto</td>
                                     <td>
                                         <input type="submit"
                                                                        value="Modificar"

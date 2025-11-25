@@ -20,11 +20,26 @@ namespace lib_repositorios.Implementaciones
 
         public List<Diagnosticos> Listar()
         {
-            return this.IConexion!.Diagnosticos!
+            var lista = this.IConexion!.Diagnosticos!
                 .Include(x => x._Vehiculo)
                 .Include(x => x._Empleado)
                 .Take(20)
                 .ToList();
+
+
+            foreach (var item in lista)
+            {
+                if (item._Vehiculo != null)
+                    item._Vehiculo.Diagnosticos = null;
+                if (item._Empleado != null)
+                {
+                    var prop = item._Empleado.GetType().GetProperty("Diagnosticos");
+                    if (prop != null)
+                        prop.SetValue(item._Empleado, null);
+                }
+            }
+
+            return lista;
         }
 
 
@@ -57,7 +72,7 @@ namespace lib_repositorios.Implementaciones
             entidad._Empleado = null;
 
             var vehiculo = this.IConexion!.Vehiculos!.Find(entidad!.Id_vehiculo);
-            if (vehiculo == null) 
+            if (vehiculo == null)
                 throw new Exception("El vehículo no fue encontrado al intentar asociar el diagnóstico.");
 
             if (vehiculo.Diagnosticos == null)
@@ -68,6 +83,10 @@ namespace lib_repositorios.Implementaciones
 
             this.IConexion.Diagnosticos!.Add(entidad);
             this.IConexion.SaveChanges();
+
+            entidad._Vehiculo = null;
+            entidad._Empleado = null;
+
             return entidad;
         }
 
@@ -109,6 +128,7 @@ namespace lib_repositorios.Implementaciones
             var entry = this.IConexion.Entry<Diagnosticos>(entidad);
             entry.State = EntityState.Modified;
             this.IConexion.SaveChanges();
+
             return entidad;
         }
 
@@ -141,23 +161,50 @@ namespace lib_repositorios.Implementaciones
 
         public List<Diagnosticos> PorVehiculo(int idVehiculo)
         {
-            return this.IConexion!.Diagnosticos!
+            var lista = this.IConexion!.Diagnosticos!
                 .Where(x => x.Id_vehiculo == idVehiculo)
                 .ToList();
+
+
+            foreach (var item in lista)
+            {
+                item._Vehiculo = null;
+                item._Empleado = null;
+            }
+
+            return lista;
         }
 
         public List<Diagnosticos> PorEmpleado(int idEmpleado)
         {
-            return this.IConexion!.Diagnosticos!
+            var lista = this.IConexion!.Diagnosticos!
                 .Where(x => x.Id_empleado == idEmpleado)
                 .ToList();
+
+
+            foreach (var item in lista)
+            {
+                item._Vehiculo = null;
+                item._Empleado = null;
+            }
+
+            return lista;
         }
 
         public List<Diagnosticos> PorRangoFechas(DateTime inicio, DateTime fin)
         {
-            return this.IConexion!.Diagnosticos!
+            var lista = this.IConexion!.Diagnosticos!
                 .Where(x => x.Fecha >= inicio && x.Fecha <= fin)
                 .ToList();
+
+
+            foreach (var item in lista)
+            {
+                item._Vehiculo = null;
+                item._Empleado = null;
+            }
+
+            return lista;
         }
 
         public int ContarPorVehiculo(int idVehiculo)
@@ -168,9 +215,18 @@ namespace lib_repositorios.Implementaciones
 
         public Diagnosticos? UltimoDiagnostico()
         {
-            return this.IConexion!.Diagnosticos!
+            var diagnostico = this.IConexion!.Diagnosticos!
                 .OrderByDescending(x => x.Fecha)
                 .FirstOrDefault();
+
+
+            if (diagnostico != null)
+            {
+                diagnostico._Vehiculo = null;
+                diagnostico._Empleado = null;
+            }
+
+            return diagnostico;
         }
     }
 }

@@ -145,6 +145,7 @@ CREATE TABLE [Productos] (
     [Precio] DECIMAL(10,2) NOT NULL,
     [Categoria] NVARCHAR(30) NOT NULL,
     [Stock] INT NOT NULL,
+    [Imagen_Base64] NVARCHAR(MAX),
 );
 
 CREATE TABLE [Detalles_Servicio] (
@@ -175,17 +176,17 @@ CREATE TABLE [Reparacion_Herramienta] (
     [Id_herramienta] INT NOT NULL REFERENCES [Herramientas] ([Id]),
 );
 
+CREATE TABLE [Funciones] (
+    [Id] INT NOT NULL PRIMARY KEY IDENTITY(1,1),
+    [Nombre] NVARCHAR(25) NOT NULL UNIQUE,
+    [Permisos] NVARCHAR(MAX) NOT NULL
+);
+
 CREATE TABLE [Usuarios] (
     [Id] INT NOT NULL PRIMARY KEY IDENTITY(1,1),
     [Nombre] NVARCHAR(50) NOT NULL UNIQUE,
     [Contraseña] NVARCHAR(250) NOT NULL,
     [Funcion] INT NOT NULL REFERENCES [Funciones] ([Id])
-);
-
-CREATE TABLE [Funciones] (
-    [Id] INT NOT NULL PRIMARY KEY IDENTITY(1,1),
-    [Nombre] NVARCHAR(25) NOT NULL UNIQUE,
-    [Permisos] NVARCHAR(MAX) NOT NULL
 );
 
 CREATE TABLE [Auditorias] (
@@ -334,12 +335,12 @@ INSERT INTO Repuestos (Id_proveedor, Nombre_repuesto, Marca, Precio, Stock) VALU
 
 
 -- Productos
-INSERT INTO Productos (Nombre_producto, Precio, Categoria, Stock) VALUES
-('Shampoo para autos', 30000, 'Cuidado', 100),
-('Limpia parabrisas', 15000, 'Cuidado', 200),
-('Aditivo para gasolina', 50000, 'Mantenimiento', 50),
-('Ambientador', 10000, 'Accesorios', 300),
-('Cera liquida', 40000, 'Cuidado', 80);
+INSERT INTO Productos (Nombre_producto, Precio, Categoria, Stock, Imagen_Base64) VALUES
+('Shampoo para autos', 30000, 'Cuidado', 100, NULL),
+('Limpia parabrisas', 15000, 'Cuidado', 200, NULL),
+('Aditivo para gasolina', 50000, 'Mantenimiento', 50, NULL),
+('Ambientador', 10000, 'Accesorios', 300, NULL),
+('Cera liquida', 40000, 'Cuidado', 80, NULL);
 
 
 -- Detalles_Servicio
@@ -377,12 +378,12 @@ INSERT INTO Reparacion_Herramienta (Id_reparacion, Id_herramienta) VALUES
 (4, 4),
 (5, 5);
 
-INSERT INTO Usuarios(Nombre, Contraseña, Funcion) VALUES
-('Prueba', '123lI', 1);
-
 INSERT INTO Funciones(Nombre, Permisos) VALUES
 ('Admin', '{}'),
 ('Mecanico', '{}'),
 ('Recepcionista', '{}');
+
+INSERT INTO Usuarios(Nombre, Contraseña, Funcion) VALUES
+('Prueba', '123lI', 1);
 
 GO
