@@ -1,3 +1,0 @@
-{
-"StringConexion": "server=PIEDRA\\DEV;database=db_taller;Integrated Security=True;TrustServerCertificate=true;"
-}
