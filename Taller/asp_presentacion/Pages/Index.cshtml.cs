@@ -1,4 +1,6 @@
+using lib_dominio.Entidades;
 using lib_dominio.Nucleo;
+using lib_presentaciones.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -6,25 +8,31 @@ namespace asp_presentacion.Pages
 {
     public class IndexModel : PageModel
     {
+        private readonly IUsuariosPresentacion? iUsuariosPresentacion;
+
+        public IndexModel(IUsuariosPresentacion usuariosPresentacion)
+        {
+            iUsuariosPresentacion = usuariosPresentacion;
+        }
+
         public bool EstaLogueado = false;
+
         [BindProperty] public string? Nombre { get; set; }
         [BindProperty] public string? Contraseña { get; set; }
 
         public void OnGet()
         {
             var variable_session = HttpContext.Session.GetString("Usuario");
-            if (!String.IsNullOrEmpty(variable_session))
+
+            if (!string.IsNullOrEmpty(variable_session))
             {
                 EstaLogueado = true;
-                return;
             }
         }
 
         public void OnPostBtClean()
         {
             try
-
-
             {
                 Nombre = string.Empty;
                 Contraseña = string.Empty;
@@ -35,30 +43,50 @@ namespace asp_presentacion.Pages
             }
         }
 
-        public void OnPostBtEnter()
+        public async Task OnPostBtEnter()
         {
             try
             {
-                if (string.IsNullOrEmpty(Nombre) &&
-                    string.IsNullOrEmpty(Contraseña))
+                // Validar campos vacíos
+                if (string.IsNullOrWhiteSpace(Nombre) || string.IsNullOrWhiteSpace(Contraseña))
                 {
                     OnPostBtClean();
                     return;
                 }
 
-                if ("Prueba.123lI" != Nombre + "." + Contraseña)
+                // Crear entidad usuario para enviar
+                var usuario = new Usuarios
                 {
+                    Nombre = Nombre,
+                    Contraseña = Contraseña
+                };
+
+                // ?? Intentar login contra el servicio
+                var respuesta = await iUsuariosPresentacion!.Login(usuario);
+
+                if (respuesta == null)
+                {
+                    // login fallido
                     OnPostBtClean();
                     return;
                 }
-                ViewData["Logged"] = true;
-                HttpContext.Session.SetString("Usuario", Nombre!);
+
+                // Si login fue exitoso ? guardar sesión
+                HttpContext.Session.SetString("Usuario", respuesta.Nombre!);
+                HttpContext.Session.SetString("UsuarioId", respuesta.Id.ToString());
+
                 EstaLogueado = true;
+                ViewData["Logged"] = true;
+
                 OnPostBtClean();
             }
             catch (Exception ex)
             {
+                // Guardar error en pantalla
                 LogConversor.Log(ex, ViewData!);
+
+                // Limpiar campos por seguridad
+                OnPostBtClean();
             }
         }
 
@@ -67,8 +95,9 @@ namespace asp_presentacion.Pages
             try
             {
                 HttpContext.Session.Clear();
-                HttpContext.Response.Redirect("/");
                 EstaLogueado = false;
+
+                HttpContext.Response.Redirect("/");
             }
             catch (Exception ex)
             {

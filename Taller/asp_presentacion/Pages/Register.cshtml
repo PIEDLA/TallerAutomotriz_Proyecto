@@ -1,19 +1,21 @@
 ﻿@page
-@model IndexModel
+@model RegisterModel
 @{
     ViewData["Title"] = "";
 }
-@if (!Model.EstaLogueado)
+
+@if (!Model.Registrado)
 {
     <div class="container"
          align="left"
          style="width:100%">
         <h3>
-            Login
+            Registro
         </h3>
 
         <form method="POST">
             <div style="width:60%">
+
                 <div class="form-group">
                     <label class="control-label">
                         Usuario:
@@ -22,11 +24,10 @@
                            asp-for="@Model.Nombre"
                            class="form-control" />
                 </div>
+
                 <div class="form-group">
                     <label class="control-label">
                         Contraseña:
-
-
                     </label>
                     <input type="password"
                            onchange="keyUp(this)"
@@ -34,17 +35,26 @@
                            class="form-control" />
                 </div>
 
+                <div class="form-group">
+                    <label class="control-label">
+                        Función (número):
+                    </label>
+                    <input type="number"
+                           onchange="keyUp(this)"
+                           asp-for="@Model.Funcion"
+                           class="form-control" />
+                </div>
+
                 <input type="submit"
                        value="Limpiar"
                        asp-page-handler="BtClean"
                        class="btn btn-default" />
+
                 <input type="submit"
-                       value="Entrar"
-                       asp-page-handler="BtEnter"
+                       value="Registrar"
+                       asp-page-handler="BtRegister"
                        class="btn btn-default" />
-                <div style="margin-top:10px;">
-                    <a href="/Register" class="btn btn-link">Registrar</a>
-                </div>
+
             </div>
         </form>
     </div>
@@ -53,14 +63,11 @@ else
 {
     <div class="text-center">
         <h1 class="display-4">
-            Bienvenido
+            Registro exitoso
         </h1>
 
-        <form method="POST">
-            <input type="submit"
-                   value="Cerrar"
-                   asp-page-handler="BtClose"
-                   class="btn btn-default" />
-        </form>
+        <a class="btn btn-default" href="/Index">
+            Ir al Login
+        </a>
     </div>
 }

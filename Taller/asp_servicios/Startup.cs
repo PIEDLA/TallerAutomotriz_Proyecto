@@ -48,6 +48,7 @@ namespace asp_servicios
             services.AddScoped<IReservasAplicacion, ReservasAplicacion>();
             services.AddScoped<IServiciosAplicacion, ServiciosAplicacion>();
             services.AddScoped<IVehiculosAplicacion, VehiculosAplicacion>();
+            services.AddScoped<IUsuariosAplicacion, UsuariosAplicacion>();
             services.AddScoped<TokenAplicacion, TokenAplicacion>();
 
             //Controladores
@@ -73,6 +74,7 @@ namespace asp_servicios
             services.AddScoped<ReservasController, ReservasController>();
             services.AddScoped<ServiciosController, ServiciosController>();
             services.AddScoped<VehiculosController, VehiculosController>();
+            services.AddScoped<UsuariosController, UsuariosController>();
             services.AddCors(o => o.AddDefaultPolicy(b => b.AllowAnyOrigin()));
         }
 

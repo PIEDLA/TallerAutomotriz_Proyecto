@@ -1,0 +1,14 @@
+﻿using lib_dominio.Entidades;
+
+namespace lib_presentaciones.Interfaces
+{
+    public interface IUsuariosPresentacion
+    {
+        Task<List<Usuarios>> Listar();
+        Task<Usuarios?> Guardar(Usuarios? entidad);
+        Task<Usuarios?> Modificar(Usuarios? entidad);
+        Task<Usuarios?> Borrar(Usuarios? entidad);
+        Task<Usuarios?> Login(Usuarios entidad);
+        Task<Usuarios?> Registrar(Usuarios entidad);
+    }
+}

@@ -95,5 +95,52 @@ namespace lib_repositorios.Implementaciones
             this.IConexion.SaveChanges();
             return entidad;
         }
+
+        public Usuarios? Login(string nombre, string contraseña)
+        {
+            if (string.IsNullOrWhiteSpace(nombre) || string.IsNullOrWhiteSpace(contraseña))
+                throw new Exception("lbFaltaInformacion");
+
+            var usuario = this.IConexion!.Usuarios!
+                .FirstOrDefault(x =>
+                    x.Nombre!.ToUpper() == nombre.ToUpper() &&
+                    x.Contraseña == contraseña
+                );
+
+            if (usuario == null)
+                throw new Exception("lbCredencialesInvalidas");
+
+            return usuario;
+        }
+
+        public Usuarios Registrar(Usuarios entidad)
+        {
+            if (entidad == null)
+                throw new Exception("lbFaltaInformacion");
+
+            if (string.IsNullOrWhiteSpace(entidad.Nombre))
+                throw new Exception("lbFaltaInformacion");
+
+            if (string.IsNullOrWhiteSpace(entidad.Contraseña))
+                throw new Exception("lbFaltaInformacion");
+
+            var usuarioExistente = this.IConexion!.Usuarios!
+                .FirstOrDefault(x => x.Nombre!.ToUpper() == entidad.Nombre!.ToUpper());
+
+            if (usuarioExistente != null)
+                throw new Exception("lbYaExiste");
+
+            if (entidad.Funcion <= 0)
+                throw new Exception("lbFaltaInformacion");
+
+            entidad._Funcion = null;
+
+            this.IConexion!.Usuarios!.Add(entidad);
+            this.IConexion.SaveChanges();
+
+            return entidad;
+        }
+
+
     }
 }

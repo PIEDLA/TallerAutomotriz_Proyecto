@@ -9,5 +9,7 @@ namespace lib_repositorios.Interfaces
         Usuarios? Guardar(Usuarios? entidad);
         Usuarios? Modificar(Usuarios? entidad);
         Usuarios? Borrar(Usuarios? entidad);
+        Usuarios? Login(string nombre, string contraseña);
+        Usuarios Registrar(Usuarios entidad);
     }
 }
