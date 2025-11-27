@@ -44,8 +44,6 @@ namespace asp_presentacion.Pages.Ventanas
                 //    return;
                 //}
 
-                Filtro!.Id_cliente = Filtro!.Id_cliente;
-
                 Accion = Enumerables.Ventanas.Listas;
                 var task = this.iPresentacion!.ListarPorCliente(Filtro!);
                 task.Wait();

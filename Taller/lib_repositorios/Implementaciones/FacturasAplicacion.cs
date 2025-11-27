@@ -103,11 +103,29 @@ namespace lib_repositorios.Implementaciones
             return entidad;
         }
 
-        public List<Facturas> ListarPorCliente(int idCliente)
+        public List<Facturas> ListarPorCliente(Facturas? entidad)
         {
+            // Caso en el que Id_cliente es 0 → listar todos
+            if (entidad!.Id_cliente == 0)
+                return this.IConexion!.Facturas!
+                    .Include(f => f._Cliente)
+                    .Include(f => f._Reparacion)
+                    .ThenInclude(r => r!._Diagnostico)
+                    .ThenInclude(d => d!._Vehiculo)
+                    .Include(f => f._Reparacion)
+                    .ThenInclude(r => r!._Diagnostico)
+                    .ThenInclude(d => d!._Empleado)
+                    .ToList();
+            // Filtro por Id_cliente
             return this.IConexion!.Facturas!
-                .Where(f => f.Id_cliente == idCliente)
+                .Where(f => f.Id_cliente == entidad!.Id_cliente)
                 .Include(f => f._Cliente)
+                .Include(f => f._Reparacion)
+                .ThenInclude(r => r!._Diagnostico)
+                .ThenInclude(d => d!._Vehiculo)
+                .Include(f => f._Reparacion)
+                .ThenInclude(r => r!._Diagnostico)
+                .ThenInclude(d => d!._Empleado)
                 .ToList();
         }
     }

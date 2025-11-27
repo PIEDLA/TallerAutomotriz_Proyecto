@@ -44,6 +44,25 @@ namespace lib_presentaciones.Implementaciones
                 JsonConversor.ConvertirAString(respuesta["Entidades"]));
             return lista;
         }
+        
+        public async Task<List<Clientes>> PorDocumento(Clientes? entidad)
+        {
+            var lista = new List<Clientes>();
+            var datos = new Dictionary<string, object>();
+            datos["Entidad"] = entidad!;
+            
+            comunicaciones = new Comunicaciones();
+            datos = comunicaciones.ConstruirUrl(datos, "Clientes/PorDocumento");
+            var respuesta = await comunicaciones!.Ejecutar(datos);
+            
+            if (respuesta.ContainsKey("Error"))
+            {
+                throw new Exception(respuesta["Error"].ToString()!);
+            }
+            lista = JsonConversor.ConvertirAObjeto<List<Clientes>>(
+                JsonConversor.ConvertirAString(respuesta["Entidades"]));
+            return lista;
+        }
 
         public async Task<Clientes?> Guardar(Clientes? entidad)
         {

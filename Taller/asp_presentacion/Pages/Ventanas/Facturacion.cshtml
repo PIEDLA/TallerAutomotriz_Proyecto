@@ -9,31 +9,31 @@
               enctype="multipart/form-data">
             @Html.AntiForgeryToken()
 
-            <div align="left">
-                <h3>Proveedores</h3>
+            <div class="table-container">
+                <div class="table-header">
+                    <h3 class="table-title">Facturación</h3>
+                    <div class="table-actions">
+                        <button class="btn btn-primary btn-sm"
+                                asp-page-handler="BtNuevo"
+                                disabled="@(Model.Accion != lib_dominio.Nucleo.Enumerables.Ventanas.Listas)">
+                            + Registrar Vehículo
+                        </button>
+                        <button class="btn btn-primary btn-sm"
+                                asp-page-handler="BtExportar"
+                                disabled="@(Model.Accion != lib_dominio.Nucleo.Enumerables.Ventanas.Listas)">
+                            📊 Exportar
+                        </button>
+                        <button class="btn btn-primary btn-sm"
+                                asp-page-handler="BtRefrescar"
+                                disabled="@(Model.Accion != lib_dominio.Nucleo.Enumerables.Ventanas.Listas)">
+                            ↺ Refrescar
+                        </button>
+                    </div>
+                </div>
             </div>
-            <div align="left"
-                 class="bt_panel_buttons">
-                <input type="submit"
-                       value="Refrescar"
-                       asp-page-handler="BtRefrescar"
-                       class="btn btn-secondary"
-                       disabled="@(Model.Accion != lib_dominio.Nucleo.Enumerables.Ventanas.Listas)" />
-                <input type="submit"
-                       value="Nuevo"
-                       asp-page-handler="BtNuevo"
-                       class="btn btn-secondary"
-                       disabled="@(Model.Accion != lib_dominio.Nucleo.Enumerables.Ventanas.Listas)" />
-                <input type="submit"
-                       value="Guardar"
-                       asp-page-handler="BtGuardar"
-                       class="btn btn-secondary"
-                       disabled="@(Model.Accion == lib_dominio.Nucleo.Enumerables.Ventanas.Listas)" />
-                <input type="submit"
-                       value="Cancelar"
-                       asp-page-handler="BtCancelar"
-                       class="btn btn-secondary"
-                       disabled="@(Model.Accion == lib_dominio.Nucleo.Enumerables.Ventanas.Listas)" />
+
+            <div align="left">
+                <h3>Factura</h3>
             </div>
 
             @if (Model.Accion != lib_dominio.Nucleo.Enumerables.Ventanas.Listas ||
@@ -47,59 +47,81 @@
 
 
                 <input type="hidden"
-                       asp-for="@Model.Actual!.Nombre" />
+                       asp-for="@Model.Actual!._Cliente!.Nombre" />
                 <input type="hidden"
-                       asp-for="@Model.Actual!.Telefono" />
+                       asp-for="@Model.Actual!._Cliente!.Apellido" />
                 <input type="hidden"
-                       asp-for="@Model.Actual!.Correo" />
+                       asp-for="@Model.Actual!._Reparacion!.Descripcion_trabajo" />
                 <input type="hidden"
-                       asp-for="@Model.Actual!.Direccion" />
+                       asp-for="@Model.Actual!.Fecha_emision" />
+                <input type="hidden"
+                       asp-for="@Model.Actual!._Reparacion!.Costo_estimado" />
             }
 
             @if (Model.Accion == lib_dominio.Nucleo.Enumerables.Ventanas.Editar)
             {
                 <div class="containers_vn panel panel-default">
-                    <h3>Proveedores</h3>
+                    <h3>Factura</h3>
 
                     <div>
                         <div class="form-group">
                             <label class="col-lg-4 control-label">
-                                Nombre
+                                Nombre del cliente
                             </label>
                             <div class="col-lg-6">
-                                <input id="nmNombre"
+                                <input id="nmCliente"
                                        class="cts_forms form-control"
-                                       asp-for="@Model.Actual!.Nombre" />
+                                       asp-for="@Model.Actual!._Cliente!.Nombre + ' ' + Model.Actual!._Cliente!.Apellido" />
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-lg-4 control-label">
-                                Telefono
+                                Vehículo
                             </label>
                             <div class="col-lg-6">
-                                <input id="nmTelefono"
+                                <input id="nmVehiculo"
                                        class="cts_forms form-control"
-                                       asp-for="@Model.Actual!.Telefono" />
+                                       asp-for="@Model.Actual!._Reparacion!._Diagnostico!._Vehiculo!.Marca + ' ' + Model.Actual!._Reparacion!._Diagnostico!._Vehiculo!.Modelo" />
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-lg-4 control-label">
-                                Correo
+                                Diagnóstico
                             </label>
                             <div class="col-lg-6">
-                                <input id="nmCorreo"
+                                <input id="nmDiagnostico"
                                        class="cts_forms form-control"
-                                       asp-for="@Model.Actual!.Correo" />
+                                       asp-for="@Model.Actual!._Reparacion!._Diagnostico!.Descripcion" />
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-lg-4 control-label">
-                                Direccion
+                                Descripción del trabajo
                             </label>
                             <div class="col-lg-6">
-                                <input id="nmDireccion"
+                                <input id="nmDescripciontrb"
                                        class="cts_forms form-control"
-                                       asp-for="@Model.Actual!.Direccion" />
+                                       asp-for="@Model.Actual!._Reparacion!.Descripcion_trabajo" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-4 control-label">
+                                Mecánico
+                            </label>
+                            <div class="col-lg-6">
+                                <input id="nmMecanico"
+                                       class="cts_forms form-control"
+                                       asp-for="@Model.Actual!._Reparacion!._Diagnostico!._Empleado!.Nombre + ' ' + Model.Actual!._Reparacion!._Diagnostico!._Empleado!.Nombre" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-4 control-label">
+                                Total
+                            </label>
+                            <div class="col-lg-6">
+                                <input id="nmTotal"
+                                       class="cts_forms form-control"
+                                       asp-for="@Model.Actual!.Total" />
                             </div>
                         </div>
                     </div>
@@ -114,7 +136,7 @@
                 ;
             }
 
-            @if (Model.Accion == lib_dominio.Nucleo.Enumerables.Ventanas.Borrar)
+            @* @if (Model.Accion == lib_dominio.Nucleo.Enumerables.Ventanas.Borrar)
             {
                 <div class='popup'>
                     <div class='pp_del_inner'>
@@ -142,15 +164,15 @@
                         </div>
                     </div>
                 </div>
-            }
+            } *@
 
             @if (Model.Accion == lib_dominio.Nucleo.Enumerables.Ventanas.Listas ||
                         Model.Accion == lib_dominio.Nucleo.Enumerables.Ventanas.Borrar)
             {
-                <input id="flNombre"
+                <input id="flCliente"
                        class="cts_forms form-control"
-                       asp-for="@Model.Filtro!.Nombre"
-                       placeholder="Nombre" />
+                       asp-for="@Model.Filtro!.Id_cliente"
+                       placeholder="Id del cliente" />
                 <br />
 
                 <div class="containers_vn panel panel-default">
@@ -159,16 +181,22 @@
                     <table class="tb_data table table-striped table-bordered table hover">
                         <tr>
                             <th>
-                                Nombre
+                                Nombre cliente
                             </th>
                             <th>
-                                Telefono
+                                Vehículo
                             </th>
                             <th>
-                                Correo
+                                Diagnóstico
                             </th>
                             <th>
-                                Direccion
+                                Descripción del trabajo
+                            </th>
+                            <th>
+                                Mecánico
+                            </th>
+                            <th>
+                                Total
                             </th>
                             <th class="cl_actions">
                                 Accion
@@ -180,16 +208,22 @@
                             {
                                 <tr>
                                     <td>
-                                        @elemento.Nombre
+                                        @elemento._Cliente!.Nombre @elemento._Cliente!.Apellido
                                     </td>
                                     <td>
-                                        @elemento.Telefono
+                                        @elemento._Reparacion!._Diagnostico!._Vehiculo!.Marca @elemento._Reparacion!._Diagnostico!._Vehiculo!.Modelo
                                     </td>
                                     <td>
-                                        @elemento.Correo
+                                        @elemento._Reparacion!._Diagnostico!.Descripcion
                                     </td>
                                     <td>
-                                        @elemento.Direccion
+                                        @elemento._Reparacion!.Descripcion_trabajo
+                                    </td>
+                                    <td>
+                                        @elemento._Reparacion!._Diagnostico!._Empleado!.Nombre @elemento._Reparacion!._Diagnostico!._Empleado!.Apellido
+                                    </td>
+                                    <td>
+                                        @elemento.Total
                                     </td>
                                     <td>
                                         <input type="submit"

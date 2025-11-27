@@ -71,7 +71,7 @@ namespace lib_repositorios.Implementaciones
         {
             return this.IConexion!.Productos!
                 .Where(x => x.Categoria!.Contains(entidad!.Categoria!))
-                .Take(50)
+                .Include(x => x._Proveedor)
                 .ToList();
         }
 

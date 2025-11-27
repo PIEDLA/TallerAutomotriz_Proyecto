@@ -8,6 +8,6 @@
         public string? Estado { get; set; }
         public string? Ubicacion { get; set; }
 
-        public List<Reparacion_Herramienta>? Reparacion_Herramienta;
+        public List<Reparacion_Herramienta>? Reparacion_Herramienta { get; set; }
     }
 }

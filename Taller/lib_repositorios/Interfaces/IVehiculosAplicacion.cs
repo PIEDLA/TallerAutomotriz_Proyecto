@@ -9,6 +9,7 @@ namespace lib_repositorios.Interfaces
         Vehiculos? Guardar(Vehiculos? entidad);
         Vehiculos? Modificar(Vehiculos? entidad);
         Vehiculos? Borrar(Vehiculos? entidad);
-        public List<Vehiculos> ListarPorCliente(int ClienteId);
+        public List<Vehiculos> ListarPorCliente(int idCliente);
+        public List<Vehiculos> PorPlaca(Vehiculos? entidad);
     }
 }

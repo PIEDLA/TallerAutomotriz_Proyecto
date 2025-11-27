@@ -3,19 +3,23 @@ using lib_dominio.Nucleo;
 using lib_presentaciones.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Collections.Generic;
 
 namespace asp_presentacion.Pages.Ventanas
 {
     public class VehiculosModel : PageModel
     {
         private IVehiculosPresentacion? iPresentacion = null;
+        private IDiagnosticosPresentacion? iDiagnosticosPresentacion = null;
 
-        public VehiculosModel(IVehiculosPresentacion iPresentacion)
+        public VehiculosModel(IVehiculosPresentacion iPresentacion, IDiagnosticosPresentacion iDiagnosticosPresentacion)
         {
             try
             {
                 this.iPresentacion = iPresentacion;
+                this.iDiagnosticosPresentacion = iDiagnosticosPresentacion;
                 Filtro = new Vehiculos();
+                FiltroD = new Diagnosticos();
             }
             catch (Exception ex)
             {
@@ -30,6 +34,9 @@ namespace asp_presentacion.Pages.Ventanas
         [BindProperty] public Vehiculos? Actual { get; set; }
         [BindProperty] public Vehiculos? Filtro { get; set; }
         [BindProperty] public List<Vehiculos>? Lista { get; set; }
+        [BindProperty] public Diagnosticos? ActualD { get; set; }
+        [BindProperty] public Diagnosticos? FiltroD { get; set; }
+        [BindProperty] public List<Diagnosticos>? ListaD { get; set; }
 
         public virtual void OnGet() { OnPostBtRefrescar(); }
 
@@ -44,10 +51,10 @@ namespace asp_presentacion.Pages.Ventanas
                 //    return;
                 //}
 
-                Filtro!.Id_cliente = Filtro!.Id_cliente;
+                Filtro!.Placa = Filtro!.Placa ?? "";
 
                 Accion = Enumerables.Ventanas.Listas;
-                var task = this.iPresentacion!.ListarPorCliente(Filtro!);
+                var task = this.iPresentacion!.PorPlaca(Filtro!);
                 task.Wait();
                 Lista = task.Result;
                 Actual = null;
@@ -164,5 +171,27 @@ namespace asp_presentacion.Pages.Ventanas
                 LogConversor.Log(ex, ViewData!);
             }
         }
+
+        public virtual void OnPostBtVerDiag(int id)
+        {
+            try
+            {
+                Accion = Enumerables.Ventanas.Sublistas;
+
+                FiltroD!.Id_vehiculo = id;
+                var task = this.iDiagnosticosPresentacion!.PorVehiculo(FiltroD);
+                task.Wait();
+                ListaD = task.Result;
+
+                Actual = ListaD!.First()._Vehiculo;
+
+                ActualD = null;
+            }
+            catch (Exception ex)
+            {
+                LogConversor.Log(ex, ViewData!);
+            }
+        }
+
     }
 }

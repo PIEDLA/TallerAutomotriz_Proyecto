@@ -6,6 +6,7 @@ namespace lib_presentaciones.Interfaces
     {
         Task<List<Proveedores>> Listar();
         Task<List<Proveedores>> PorNombre(Proveedores? entidad);
+        Task<List<Proveedores>> PorNIT(Proveedores? entidad);
         Task<Proveedores?> Guardar(Proveedores? entidad);
         Task<Proveedores?> Modificar(Proveedores? entidad);
         Task<Proveedores?> Borrar(Proveedores? entidad);

@@ -45,6 +45,25 @@ namespace lib_presentaciones.Implementaciones
             return lista;
         }
 
+        public async Task<List<Proveedores>> PorNIT(Proveedores? entidad)
+        {
+            var lista = new List<Proveedores>();
+            var datos = new Dictionary<string, object>();
+            datos["Entidad"] = entidad!;
+
+            comunicaciones = new Comunicaciones();
+            datos = comunicaciones.ConstruirUrl(datos, "Proveedores/PorNIT");
+            var respuesta = await comunicaciones!.Ejecutar(datos);
+
+            if (respuesta.ContainsKey("Error"))
+            {
+                throw new Exception(respuesta["Error"].ToString()!);
+            }
+            lista = JsonConversor.ConvertirAObjeto<List<Proveedores>>(
+                JsonConversor.ConvertirAString(respuesta["Entidades"]));
+            return lista;
+        }
+
         public async Task<Proveedores?> Guardar(Proveedores? entidad)
         {
             if (entidad!.Id != 0)

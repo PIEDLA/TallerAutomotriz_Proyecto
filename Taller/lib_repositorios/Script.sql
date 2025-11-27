@@ -8,6 +8,7 @@ CREATE TABLE [Clientes] (
     [Id] INT NOT NULL PRIMARY KEY IDENTITY(1,1),
     [Nombre] NVARCHAR(50) NOT NULL,
     [Apellido] NVARCHAR(50) NOT NULL,
+    [Documento] INT NOT NULL UNIQUE,
     [Telefono] NVARCHAR(15) NOT NULL UNIQUE,
     [Correo] NVARCHAR(50) NOT NULL UNIQUE
 );
@@ -61,6 +62,7 @@ CREATE TABLE [Empleados] (
     [Id_sede] INT NOT NULL REFERENCES [Sedes] ([Id]),
     [Nombre] NVARCHAR(50) NOT NULL,
     [Apellido] NVARCHAR(50) NOT NULL,
+    [Documento] INT NOT NULL UNIQUE,
     [Cargo] NVARCHAR(30) NOT NULL,
     [Telefono] NVARCHAR(15) NOT NULL UNIQUE,
 );
@@ -123,6 +125,7 @@ CREATE TABLE [Herramientas] (
 CREATE TABLE [Proveedores] (
     [Id] INT NOT NULL PRIMARY KEY IDENTITY(1,1),
     [Nombre] NVARCHAR(50) NOT NULL,
+    [NIT] INT NOT NULL UNIQUE,
     [Telefono] NVARCHAR(15) NOT NULL UNIQUE,
     [Correo] NVARCHAR(50) NOT NULL UNIQUE,
     [Direccion] NVARCHAR(100) NOT NULL UNIQUE,
@@ -142,6 +145,7 @@ CREATE TABLE [Repuestos] (
 CREATE TABLE [Productos] (
     [Id] INT NOT NULL PRIMARY KEY IDENTITY(1,1),
     [Nombre_producto] NVARCHAR(50) NOT NULL,
+    [Id_proveedor] INT NOT NULL REFERENCES [Proveedores] ([Id]),
     [Precio] DECIMAL(10,2) NOT NULL,
     [Categoria] NVARCHAR(30) NOT NULL,
     [Stock] INT NOT NULL,
@@ -175,17 +179,17 @@ CREATE TABLE [Reparacion_Herramienta] (
     [Id_herramienta] INT NOT NULL REFERENCES [Herramientas] ([Id]),
 );
 
+CREATE TABLE [Funciones] (
+    [Id] INT NOT NULL PRIMARY KEY IDENTITY(1,1),
+    [Nombre] NVARCHAR(25) NOT NULL UNIQUE,
+    [Permisos] NVARCHAR(MAX) NOT NULL
+);
+
 CREATE TABLE [Usuarios] (
     [Id] INT NOT NULL PRIMARY KEY IDENTITY(1,1),
     [Nombre] NVARCHAR(50) NOT NULL UNIQUE,
     [Contraseña] NVARCHAR(250) NOT NULL,
     [Funcion] INT NOT NULL REFERENCES [Funciones] ([Id])
-);
-
-CREATE TABLE [Funciones] (
-    [Id] INT NOT NULL PRIMARY KEY IDENTITY(1,1),
-    [Nombre] NVARCHAR(25) NOT NULL UNIQUE,
-    [Permisos] NVARCHAR(MAX) NOT NULL
 );
 
 CREATE TABLE [Auditorias] (
@@ -199,12 +203,12 @@ CREATE TABLE [Auditorias] (
 GO
 
 -- Clientes
-INSERT INTO Clientes (Nombre, Apellido, Telefono, Correo) VALUES
-('Juan', 'Perez', '3001111111', 'juan.perez@mail.com'),
-('Mar a', 'Gomez', '3002222222', 'maria.gomez@mail.com'),
-('Carlos', 'Rodriguez', '3003333333', 'carlos.rodriguez@mail.com'),
-('Ana', 'Martinez', '3004444444', 'ana.martinez@mail.com'),
-('Luis', 'Hernendez', '3005555555', 'luis.hernandez@mail.com');
+INSERT INTO Clientes (Nombre, Apellido, Documento, Telefono, Correo) VALUES
+('Juan', 'Perez', 002478874, '3001111111', 'juan.perez@mail.com'),
+('Mar a', 'Gomez', 145576235, '3002222222', 'maria.gomez@mail.com'),
+('Carlos', 'Rodriguez', 101142357, '3003333333', 'carlos.rodriguez@mail.com'),
+('Ana', 'Martinez', 999876582, '3004444444', 'ana.martinez@mail.com'),
+('Luis', 'Hernendez', 013478559, '3005555555', 'luis.hernandez@mail.com');
 
 
 -- Vehiculos
@@ -253,12 +257,12 @@ INSERT INTO Reserva_Servicio (PrecioServicio ,Servicio, Reserva) VALUES
 
 
 -- Empleados
-INSERT INTO Empleados (Id_sede, Nombre, Apellido, Cargo, Telefono) VALUES
-(1, 'Pedro', 'Suarez', 'Mecanico', '3101111111'),
-(2, 'Laura', 'Torres', 'Recepcionista', '3102222222'),
-(3, 'Andres', 'Mora', 'Mecanico', '3103333333'),
-(4, 'Camila', 'Rios', 'Administrador', '3104444444'),
-(5, 'Felipe', 'Vargas', 'Mecanico', '3105555555');
+INSERT INTO Empleados (Id_sede, Nombre, Apellido, Documento, Cargo, Telefono) VALUES
+(1, 'Pedro', 'Suarez', 452873691, 'Mecanico', '3101111111'),
+(2, 'Laura', 'Torres', 241036975, 'Recepcionista', '3102222222'),
+(3, 'Andres', 'Mora', 710682975, 'Mecanico', '3103333333'),
+(4, 'Camila', 'Rios', 115776398, 'Administrador', '3104444444'),
+(5, 'Felipe', 'Vargas', 100142225, 'Mecanico', '3105555555');
 
 
 -- Diagnosticos
@@ -316,12 +320,12 @@ INSERT INTO Herramientas (Nombre, Tipo, Estado, Ubicacion) VALUES
 
 
 -- Proveedores
-INSERT INTO Proveedores (Nombre, Telefono, Correo, Direccion) VALUES
-('Repuestos Express', '6016666666', 'ventas@repuestosx.com', 'Cl 10 #25-50'),
-('Autopartes Bogota', '6017777777', 'info@autopartesbogota.com', 'Cra 15 #45-20'),
-('Motores y mas', '6018888888', 'contacto@motoresymas.com', 'Av 68 #70-30'),
-('Frenos Seguros', '6019999999', 'soporte@frenosseguros.com', 'Cl 100 #15-10'),
-('Accesorios Cars', '6011010101', 'ventas@accesorioscars.com', 'Cra 7 #50-25');
+INSERT INTO Proveedores (Nombre, NIT, Telefono, Correo, Direccion) VALUES
+('Repuestos Express', 123456789, '6016666666', 'ventas@repuestosx.com', 'Cl 10 #25-50'),
+('Autopartes Bogota', 987654321, '6017777777', 'info@autopartesbogota.com', 'Cra 15 #45-20'),
+('Motores y mas', 948382948, '6018888888', 'contacto@motoresymas.com', 'Av 68 #70-30'),
+('Frenos Seguros', 845834578, '6019999999', 'soporte@frenosseguros.com', 'Cl 100 #15-10'),
+('Accesorios Cars', 135798547, '6011010101', 'ventas@accesorioscars.com', 'Cra 7 #50-25');
 
 
 -- Repuestos
@@ -334,12 +338,12 @@ INSERT INTO Repuestos (Id_proveedor, Nombre_repuesto, Marca, Precio, Stock) VALU
 
 
 -- Productos
-INSERT INTO Productos (Nombre_producto, Precio, Categoria, Stock) VALUES
-('Shampoo para autos', 30000, 'Cuidado', 100),
-('Limpia parabrisas', 15000, 'Cuidado', 200),
-('Aditivo para gasolina', 50000, 'Mantenimiento', 50),
-('Ambientador', 10000, 'Accesorios', 300),
-('Cera liquida', 40000, 'Cuidado', 80);
+INSERT INTO Productos (Nombre_producto, Id_proveedor, Precio, Categoria, Stock) VALUES
+('Shampoo para autos', 3, 30000, 'Cuidado', 100),
+('Limpia parabrisas', 2, 15000, 'Cuidado', 200),
+('Aditivo para gasolina', 1, 50000, 'Mantenimiento', 50),
+('Ambientador', 5, 10000, 'Accesorios', 300),
+('Cera liquida', 4, 40000, 'Cuidado', 80);
 
 
 -- Detalles_Servicio
@@ -377,12 +381,12 @@ INSERT INTO Reparacion_Herramienta (Id_reparacion, Id_herramienta) VALUES
 (4, 4),
 (5, 5);
 
-INSERT INTO Usuarios(Nombre, Contraseña, Funcion) VALUES
-('Prueba', '123lI', 1);
-
 INSERT INTO Funciones(Nombre, Permisos) VALUES
 ('Admin', '{}'),
 ('Mecanico', '{}'),
 ('Recepcionista', '{}');
+
+INSERT INTO Usuarios(Nombre, Contraseña, Funcion) VALUES
+('Prueba', '123lI', 1);
 
 GO

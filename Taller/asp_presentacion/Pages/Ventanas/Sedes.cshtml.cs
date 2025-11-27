@@ -3,19 +3,23 @@ using lib_dominio.Nucleo;
 using lib_presentaciones.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Collections.Generic;
 
 namespace asp_presentacion.Pages.Ventanas
 {
     public class SedesModel : PageModel
     {
         private ISedesPresentacion? iPresentacion = null;
+        private IEmpleadosPresentacion? iEmpleadosPresentacion = null;
 
-        public SedesModel(ISedesPresentacion iPresentacion)
+        public SedesModel(ISedesPresentacion iPresentacion, IEmpleadosPresentacion iEmpleadosPresentacion)
         {
             try
             {
                 this.iPresentacion = iPresentacion;
                 Filtro = new Sedes();
+                this.iEmpleadosPresentacion = iEmpleadosPresentacion;
+                FiltroE = new Empleados();
             }
             catch (Exception ex)
             {
@@ -30,6 +34,9 @@ namespace asp_presentacion.Pages.Ventanas
         [BindProperty] public Sedes? Actual { get; set; }
         [BindProperty] public Sedes? Filtro { get; set; }
         [BindProperty] public List<Sedes>? Lista { get; set; }
+        [BindProperty] public Empleados? ActualE { get; set; }
+        [BindProperty] public Empleados? FiltroE { get; set; }
+        [BindProperty] public List<Empleados>? ListaE { get; set; }
 
         public virtual void OnGet() { OnPostBtRefrescar(); }
 
@@ -158,6 +165,27 @@ namespace asp_presentacion.Pages.Ventanas
             {
                 if (Accion == Enumerables.Ventanas.Listas)
                     OnPostBtRefrescar();
+            }
+            catch (Exception ex)
+            {
+                LogConversor.Log(ex, ViewData!);
+            }
+        }
+
+        public virtual void OnPostBtVerEmpleados(int id)
+        {
+            try
+            {
+                Accion = Enumerables.Ventanas.Sublistas;
+
+                FiltroE!.Id_sede = id;
+                var task = this.iEmpleadosPresentacion!.ListarPorSede(FiltroE!);
+                task.Wait();
+                ListaE = task.Result;
+
+                Actual = ListaE!.First()._Sede;
+
+                ActualE = null;
             }
             catch (Exception ex)
             {

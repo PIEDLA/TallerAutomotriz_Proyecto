@@ -276,6 +276,44 @@ namespace asp_servicios.Controllers
                 return JsonConversor.ConvertirAString(respuesta);
             }
         }
+        [HttpPost]
+
+        public string PorNombre()
+        {
+            var respuesta = new Dictionary<string, object>();
+            try
+            {
+                var datos = ObtenerDatos();
+                if (!iAplicacionToken!.Validar(datos))
+                {
+                    respuesta["Error"] = "lbNoAutenticacion";
+                    return JsonConversor.ConvertirAString(respuesta);
+                }
+
+                string marca = datos.ContainsKey("Nombre") ? datos["Nommbre"].ToString()! : "";
+
+                if (string.IsNullOrWhiteSpace(marca))
+                {
+                    respuesta["Error"] = "Debe especificar una marca válida.";
+                    return JsonConversor.ConvertirAString(respuesta);
+                }
+
+                this.iAplicacion!.Configurar(Configuracion.ObtenerValor("StringConexion"));
+                var lista = this.iAplicacion!.PorMarca(marca);
+
+                respuesta["Entidades"] = lista!;
+                respuesta["Marca"] = marca;
+                respuesta["Respuesta"] = "OK";
+                respuesta["Fecha"] = DateTime.Now.ToString();
+                return JsonConversor.ConvertirAString(respuesta);
+            }
+            catch (Exception ex)
+            {
+                respuesta["Error"] = ex.Message;
+                respuesta["Respuesta"] = "Error";
+                return JsonConversor.ConvertirAString(respuesta);
+            }
+        }
 
 
         [HttpPost]

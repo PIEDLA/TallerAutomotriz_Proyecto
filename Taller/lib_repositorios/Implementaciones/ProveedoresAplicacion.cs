@@ -76,6 +76,17 @@ namespace lib_repositorios.Implementaciones
                 .ToList();
         }
 
+        public List<Proveedores> PorNIT(Proveedores? entidad)
+        {
+            if (entidad!.NIT == 0)
+                return this.IConexion!.Proveedores!
+                    .ToList();
+
+            return this.IConexion!.Proveedores!
+                .Where(x => x.NIT == entidad.NIT)
+                .ToList();
+        }
+
         public Proveedores? Modificar(Proveedores? entidad)
         {
             if (entidad == null)

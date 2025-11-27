@@ -6,6 +6,7 @@ namespace lib_presentaciones.Interfaces
     {
         Task<List<Empleados>> Listar();
         Task<List<Empleados>> ListarPorSede(Empleados? entidad);
+        Task<List<Empleados>> PorDocumento(Empleados? entidad);
         Task<Empleados?> Guardar(Empleados? entidad);
         Task<Empleados?> Modificar(Empleados? entidad);
         Task<Empleados?> Borrar(Empleados? entidad);

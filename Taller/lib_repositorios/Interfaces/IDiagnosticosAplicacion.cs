@@ -10,8 +10,8 @@ namespace lib_repositorios.Interfaces
         Diagnosticos? Modificar(Diagnosticos? entidad);
         Diagnosticos? Borrar(Diagnosticos? entidad);
 
-        List<Diagnosticos> PorVehiculo(int idVehiculo);
-        List<Diagnosticos> PorEmpleado(int idEmpleado);
+        List<Diagnosticos> PorVehiculo(Diagnosticos? entidad);
+        List<Diagnosticos> PorEmpleado(Diagnosticos? entidad);
         List<Diagnosticos> PorRangoFechas(DateTime inicio, DateTime fin);
         int ContarPorVehiculo(int idVehiculo);
         Diagnosticos? UltimoDiagnostico();

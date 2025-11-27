@@ -61,18 +61,25 @@ namespace lib_repositorios.Implementaciones
 
         public List<Clientes> Listar()
         {
-            return this.IConexion!.Clientes!
-                        .Include(c => c.Vehiculos).ToList();
+            return this.IConexion!.Clientes!.ToList();
         }
 
         public List<Clientes> PorNombre(string nombre)
         {
             return this.IConexion!.Clientes!
-                .Where(x => x.Nombre!.ToLower().Contains(nombre.ToLower()) || x.Apellido!.ToLower().Contains(nombre.ToLower()))
-                .OrderBy(x => x.Apellido).ThenBy(x => x.Nombre).ToList();
+                .Where(x => x.Nombre!.ToLower().Contains(nombre.ToLower()) || x.Apellido!.ToLower().Contains(nombre.ToLower())).ToList();
         }
 
+        public List<Clientes> PorDocumento(Clientes? entidad)
+        {
+            if (entidad!.Documento == 0)
+                return this.IConexion!.Clientes!
+                    .ToList();
 
+            return this.IConexion!.Clientes!
+                .Where(x => x.Documento == entidad.Documento)
+                .ToList();
+        }
 
         public Clientes? Modificar(Clientes? entidad)
         {

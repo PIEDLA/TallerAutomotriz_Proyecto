@@ -108,9 +108,18 @@ namespace lib_repositorios.Implementaciones
                 .Where(r => r.Marca!.Contains(marca))
                 .ToList();
         }
+        public List<Repuestos> PorNombre(string Nombre)
+        {
+            return this.IConexion!.Repuestos!
+                .Where(r => r.Nombre_repuesto!.Contains(Nombre))
+                .ToList();
+        }
 
         public List<Repuestos> PorProveedor(int idProveedor)
         {
+            if (idProveedor == 0)
+                return this.IConexion!.Repuestos!.Take(50).ToList();
+
             return this.IConexion!.Repuestos!
                 .Where(r => r.Id_proveedor == idProveedor)
                 .ToList();

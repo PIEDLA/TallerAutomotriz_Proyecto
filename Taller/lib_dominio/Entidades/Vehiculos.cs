@@ -11,7 +11,7 @@ namespace lib_dominio.Entidades
         public string? Modelo { get; set; }
         [ForeignKey("Id_cliente")] public Clientes? _Cliente { get; set; }
 
-        public List<Diagnosticos>? Diagnosticos;
+        public List<Diagnosticos>? Diagnosticos { get; set; }
 
     }
 }

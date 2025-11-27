@@ -45,7 +45,7 @@ namespace asp_presentacion.Pages.Ventanas
                 //}
 
                 Accion = Enumerables.Ventanas.Listas;
-                var task = this.iPresentacion!.ListarPorSede(Filtro!);
+                var task = this.iPresentacion!.PorDocumento(Filtro!);
                 task.Wait();
                 Lista = task.Result;
                 Actual = null;
