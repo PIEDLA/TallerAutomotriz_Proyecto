@@ -11,5 +11,6 @@ namespace lib_repositorios.Interfaces
         Empleados? Modificar(Empleados? entidad);
         Empleados? Borrar(Empleados? entidad);
         public List<Empleados> ListarPorSede(Empleados? entidad);
+        public List<Empleados> PorDocumento(Empleados? entidad);
     }
 }

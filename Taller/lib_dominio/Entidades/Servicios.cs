@@ -8,8 +8,8 @@ namespace lib_dominio.Entidades
         public decimal Precio { get; set; }
         public string? Duracion_aprox { get; set; }
 
-        public List<Detalles_Servicio>? Detalles_Servicio;
-        public List<Reserva_Servicio>? Reserva_Servicio;
+        public List<Detalles_Servicio>? Detalles_Servicio { get; set; }
+        public List<Reserva_Servicio>? Reserva_Servicio { get; set; }
 
     }
 }

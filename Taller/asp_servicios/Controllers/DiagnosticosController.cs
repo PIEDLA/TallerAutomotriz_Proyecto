@@ -183,8 +183,6 @@ namespace asp_servicios.Controllers
             }
         }
 
-
-
         [HttpPost]
         public string PorVehiculo()
         {
@@ -194,32 +192,21 @@ namespace asp_servicios.Controllers
                 var datos = ObtenerDatos();
                 if (!iAplicacionToken!.Validar(datos))
                 {
-                    respuesta["Error"] = "No autenticado.";
+                    respuesta["Error"] = "lbNoAutenticacion";
                     return JsonConversor.ConvertirAString(respuesta);
                 }
+                var entidad = JsonConversor.ConvertirAObjeto<Diagnosticos>(
+                JsonConversor.ConvertirAString(datos["Entidad"]));
+                this.iAplicacion!.Configurar(Configuracion.ObtenerValor("StringConexion"));
 
-                if (!datos.ContainsKey("idVehiculo"))
-                {
-                    respuesta["Error"] = "Debe especificar un vehículo.";
-                    return JsonConversor.ConvertirAString(respuesta);
-                }
-
-                int idVehiculo = Convert.ToInt32(datos["idVehiculo"]);
-                iAplicacion!.Configurar(Configuracion.ObtenerValor("StringConexion"));
-
-                var lista = iAplicacion.PorVehiculo(idVehiculo);
-                if (lista == null || lista.Count == 0)
-                    respuesta["Mensaje"] = "No hay diagnósticos para este vehículo.";
-
-                respuesta["Entidades"] = lista!;
+                respuesta["Entidades"] = this.iAplicacion!.PorVehiculo(entidad!);
                 respuesta["Respuesta"] = "OK";
-                respuesta["Fecha"] = DateTime.Now;
-
+                respuesta["Fecha"] = DateTime.Now.ToString();
                 return JsonConversor.ConvertirAString(respuesta);
             }
             catch (Exception ex)
             {
-                respuesta["Error"] = ex.Message;
+                respuesta["Error"] = ex.Message.ToString();
                 respuesta["Respuesta"] = "Error";
                 return JsonConversor.ConvertirAString(respuesta);
             }
@@ -234,32 +221,21 @@ namespace asp_servicios.Controllers
                 var datos = ObtenerDatos();
                 if (!iAplicacionToken!.Validar(datos))
                 {
-                    respuesta["Error"] = "No autenticado.";
+                    respuesta["Error"] = "lbNoAutenticacion";
                     return JsonConversor.ConvertirAString(respuesta);
                 }
+                var entidad = JsonConversor.ConvertirAObjeto<Diagnosticos>(
+                JsonConversor.ConvertirAString(datos["Entidad"]));
+                this.iAplicacion!.Configurar(Configuracion.ObtenerValor("StringConexion"));
 
-                if (!datos.ContainsKey("idEmpleado"))
-                {
-                    respuesta["Error"] = "Debe especificar un empleado.";
-                    return JsonConversor.ConvertirAString(respuesta);
-                }
-
-                int idEmpleado = Convert.ToInt32(datos["idEmpleado"]);
-                iAplicacion!.Configurar(Configuracion.ObtenerValor("StringConexion"));
-
-                var lista = iAplicacion.PorEmpleado(idEmpleado);
-                if (lista == null || lista.Count == 0)
-                    respuesta["Mensaje"] = "No hay diagnósticos para este empleado.";
-
-                respuesta["Entidades"] = lista!;
+                respuesta["Entidades"] = this.iAplicacion!.PorEmpleado(entidad!);
                 respuesta["Respuesta"] = "OK";
-                respuesta["Fecha"] = DateTime.Now;
-
+                respuesta["Fecha"] = DateTime.Now.ToString();
                 return JsonConversor.ConvertirAString(respuesta);
             }
             catch (Exception ex)
             {
-                respuesta["Error"] = ex.Message;
+                respuesta["Error"] = ex.Message.ToString();
                 respuesta["Respuesta"] = "Error";
                 return JsonConversor.ConvertirAString(respuesta);
             }

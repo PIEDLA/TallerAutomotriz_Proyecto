@@ -8,8 +8,8 @@
         public string? Telefono { get; set; }
         public string? Ciudad { get; set; }
 
-        public List<Reservas>? reservas;
-        public List<Empleados>? empleados;
+        public List<Reservas>? reservas { get; set; }
+        public List<Empleados>? empleados { get; set; }
 
 
     }

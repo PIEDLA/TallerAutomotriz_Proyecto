@@ -132,17 +132,35 @@ namespace lib_repositorios.Implementaciones
             return original;
         }
 
-        public List<Diagnosticos> PorVehiculo(int idVehiculo)
+        public List<Diagnosticos> PorVehiculo(Diagnosticos? entidad)
         {
+
+            if(entidad!.Id_vehiculo == 0)
+                return this.IConexion!.Diagnosticos!
+                .Include(x => x._Empleado)
+                .Include(x => x._Vehiculo)
+                .ToList();
+
             return this.IConexion!.Diagnosticos!
-                .Where(x => x.Id_vehiculo == idVehiculo)
+                .Where(x => x.Id_vehiculo == entidad!.Id_vehiculo)
+                .Include(x => x._Empleado)
+                .Include(x => x._Vehiculo)
                 .ToList();
         }
 
-        public List<Diagnosticos> PorEmpleado(int idEmpleado)
+        public List<Diagnosticos> PorEmpleado(Diagnosticos? entidad)
         {
+
+            if (entidad!.Id_vehiculo == 0)
+                return this.IConexion!.Diagnosticos!
+                .Include(x => x._Empleado)
+                .Include(x => x._Vehiculo)
+                .ToList();
+
             return this.IConexion!.Diagnosticos!
-                .Where(x => x.Id_empleado == idEmpleado)
+                .Where(x => x.Id_empleado == entidad!.Id_empleado)
+                .Include(x => x._Empleado)
+                .Include(x => x._Vehiculo)
                 .ToList();
         }
 

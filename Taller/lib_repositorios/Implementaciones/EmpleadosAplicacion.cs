@@ -69,10 +69,27 @@ namespace lib_repositorios.Implementaciones
         public List<Empleados> ListarPorSede(Empleados? entidad)
         {
             if (entidad!.Id_sede == 0)
-                return this.IConexion!.Empleados!.Include(x => x._Sede).Take(50).ToList();
+                return this.IConexion!.Empleados!
+                    .Include(x => x._Sede)
+                    .ToList();
 
             return this.IConexion!.Empleados!
-                .Include(x => x._Sede).Where(x => x.Id_sede == entidad.Id_sede).ToList();
+                .Include(x => x._Sede)
+                .Where(x => x.Id_sede == entidad.Id_sede)
+                .ToList();
+        }
+
+        public List<Empleados> PorDocumento(Empleados? entidad)
+        {
+            if (entidad!.Documento == 0)
+                return this.IConexion!.Empleados!
+                    .Include(x => x._Sede)
+                    .ToList();
+
+            return this.IConexion!.Empleados!
+                .Include(x => x._Sede)
+                .Where(x => x.Documento == entidad.Documento)
+                .ToList();
         }
 
         public Empleados? Modificar(Empleados? entidad)

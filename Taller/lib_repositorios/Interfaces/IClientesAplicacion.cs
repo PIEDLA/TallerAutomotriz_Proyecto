@@ -11,5 +11,6 @@ namespace lib_repositorios.Interfaces
         Clientes? Modificar(Clientes? entidad);
         Clientes? Borrar(Clientes? entidad);
         public List<Clientes> PorNombre(string nombre);
+        public List<Clientes> PorDocumento(Clientes? entidad);
     }
 }

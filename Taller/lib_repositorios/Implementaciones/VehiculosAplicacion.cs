@@ -73,9 +73,22 @@ namespace lib_repositorios.Implementaciones
 
         public List<Vehiculos> ListarPorCliente(int idCliente)
         {
+            if(idCliente == 0)
+                return this.IConexion!.Vehiculos!
+                    .Include(f => f._Cliente)
+                    .ToList();
+
             return this.IConexion!.Vehiculos!
                 .Where(f => f.Id_cliente == idCliente)
                 .Include(f => f._Cliente)
+                .ToList();
+        }
+
+        public List<Vehiculos> PorPlaca(Vehiculos? entidad)
+        {
+            return this.IConexion!.Vehiculos!
+                .Include(x => x._Cliente)
+                .Where(x => x.Placa!.Contains(entidad!.Placa!))
                 .ToList();
         }
 

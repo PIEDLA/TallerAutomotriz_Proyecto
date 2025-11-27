@@ -9,31 +9,45 @@
               enctype="multipart/form-data">
             @Html.AntiForgeryToken()
 
+            <div class="table-container">
+                <div class="table-header">
+                    <h3 class="table-title">Gestión de Productos</h3>
+                    <div class="table-actions">
+                        <button class="btn btn-primary btn-sm"
+                                asp-page-handler="BtNuevo"
+                                disabled="@(Model.Accion != lib_dominio.Nucleo.Enumerables.Ventanas.Listas)">
+                            + Registrar Producto
+                        </button>
+                        <button class="btn btn-primary btn-sm"
+                                asp-page-handler="BtExportar"
+                                disabled="@(Model.Accion != lib_dominio.Nucleo.Enumerables.Ventanas.Listas)">
+                            📊 Exportar
+                        </button>
+                        <button class="btn btn-primary btn-sm"
+                                asp-page-handler="BtRefrescar"
+                                disabled="@(Model.Accion != lib_dominio.Nucleo.Enumerables.Ventanas.Listas)">
+                            ↺ Refrescar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            @if (Model!.Accion == lib_dominio.Nucleo.Enumerables.Ventanas.Listas ||
+                        Model.Accion == lib_dominio.Nucleo.Enumerables.Ventanas.Borrar)
+            {
+                <div style="padding: 24px;">
+                    <div class="search-bar">
+                        <input id="flCategoria"
+                               type="text" class="search-input"
+                               placeholder="Categoria"
+                               asp-for="@Model.Filtro!.Categoria">
+                        <button class="btn btn-secondary btn-sm" asp-page-handler="BtRefrescar">🔍 Buscar</button>
+                    </div>
+                </div>
+            }
+
             <div align="left">
                 <h3>Productos</h3>
-            </div>
-            <div align="left"
-                 class="bt_panel_buttons">
-                <input type="submit"
-                       value="Refrescar"
-                       asp-page-handler="BtRefrescar"
-                       class="btn btn-secondary"
-                       disabled="@(Model.Accion != lib_dominio.Nucleo.Enumerables.Ventanas.Listas)" />
-                <input type="submit"
-                       value="Nuevo"
-                       asp-page-handler="BtNuevo"
-                       class="btn btn-secondary"
-                       disabled="@(Model.Accion != lib_dominio.Nucleo.Enumerables.Ventanas.Listas)" />
-                <input type="submit"
-                       value="Guardar"
-                       asp-page-handler="BtGuardar"
-                       class="btn btn-secondary"
-                       disabled="@(Model.Accion == lib_dominio.Nucleo.Enumerables.Ventanas.Listas)" />
-                <input type="submit"
-                       value="Cancelar"
-                       asp-page-handler="BtCancelar"
-                       class="btn btn-secondary"
-                       disabled="@(Model.Accion == lib_dominio.Nucleo.Enumerables.Ventanas.Listas)" />
             </div>
 
             @if (Model.Accion != lib_dominio.Nucleo.Enumerables.Ventanas.Listas ||
@@ -58,49 +72,75 @@
 
             @if (Model.Accion == lib_dominio.Nucleo.Enumerables.Ventanas.Editar)
             {
-                <div class="containers_vn panel panel-default">
-                    <h3>Productos</h3>
+                <div class='popup'>
+                    <div class='pp_del_inner'>
+                        <div style='width:95%'>
+                            <div class="containers_vn panel panel-default">
+                                <h3>Productos</h3>
 
-                    <div>
-                        <div class="form-group">
-                            <label class="col-lg-4 control-label">
-                                Nombre
-                            </label>
-                            <div class="col-lg-6">
-                                <input id="nmNombre_producto"
-                                       class="cts_forms form-control"
-                                       asp-for="@Model.Actual!.Nombre_producto" />
+                                <div>
+                                    <div class="form-group">
+                                        <label class="col-lg-4 control-label">
+                                            Nombre
+                                        </label>
+                                        <div class="col-lg-6">
+                                            <input id="nmNombre_producto"
+                                                   class="cts_forms form-control"
+                                                   asp-for="@Model.Actual!.Nombre_producto" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-lg-4 control-label">
+                                            Precio
+                                        </label>
+                                        <div class="col-lg-6">
+                                            <input id="nmPrecio"
+                                                   class="cts_forms form-control"
+                                                   asp-for="@Model.Actual!.Precio" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-lg-4 control-label">
+                                            Categoria
+                                        </label>
+                                        <div class="col-lg-6">
+                                            <input id="nmCategoria"
+                                                   class="cts_forms form-control"
+                                                   asp-for="@Model.Actual!.Categoria" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-lg-4 control-label">
+                                            Id del proveedor
+                                        </label>
+                                        <div class="col-lg-6">
+                                            <input id="nmCategoria"
+                                                   class="cts_forms form-control"
+                                                   asp-for="@Model.Actual!.Id_proveedor" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-lg-4 control-label">
+                                            Stock
+                                        </label>
+                                        <div class="col-lg-6">
+                                            <input id="nmStock"
+                                                   class="cts_forms form-control"
+                                                   asp-for="@Model.Actual!.Stock" />
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-4 control-label">
-                                Precio
-                            </label>
-                            <div class="col-lg-6">
-                                <input id="nmPrecio"
-                                       class="cts_forms form-control"
-                                       asp-for="@Model.Actual!.Precio" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-4 control-label">
-                                Categoria
-                            </label>
-                            <div class="col-lg-6">
-                                <input id="nmCategoria"
-                                       class="cts_forms form-control"
-                                       asp-for="@Model.Actual!.Categoria" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-4 control-label">
-                                Stock
-                            </label>
-                            <div class="col-lg-6">
-                                <input id="nmStock"
-                                       class="cts_forms form-control"
-                                       asp-for="@Model.Actual!.Stock" />
-                            </div>
+                            <button class="btn btn-primary btn-sm"
+                                    asp-page-handler="BtGuardar"
+                                    disabled="@(Model.Accion == lib_dominio.Nucleo.Enumerables.Ventanas.Listas)">
+                                ✓ Guardar
+                            </button>
+                            <button class="btn btn-primary btn-sm"
+                                    asp-page-handler="BtCancelar"
+                                    disabled="@(Model.Accion == lib_dominio.Nucleo.Enumerables.Ventanas.Listas)">
+                                ✕ Cancelar
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -147,65 +187,53 @@
             @if (Model.Accion == lib_dominio.Nucleo.Enumerables.Ventanas.Listas ||
                         Model.Accion == lib_dominio.Nucleo.Enumerables.Ventanas.Borrar)
             {
-                <input id="flCategoria"
-                       class="cts_forms form-control"
-                       asp-for="@Model.Filtro!.Categoria"
-                       placeholder="Categoria" />
-                <br />
-
                 <div class="containers_vn panel panel-default">
-
-
                     <table class="tb_data table table-striped table-bordered table hover">
-                        <tr>
-                            <th>
-                                Nombre
-                            </th>
-                            <th>
-                                Precio
-                            </th>
-                            <th>
-                                Categoria
-                            </th>
-                            <th>
-                                Stock
-                            </th>
-                            <th class="cl_actions">
-                                Accion
-                            </th>
-                        </tr>
-                        @if (Model != null && Model.Lista != null)
-                        {
-                            @foreach (var elemento in Model.Lista)
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Nombre</th>
+                                <th>Precio</th>
+                                <th>Categoría</th>
+                                <th>Proveedor</th>
+                                <th>Stock</th>
+                                <th class="cl_actions">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null && Model.Lista != null)
                             {
-                                <tr>
-                                    <td>
-                                        @elemento.Nombre_producto
-                                    </td>
-                                    <td>
-                                        @elemento.Precio
-                                    </td>
-                                    <td>
-                                        @elemento.Categoria
-                                    </td>
-                                    <td>
-                                        @elemento.Stock
-                                    </td>
-                                    <td>
-                                        <input type="submit"
-                                               value="Modicar"
-                                               asp-page-handler="BtModificar"
-                                               class="btn btn-secondary"
-                                               asp-route-data="@elemento.Id" />
-                                        <input type="submit"
-                                               value="Borrar"
-                                               asp-page-handler="BtBorrarVal"
-                                               class="btn btn-secondary"
-                                               asp-route-data="@elemento.Id" />
-                                    </td>
-                                </tr>
+                                @foreach (var elemento in Model.Lista)
+                                {
+                                    <tr>
+                                        <td>
+                                            @elemento.Id
+                                        </td>
+                                        <td>
+                                            @elemento.Nombre_producto
+                                        </td>
+                                        <td>
+                                            @elemento.Precio
+                                        </td>
+                                        <td>
+                                            @elemento.Categoria
+                                        </td>
+                                        <td>
+                                            @elemento._Proveedor!.Nombre
+                                        </td>
+                                        <td>
+                                            @elemento.Stock
+                                        </td>
+                                        <td>
+                                            <div class="action-buttons">
+                                                <button class="btn-icon" title="Editar" asp-page-handler="BtModificar" asp-route-data="@elemento.Id">✏️</button>
+                                                <button class="btn-icon" title="Eliminar" asp-page-handler="BtBorrarVal" asp-route-data="@elemento.Id">🗑️</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
                             }
-                        }
+                        </tbody>
                     </table>
                 </div>
             }

@@ -17,7 +17,7 @@ namespace lib_dominio.Nucleo
             }
             return values2;
         }
-        public static string ConvertirAString(object data, bool ignore = false)
+        public static string ConvertirAString(object data, bool ignore = true)
         {
             if (!ignore)
                 return JsonConvert.SerializeObject(data);

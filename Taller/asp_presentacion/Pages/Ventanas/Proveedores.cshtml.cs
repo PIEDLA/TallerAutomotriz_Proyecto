@@ -29,10 +29,7 @@ namespace asp_presentacion.Pages.Ventanas
 
         [BindProperty] public Proveedores? Actual { get; set; }
         [BindProperty] public Proveedores? Filtro { get; set; }
-        [BindProperty]
-        public List<Proveedores>
-    ? Lista
-        { get; set; }
+        [BindProperty] public List<Proveedores>? Lista { get; set; }
 
         public virtual void OnGet() { OnPostBtRefrescar(); }
 
@@ -47,10 +44,8 @@ namespace asp_presentacion.Pages.Ventanas
                 //    return;
                 //}
 
-                Filtro!.Nombre = Filtro!.Nombre ?? "";
-
                 Accion = Enumerables.Ventanas.Listas;
-                var task = this.iPresentacion!.PorNombre(Filtro!);
+                var task = this.iPresentacion!.PorNIT(Filtro!);
                 task.Wait();
                 Lista = task.Result;
                 Actual = null;

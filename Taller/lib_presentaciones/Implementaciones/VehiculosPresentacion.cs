@@ -45,6 +45,25 @@ namespace lib_presentaciones.Implementaciones
             return lista;
         }
 
+        public async Task<List<Vehiculos>> PorPlaca(Vehiculos? entidad)
+        {
+            var lista = new List<Vehiculos>();
+            var datos = new Dictionary<string, object>();
+            datos["Entidad"] = entidad!;
+            
+            comunicaciones = new Comunicaciones();
+            datos = comunicaciones.ConstruirUrl(datos, "Vehiculos/PorPlaca");
+            var respuesta = await comunicaciones!.Ejecutar(datos);
+            
+            if (respuesta.ContainsKey("Error"))
+            {
+                throw new Exception(respuesta["Error"].ToString()!);
+            }
+            lista = JsonConversor.ConvertirAObjeto<List<Vehiculos>>(
+                JsonConversor.ConvertirAString(respuesta["Entidades"]));
+            return lista;
+        }
+
         public async Task<Vehiculos?> Guardar(Vehiculos? entidad)
         {
             if (entidad!.Id != 0)

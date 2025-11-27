@@ -15,7 +15,7 @@ namespace asp_presentacion.Pages.Ventanas
             try
             {
                 this.iFacturasPresentacion = iFacturasPresentacion;
-                Filtro = new Proveedores();
+                Filtro = new Facturas();
             }
             catch (Exception ex)
             {
@@ -27,12 +27,10 @@ namespace asp_presentacion.Pages.Ventanas
         [BindProperty] public Enumerables.Ventanas Accion { get; set; }
 
 
-        [BindProperty] public Proveedores? Actual { get; set; }
-        [BindProperty] public Proveedores? Filtro { get; set; }
+        [BindProperty] public Facturas? Actual { get; set; }
+        [BindProperty] public Facturas? Filtro { get; set; }
         [BindProperty]
-        public List<Proveedores>
-    ? Lista
-        { get; set; }
+        public List<Facturas>? Lista { get; set; }
 
         public virtual void OnGet() { OnPostBtRefrescar(); }
 
@@ -47,10 +45,8 @@ namespace asp_presentacion.Pages.Ventanas
                 //    return;
                 //}
 
-                Filtro!.Nombre = Filtro!.Nombre ?? "";
-
                 Accion = Enumerables.Ventanas.Listas;
-                var task = this.iPresentacion!.PorNombre(Filtro!);
+                var task = this.iFacturasPresentacion!.ListarPorCliente(Filtro!);
                 task.Wait();
                 Lista = task.Result;
                 Actual = null;
@@ -66,7 +62,7 @@ namespace asp_presentacion.Pages.Ventanas
             try
             {
                 Accion = Enumerables.Ventanas.Editar;
-                Actual = new Proveedores();
+                Actual = new Facturas();
             }
             catch (Exception ex)
             {
@@ -96,12 +92,12 @@ namespace asp_presentacion.Pages.Ventanas
             {
                 Accion = Enumerables.Ventanas.Editar;
 
-                Task<Proveedores>
+                Task<Facturas>
                     ? task = null;
                 if (Actual!.Id == 0)
-                    task = this.iPresentacion!.Guardar(Actual!)!;
+                    task = this.iFacturasPresentacion!.Guardar(Actual!)!;
                 else
-                    task = this.iPresentacion!.Modificar(Actual!)!;
+                    task = this.iFacturasPresentacion!.Modificar(Actual!)!;
                 task.Wait();
                 Actual = task.Result;
                 Accion = Enumerables.Ventanas.Listas;
@@ -131,7 +127,7 @@ namespace asp_presentacion.Pages.Ventanas
         {
             try
             {
-                var task = this.iPresentacion!.Borrar(Actual!);
+                var task = this.iFacturasPresentacion!.Borrar(Actual!);
                 Actual = task.Result;
                 OnPostBtRefrescar();
             }

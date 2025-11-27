@@ -12,6 +12,7 @@ namespace lib_repositorios.Interfaces
 
         List<Repuestos> StockBajo(int limite = 5);
         List<Repuestos> PorMarca(string marca);
+        List<Repuestos> PorNombre(string Nombre);
         List<Repuestos> PorProveedor(int idProveedor);
         Repuestos? MasCaro();
         Repuestos? MasBarato();

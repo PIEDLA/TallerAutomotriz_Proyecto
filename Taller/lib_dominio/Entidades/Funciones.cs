@@ -8,6 +8,6 @@ namespace lib_dominio.Entidades
         public string? Nombre { get; set; }
         public string? Permisos { get; set; }
 
-        public List<Usuarios>? Usuarios;
+        public List<Usuarios>? Usuarios { get; set; }
     }
 }
