@@ -47,31 +47,28 @@ namespace asp_presentacion.Pages
         {
             try
             {
-                // Validar campos vacíos
+
                 if (string.IsNullOrWhiteSpace(Nombre) || string.IsNullOrWhiteSpace(Contraseña))
                 {
                     OnPostBtClean();
                     return;
                 }
 
-                // Crear entidad usuario para enviar
                 var usuario = new Usuarios
                 {
                     Nombre = Nombre,
                     Contraseña = Contraseña
                 };
 
-                // ?? Intentar login contra el servicio
                 var respuesta = await iUsuariosPresentacion!.Login(usuario);
 
                 if (respuesta == null)
                 {
-                    // login fallido
+
                     OnPostBtClean();
                     return;
                 }
 
-                // Si login fue exitoso ? guardar sesión
                 HttpContext.Session.SetString("Usuario", respuesta.Nombre!);
                 HttpContext.Session.SetString("UsuarioId", respuesta.Id.ToString());
 
@@ -82,10 +79,8 @@ namespace asp_presentacion.Pages
             }
             catch (Exception ex)
             {
-                // Guardar error en pantalla
                 LogConversor.Log(ex, ViewData!);
 
-                // Limpiar campos por seguridad
                 OnPostBtClean();
             }
         }
